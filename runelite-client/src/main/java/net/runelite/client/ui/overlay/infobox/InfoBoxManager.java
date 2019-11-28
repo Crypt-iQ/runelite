@@ -36,11 +36,11 @@ import java.util.function.Predicate;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
-import net.runelite.api.events.ConfigChanged;
 import net.runelite.client.config.RuneLiteConfig;
 import net.runelite.client.eventbus.EventBus;
-import net.runelite.client.game.AsyncBufferedImage;
+import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.util.AsyncBufferedImage;
 
 @Singleton
 @Slf4j
@@ -79,7 +79,7 @@ public class InfoBoxManager
 		if (image instanceof AsyncBufferedImage)
 		{
 			AsyncBufferedImage abi = (AsyncBufferedImage) image;
-			abi.onChanged(() -> updateInfoBoxImage(infoBox));
+			abi.onLoaded(() -> updateInfoBoxImage(infoBox));
 		}
 	}
 

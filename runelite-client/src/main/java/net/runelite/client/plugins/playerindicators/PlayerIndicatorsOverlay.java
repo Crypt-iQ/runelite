@@ -61,8 +61,8 @@ public class PlayerIndicatorsOverlay extends Overlay
 		"no-agility.png");
 	private final BufferedImage skullIcon = ImageUtil.getResourceStreamFromClass(PlayerIndicatorsPlugin.class,
 		"skull.png");
-	private PlayerIndicatorsPlugin plugin;
-	private PlayerIndicatorsService playerIndicatorsService;
+	private final PlayerIndicatorsPlugin plugin;
+	private final PlayerIndicatorsService playerIndicatorsService;
 	@Inject
 	private Client client;
 	@Inject
@@ -131,14 +131,12 @@ public class PlayerIndicatorsOverlay extends Overlay
 					}
 				}
 			}
-
-			if (skulls && actor.getSkullIcon() != null && relation.equals(PlayerRelation.TARGET))
+			else if (skulls && actor.getSkullIcon() != null && relation.equals(PlayerRelation.TARGET))
 			{
 
 				OverlayUtil.renderActorTextAndImage(graphics, actor, builtString, color,
 					ImageUtil.resizeImage(skullIcon, y, y), ACTOR_OVERHEAD_TEXT_MARGIN, ACTOR_HORIZONTAL_TEXT_MARGIN);
 			}
-
 			else
 			{
 				OverlayUtil.renderActorTextOverlay(graphics, actor, builtString, color);
@@ -182,14 +180,14 @@ public class PlayerIndicatorsOverlay extends Overlay
 								textLocation.getY() - height),
 							ImageUtil.resizeImage(agilityIcon, height, height));
 					}
-					else if (level >= plugin.getAgilitySecondThreshold())
+					if (level >= plugin.getAgilitySecondThreshold())
 					{
 						OverlayUtil.renderImageLocation(graphics,
 							new Point(textLocation.getX() + agilityIcon.getWidth() + width,
 								textLocation.getY() - height),
 							ImageUtil.resizeImage(agilityIcon, height, height));
 					}
-					else if (level < plugin.getAgilityFirstThreshold())
+					if (level < plugin.getAgilityFirstThreshold())
 					{
 						OverlayUtil.renderImageLocation(graphics,
 							new Point(textLocation.getX() + 5 + width,

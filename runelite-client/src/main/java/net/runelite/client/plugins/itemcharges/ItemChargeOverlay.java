@@ -34,8 +34,10 @@ import net.runelite.api.ItemID;
 import net.runelite.api.widgets.WidgetItem;
 import static net.runelite.client.plugins.itemcharges.ItemChargeType.ABYSSAL_BRACELET;
 import static net.runelite.client.plugins.itemcharges.ItemChargeType.BELLOWS;
+import static net.runelite.client.plugins.itemcharges.ItemChargeType.FRUIT_BASKET;
 import static net.runelite.client.plugins.itemcharges.ItemChargeType.FUNGICIDE_SPRAY;
 import static net.runelite.client.plugins.itemcharges.ItemChargeType.IMPBOX;
+import static net.runelite.client.plugins.itemcharges.ItemChargeType.SACK;
 import static net.runelite.client.plugins.itemcharges.ItemChargeType.TELEPORT;
 import static net.runelite.client.plugins.itemcharges.ItemChargeType.WATERCAN;
 import static net.runelite.client.plugins.itemcharges.ItemChargeType.WATERSKIN;
@@ -160,6 +162,8 @@ class ItemChargeOverlay extends WidgetItemOverlay
 				|| (type == WATERCAN && !plugin.isShowWateringCanCharges())
 				|| (type == WATERSKIN && !plugin.isShowWaterskinCharges())
 				|| (type == BELLOWS && !plugin.isShowBellowCharges())
+				|| (type == FRUIT_BASKET && !plugin.isShowBasketCharges())
+				|| (type == SACK && !plugin.isShowSackCharges())
 				|| (type == ABYSSAL_BRACELET && !plugin.isShowAbyssalBraceletCharges()))
 			{
 				return;
@@ -180,7 +184,7 @@ class ItemChargeOverlay extends WidgetItemOverlay
 	{
 		return plugin.isShowTeleportCharges() || plugin.isShowDodgyCount() || plugin.isShowFungicideCharges()
 			|| plugin.isShowImpCharges() || plugin.isShowWateringCanCharges() || plugin.isShowWaterskinCharges()
-			|| plugin.isShowBellowCharges() || plugin.isShowAbyssalBraceletCharges() || plugin.isShowExplorerRingCharges()
+			|| plugin.isShowBellowCharges() || plugin.isShowBasketCharges() || plugin.isShowSackCharges() || plugin.isShowAbyssalBraceletCharges() || plugin.isShowExplorerRingCharges()
 			|| plugin.isShowRingOfForgingCount();
 	}
 }

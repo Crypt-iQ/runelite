@@ -144,7 +144,6 @@
       "name": "Opal Necklace",
       "xp": 35
     },
-
     {
       "level": 17,
       "icon": 1724,
@@ -312,6 +311,12 @@
       "icon": 21102,
       "name": "Jade Amulet (U)",
       "xp": 70
+    },
+    {
+      "level": 35,
+      "icon": 6235,
+      "name": "Broodoo shield",
+      "xp": 100
     },
     {
       "level": 36,

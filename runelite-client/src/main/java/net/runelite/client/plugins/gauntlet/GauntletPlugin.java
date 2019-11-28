@@ -43,6 +43,7 @@ import net.runelite.api.Client;
 import net.runelite.api.GameObject;
 import net.runelite.api.GameState;
 import net.runelite.api.HeadIcon;
+import net.runelite.api.ItemID;
 import net.runelite.api.NPC;
 import net.runelite.api.NPCDefinition;
 import net.runelite.api.NpcID;
@@ -50,14 +51,15 @@ import net.runelite.api.ObjectID;
 import net.runelite.api.Player;
 import net.runelite.api.Projectile;
 import net.runelite.api.ProjectileID;
+import net.runelite.api.Skill;
 import net.runelite.api.SoundEffectID;
 import net.runelite.api.Varbits;
 import net.runelite.api.events.AnimationChanged;
-import net.runelite.api.events.ConfigChanged;
 import net.runelite.api.events.GameObjectDespawned;
 import net.runelite.api.events.GameObjectSpawned;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.GameTick;
+import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.api.events.NpcDespawned;
 import net.runelite.api.events.NpcSpawned;
 import net.runelite.api.events.ProjectileSpawned;
@@ -65,7 +67,12 @@ import net.runelite.api.events.VarbitChanged;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.EventBus;
+import net.runelite.client.eventbus.Subscribe;
+import net.runelite.client.events.ConfigChanged;
+import net.runelite.client.events.NpcLootReceived;
+import net.runelite.client.game.ItemManager;
 import net.runelite.client.game.SkillIconManager;
+import net.runelite.client.game.XpDropEvent;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.plugins.PluginType;
@@ -74,6 +81,8 @@ import static net.runelite.client.plugins.gauntlet.Hunllef.BossAttack.MAGIC;
 import static net.runelite.client.plugins.gauntlet.Hunllef.BossAttack.PRAYER;
 import static net.runelite.client.plugins.gauntlet.Hunllef.BossAttack.RANGE;
 import net.runelite.client.ui.overlay.OverlayManager;
+import net.runelite.client.ui.overlay.infobox.Counter;
+import net.runelite.client.ui.overlay.infobox.InfoBoxManager;
 
 @PluginDescriptor(
 	name = "Gauntlet",
@@ -104,40 +113,59 @@ public class GauntletPlugin extends Plugin
 		ObjectID.PHREN_ROOTS_36066, ObjectID.FISHING_SPOT_36068, ObjectID.FISHING_SPOT_35971, ObjectID.GRYM_ROOT, ObjectID.GRYM_ROOT_36070,
 		ObjectID.LINUM_TIRINUM, ObjectID.LINUM_TIRINUM_36072
 	);
+	private static final int GATHERING_HERB = 0;
+	private static final int GATHERING_CLOTH = 1;
 
 	@Inject
 	@Getter(AccessLevel.NONE)
 	private Client client;
+
 	@Inject
 	@Getter(AccessLevel.NONE)
 	private ClientThread clientThread;
+
 	@Inject
 	@Getter(AccessLevel.NONE)
 	private OverlayManager overlayManager;
+
 	@Inject
 	@Getter(AccessLevel.NONE)
 	private GauntletOverlay overlay;
+
 	@Inject
 	@Getter(AccessLevel.NONE)
 	private GauntletInfoBoxOverlay infoboxoverlay;
+
 	@Inject
 	@Getter(AccessLevel.NONE)
 	private GauntletConfig config;
+
 	@Inject
 	@Getter(AccessLevel.NONE)
 	private EventBus eventBus;
+
 	@Inject
 	@Getter(AccessLevel.NONE)
 	private GauntletTimer timer;
+
 	@Inject
 	@Getter(AccessLevel.NONE)
 	private SkillIconManager skillIconManager;
+
 	@Inject
 	@Getter(AccessLevel.NONE)
 	private GauntletCounter GauntletCounter;
+
 	@Setter(AccessLevel.PACKAGE)
 	@Nullable
 	private Hunllef hunllef;
+
+	@Inject
+	private InfoBoxManager infoBoxManager;
+
+	@Inject
+	private ItemManager itemManager;
+
 	private boolean attackVisualOutline;
 	private boolean completeStartup = false;
 	private boolean displayTimerChat;
@@ -160,11 +188,24 @@ public class GauntletPlugin extends Plugin
 	private final Map<String, Integer> items = new HashMap<>();
 	private final Set<Missiles> projectiles = new HashSet<>();
 	private final Set<Resources> resources = new HashSet<>();
+
 	private GauntletConfig.CounterDisplay countAttacks;
 	private int resourceIconSize;
 	private Set<Tornado> tornadoes = new HashSet<>();
 	private int projectileIconSize;
-
+	private boolean displayResources;
+	private Counter oreCounter;
+	private Counter woodCounter;
+	private Counter clothCounter;
+	private Counter fishCounter;
+	private Counter herbCounter;
+	private int oresGathered;
+	private int woodGathered;
+	private int clothGathered;
+	private int fishGathered;
+	private int herbGathered;
+	private int currentFarmingAction = -1;
+	private boolean countersVisible = false;
 
 	@Provides
 	GauntletConfig getConfig(ConfigManager configManager)
@@ -175,8 +216,8 @@ public class GauntletPlugin extends Plugin
 	@Override
 	protected void startUp()
 	{
-		addSubscriptions();
 		updateConfig();
+		initializeCounters();
 		overlayManager.add(overlay);
 		overlayManager.add(infoboxoverlay);
 		overlayManager.add(GauntletCounter);
@@ -189,7 +230,8 @@ public class GauntletPlugin extends Plugin
 		if (client.getGameState() != GameState.STARTING && client.getGameState() != GameState.UNKNOWN)
 		{
 			completeStartup = false;
-			clientThread.invoke(() -> {
+			clientThread.invoke(() ->
+			{
 				timer.initStates();
 				completeStartup = true;
 			});
@@ -200,10 +242,50 @@ public class GauntletPlugin extends Plugin
 		}
 	}
 
+	private void addCounters()
+	{
+		if (!countersVisible)
+		{
+			infoBoxManager.addInfoBox(oreCounter);
+			infoBoxManager.addInfoBox(woodCounter);
+			infoBoxManager.addInfoBox(clothCounter);
+			infoBoxManager.addInfoBox(fishCounter);
+			infoBoxManager.addInfoBox(herbCounter);
+			countersVisible = true;
+		}
+	}
+
+	private void initializeCounters()
+	{
+		resetGatheringCounters();
+		oreCounter = new Counter(itemManager.getImage(ItemID.CORRUPTED_ORE), this, 0);
+		woodCounter = new Counter(itemManager.getImage(ItemID.PHREN_BARK_23878), this, 0);
+		clothCounter = new Counter(itemManager.getImage(ItemID.LINUM_TIRINUM_23876), this, 0);
+		fishCounter = new Counter(itemManager.getImage(ItemID.RAW_PADDLEFISH), this, 0);
+		herbCounter = new Counter(itemManager.getImage(ItemID.GRYM_LEAF_23875), this, 0);
+	}
+
+	private void resetGatheringCounters()
+	{
+		oresGathered = 0;
+		fishGathered = 0;
+		woodGathered = 0;
+		clothGathered = 0;
+		herbGathered = 0;
+	}
+
+	private void updateCounters()
+	{
+		oreCounter.setCount(oresGathered);
+		woodCounter.setCount(woodGathered);
+		clothCounter.setCount(clothGathered);
+		fishCounter.setCount(fishGathered);
+		herbCounter.setCount(herbGathered);
+	}
+
 	@Override
 	protected void shutDown()
 	{
-		eventBus.unregister(this);
 		timer.resetStates();
 		if (timerVisible)
 		{
@@ -213,26 +295,75 @@ public class GauntletPlugin extends Plugin
 		overlayManager.remove(overlay);
 		overlayManager.remove(infoboxoverlay);
 		overlayManager.remove(GauntletCounter);
+		removeCounters();
+		resetGatheringCounters();
 		resources.clear();
 		projectiles.clear();
 		tornadoes.clear();
 		setHunllef(null);
 	}
 
-	private void addSubscriptions()
+	private void removeCounters()
 	{
-		eventBus.subscribe(AnimationChanged.class, this, this::onAnimationChanged);
-		eventBus.subscribe(ConfigChanged.class, this, this::onConfigChanged);
-		eventBus.subscribe(GameObjectDespawned.class, this, this::onGameObjectDespawned);
-		eventBus.subscribe(GameObjectSpawned.class, this, this::onGameObjectSpawned);
-		eventBus.subscribe(GameStateChanged.class, this, this::onGameStateChanged);
-		eventBus.subscribe(GameTick.class, this, this::onGameTick);
-		eventBus.subscribe(NpcDespawned.class, this, this::onNpcDespawned);
-		eventBus.subscribe(NpcSpawned.class, this, this::onNpcSpawned);
-		eventBus.subscribe(ProjectileSpawned.class, this, this::onProjectileSpawned);
-		eventBus.subscribe(VarbitChanged.class, this, this::onVarbitChanged);
+		infoBoxManager.removeInfoBox(oreCounter);
+		infoBoxManager.removeInfoBox(woodCounter);
+		infoBoxManager.removeInfoBox(clothCounter);
+		infoBoxManager.removeInfoBox(fishCounter);
+		infoBoxManager.removeInfoBox(herbCounter);
+		countersVisible = false;
 	}
 
+	@Subscribe
+	private void onMenuOptionClicked(MenuOptionClicked menuOptionClicked)
+	{
+		if (menuOptionClicked.getTarget().toUpperCase().contains("LINUM"))
+		{
+			currentFarmingAction = GATHERING_CLOTH;
+		}
+		if (menuOptionClicked.getTarget().toUpperCase().contains("GRYM"))
+		{
+			currentFarmingAction = GATHERING_HERB;
+		}
+	}
+
+	@Subscribe
+	private void onNpcLootReceived(NpcLootReceived npcLootReceived)
+	{
+		fishGathered += (int) npcLootReceived.getItems().stream().filter(item -> item.getId() == ItemID.RAW_PADDLEFISH).count();
+		herbGathered += (int) npcLootReceived.getItems().stream().filter(item -> item.getId() == ItemID.GRYM_LEAF || item.getId() == ItemID.GRYM_LEAF_23875).count();
+		updateCounters();
+	}
+
+	@Subscribe
+	private void onXpDropEvent(XpDropEvent experienceChanged)
+	{
+		if (experienceChanged.getSkill().compareTo(Skill.MINING) == 0)
+		{
+			oresGathered++;
+		}
+		if (experienceChanged.getSkill().compareTo(Skill.WOODCUTTING) == 0)
+		{
+			woodGathered++;
+		}
+		if (experienceChanged.getSkill().compareTo(Skill.FARMING) == 0)
+		{
+			if (currentFarmingAction == GATHERING_HERB)
+			{
+				herbGathered++;
+			}
+			else if (currentFarmingAction == GATHERING_CLOTH)
+			{
+				clothGathered++;
+			}
+		}
+		if (experienceChanged.getSkill().compareTo(Skill.FISHING) == 0)
+		{
+			fishGathered++;
+		}
+		updateCounters();
+	}
+
+	@Subscribe
 	private void onAnimationChanged(AnimationChanged event)
 	{
 		if (hunllef == null)
@@ -248,7 +379,7 @@ public class GauntletPlugin extends Plugin
 			final Player player = (Player) actor;
 			final int anim = player.getAnimation();
 
-			if (!player.getName().equals(client.getLocalPlayer().getName()) || anim == -1 || !PLAYER_ANIMATIONS.contains(anim))
+			if (player.getName() == null || client.getLocalPlayer() == null || !player.getName().equals(client.getLocalPlayer().getName()) || anim == -1 || !PLAYER_ANIMATIONS.contains(anim))
 			{
 				return;
 			}
@@ -303,6 +434,7 @@ public class GauntletPlugin extends Plugin
 		}
 	}
 
+	@Subscribe
 	private void onConfigChanged(ConfigChanged event)
 	{
 		if (!event.getGroup().equals("Gauntlet"))
@@ -325,8 +457,21 @@ public class GauntletPlugin extends Plugin
 				timerVisible = false;
 			}
 		}
+
+		if (event.getKey().equals("displayResources"))
+		{
+			if (this.displayResources && this.startedGauntlet())
+			{
+				addCounters();
+			}
+			else
+			{
+				removeCounters();
+			}
+		}
 	}
 
+	@Subscribe
 	private void onGameObjectDespawned(GameObjectDespawned event)
 	{
 		final GameObject obj = event.getGameObject();
@@ -336,6 +481,7 @@ public class GauntletPlugin extends Plugin
 		}
 	}
 
+	@Subscribe
 	private void onGameObjectSpawned(GameObjectSpawned event)
 	{
 		final GameObject obj = event.getGameObject();
@@ -345,6 +491,7 @@ public class GauntletPlugin extends Plugin
 		}
 	}
 
+	@Subscribe
 	private void onGameStateChanged(GameStateChanged event)
 	{
 		if (event.getGameState() == GameState.LOADING)
@@ -353,6 +500,7 @@ public class GauntletPlugin extends Plugin
 		}
 	}
 
+	@Subscribe
 	private void onGameTick(GameTick event)
 	{
 		// This handles the timer based on player health.
@@ -373,12 +521,14 @@ public class GauntletPlugin extends Plugin
 		}
 	}
 
+	@Subscribe
 	private void onNpcDespawned(NpcDespawned event)
 	{
 		final NPC npc = event.getNpc();
 		if (HUNLLEF_NPC_IDS.contains(npc.getId()))
 		{
 			setHunllef(null);
+			resetGatheringCounters();
 		}
 		else if (TORNADO_NPC_IDS.contains(npc.getId()))
 		{
@@ -386,6 +536,7 @@ public class GauntletPlugin extends Plugin
 		}
 	}
 
+	@Subscribe
 	private void onNpcSpawned(NpcSpawned event)
 	{
 		final NPC npc = event.getNpc();
@@ -399,6 +550,7 @@ public class GauntletPlugin extends Plugin
 		}
 	}
 
+	@Subscribe
 	private void onProjectileSpawned(ProjectileSpawned event)
 	{
 		if (hunllef == null)
@@ -430,11 +582,20 @@ public class GauntletPlugin extends Plugin
 		}
 	}
 
+	@Subscribe
 	private void onVarbitChanged(VarbitChanged event)
 	{
 		if (this.completeStartup)
 		{
 			timer.checkStates(true);
+		}
+		if (startedGauntlet() && displayResources)
+		{
+			addCounters();
+		}
+		else
+		{
+			removeCounters();
 		}
 	}
 
@@ -468,5 +629,6 @@ public class GauntletPlugin extends Plugin
 		this.displayTimerChat = config.displayTimerChat();
 		this.attackVisualOutline = config.attackVisualOutline();
 		this.highlightPrayerInfobox = config.highlightPrayerInfobox();
+		this.displayResources = config.displayGatheredResources();
 	}
 }

@@ -62,7 +62,7 @@ public class PlayerIndicatorsService
 			&& client.isFriended(player.getName(), false)
 			&& plugin.getLocationHashMap().containsKey(PlayerRelation.FRIEND));
 
-		clan = (player) -> (player.isClanMember()  && !client.getLocalPlayer().equals(player) && !client.isFriended(player.getName(), false)
+		clan = (player) -> (player.isClanMember() && !client.getLocalPlayer().equals(player) && !client.isFriended(player.getName(), false)
 			&& plugin.getLocationHashMap().containsKey(PlayerRelation.CLAN));
 
 		team = (player) -> (Objects.requireNonNull(client.getLocalPlayer()).getTeam() != 0 && !player.isClanMember()
@@ -72,7 +72,7 @@ public class PlayerIndicatorsService
 
 		target = (player) -> (!team.test(player) && !clan.test(player)
 			&& !client.isFriended(player.getName(), false) && PvPUtil.isAttackable(client, player)
-			&& !client.getLocalPlayer().equals(player)  && plugin.getLocationHashMap().containsKey(PlayerRelation.TARGET));
+			&& !client.getLocalPlayer().equals(player) && !clan.test(player) && plugin.getLocationHashMap().containsKey(PlayerRelation.TARGET));
 
 		caller = (player) -> (plugin.isCaller(player) && plugin.getLocationHashMap().containsKey(PlayerRelation.CALLER));
 
@@ -80,7 +80,7 @@ public class PlayerIndicatorsService
 
 		other = (player) ->
 			(!PvPUtil.isAttackable(client, player) && !client.getLocalPlayer().equals(player)
-				&& !team.test(player) && !player.isClanMember() && !client.isFriended(player.getName(), false)
+				&& !team.test(player) && !clan.test(player) && !client.isFriended(player.getName(), false)
 				&& plugin.getLocationHashMap().containsKey(PlayerRelation.OTHER));
 
 	}
@@ -100,7 +100,7 @@ public class PlayerIndicatorsService
 				consumer.accept(p, PlayerRelation.CALLER);
 				continue;
 			}
-			if (callerTarget.test(p) )
+			if (callerTarget.test(p))
 			{
 				consumer.accept(p, PlayerRelation.CALLER_TARGET);
 				continue;
@@ -135,7 +135,7 @@ public class PlayerIndicatorsService
 				consumer.accept(p, PlayerRelation.TARGET);
 			}
 		}
-}
+	}
 
 	private boolean highlight()
 	{

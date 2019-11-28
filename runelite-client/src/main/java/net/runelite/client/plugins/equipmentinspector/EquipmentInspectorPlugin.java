@@ -24,7 +24,6 @@
  */
 package net.runelite.client.plugins.equipmentinspector;
 
-
 import com.google.inject.Provides;
 import java.awt.image.BufferedImage;
 import java.lang.reflect.InvocationTargetException;
@@ -44,15 +43,16 @@ import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
 import net.runelite.api.ItemDefinition;
 import net.runelite.api.Player;
-import net.runelite.api.events.ConfigChanged;
 import net.runelite.api.events.PlayerMenuOptionClicked;
 import net.runelite.api.kit.KitType;
+import net.runelite.api.util.Text;
 import net.runelite.client.chat.ChatColorType;
 import net.runelite.client.chat.ChatMessageBuilder;
 import net.runelite.client.chat.ChatMessageManager;
 import net.runelite.client.chat.QueuedMessage;
 import net.runelite.client.config.ConfigManager;
-import net.runelite.client.eventbus.EventBus;
+import net.runelite.client.eventbus.Subscribe;
+import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.menus.MenuManager;
 import net.runelite.client.plugins.Plugin;
@@ -61,7 +61,6 @@ import net.runelite.client.plugins.PluginType;
 import net.runelite.client.ui.ClientToolbar;
 import net.runelite.client.ui.NavigationButton;
 import net.runelite.client.util.ImageUtil;
-import net.runelite.api.util.Text;
 
 @PluginDescriptor(
 	name = "Equipment Inspector",
@@ -95,9 +94,6 @@ public class EquipmentInspectorPlugin extends Plugin
 	@Inject
 	private ClientToolbar pluginToolbar;
 
-	@Inject
-	private EventBus eventBus;
-
 	private NavigationButton navButton;
 	private EquipmentInspectorPanel equipmentInspectorPanel;
 	private int TotalPrice = 0;
@@ -117,10 +113,9 @@ public class EquipmentInspectorPlugin extends Plugin
 	}
 
 	@Override
-	protected void startUp() throws Exception
+	protected void startUp()
 	{
 		updateConfig();
-		addSubscriptions();
 
 		equipmentInspectorPanel = injector.getInstance(EquipmentInspectorPanel.class);
 		if (client != null)
@@ -142,20 +137,13 @@ public class EquipmentInspectorPlugin extends Plugin
 	}
 
 	@Override
-	protected void shutDown() throws Exception
+	protected void shutDown()
 	{
-		eventBus.unregister(this);
-
 		menuManager.removePlayerMenuItem(INSPECT_EQUIPMENT);
 		pluginToolbar.removeNavigation(navButton);
 	}
 
-	private void addSubscriptions()
-	{
-		eventBus.subscribe(ConfigChanged.class, this, this::onConfigChanged);
-		eventBus.subscribe(PlayerMenuOptionClicked.class, this, this::onPlayerMenuOptionClicked);
-	}
-
+	@Subscribe
 	private void onPlayerMenuOptionClicked(PlayerMenuOptionClicked event)
 	{
 		if (event.getMenuOption().equals(INSPECT_EQUIPMENT))
@@ -306,6 +294,7 @@ public class EquipmentInspectorPlugin extends Plugin
 		}
 	}
 
+	@Subscribe
 	private void onConfigChanged(ConfigChanged event)
 	{
 		if (event.getGroup().equalsIgnoreCase("equipmentinspector"))

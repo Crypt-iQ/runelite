@@ -72,6 +72,49 @@ public class OverlayUtil
 		graphics.setStroke(originalStroke);
 	}
 
+	public static void renderOutlinePolygon(Graphics2D graphics, Shape poly, Color color)
+	{
+		graphics.setColor(color);
+		final Stroke originalStroke = graphics.getStroke();
+		graphics.setStroke(new BasicStroke(2));
+		graphics.draw(poly);
+		graphics.setStroke(originalStroke);
+	}
+
+	public static void renderFilledPolygon(Graphics2D graphics, Shape poly, Color color)
+	{
+		graphics.setColor(color);
+		final Stroke originalStroke = graphics.getStroke();
+		graphics.setStroke(new BasicStroke(2));
+		graphics.draw(poly);
+		graphics.fill(poly);
+		graphics.setStroke(originalStroke);
+	}
+
+	public static void renderAreaTilePolygon(Graphics2D graphics, Shape poly, Color color)
+	{
+		graphics.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), 10));
+		graphics.fill(poly);
+	}
+
+	public static void renderFullLine(Graphics2D graphics, int[][] line, Color color)
+	{
+		graphics.setColor(color);
+		final Stroke originalStroke = graphics.getStroke();
+		graphics.setStroke(new BasicStroke(2));
+		graphics.drawLine(line[0][0], line[0][1], line[1][0], line[1][1]);
+		graphics.setStroke(originalStroke);
+	}
+
+	public static void renderDashedLine(Graphics2D graphics, int[][] line, Color color)
+	{
+		graphics.setColor(color);
+		final Stroke originalStroke = graphics.getStroke();
+		graphics.setStroke(new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{9}, 0));
+		graphics.drawLine(line[0][0], line[0][1], line[1][0], line[1][1]);
+		graphics.setStroke(originalStroke);
+	}
+
 	public static void renderPolygonThin(Graphics2D graphics, Polygon poly, Color color)
 	{
 		graphics.setColor(color);
@@ -252,8 +295,6 @@ public class OverlayUtil
 				break;
 			case TOP_LEFT:
 			case TOP_CENTER:
-				result.y += dimension.height + (dimension.height == 0 ? 0 : padding);
-				break;
 			case CANVAS_TOP_RIGHT:
 			case TOP_RIGHT:
 				result.y += dimension.height + (dimension.height == 0 ? 0 : padding);

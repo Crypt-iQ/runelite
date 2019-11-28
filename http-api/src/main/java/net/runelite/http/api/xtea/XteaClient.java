@@ -31,10 +31,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 import net.runelite.http.api.RuneLiteAPI;
+import static net.runelite.http.api.RuneLiteAPI.JSON;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.HttpUrl;
-import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
@@ -43,15 +43,13 @@ import org.slf4j.LoggerFactory;
 
 public class XteaClient
 {
-	private static final MediaType JSON = MediaType.parse("application/json");
-
 	private static final Logger logger = LoggerFactory.getLogger(XteaClient.class);
 
 	public void submit(XteaRequest xteaRequest)
 	{
 		String json = RuneLiteAPI.GSON.toJson(xteaRequest);
 
-		HttpUrl url = RuneLiteAPI.getPlusApiBase().newBuilder()
+		HttpUrl url = RuneLiteAPI.getOpenOSRSApiBase().newBuilder()
 			.addPathSegment("xtea")
 			.build();
 
@@ -63,7 +61,7 @@ public class XteaClient
 			.url(url)
 			.build();
 
-		RuneLiteAPI.RLP_CLIENT.newCall(request).enqueue(new Callback()
+		RuneLiteAPI.CLIENT.newCall(request).enqueue(new Callback()
 		{
 			@Override
 			public void onFailure(Call call, IOException e)
@@ -91,7 +89,7 @@ public class XteaClient
 
 	public List<XteaKey> get() throws IOException
 	{
-		HttpUrl url = RuneLiteAPI.getPlusApiBase().newBuilder()
+		HttpUrl url = RuneLiteAPI.getOpenOSRSApiBase().newBuilder()
 			.addPathSegment("xtea")
 			.build();
 
@@ -103,9 +101,7 @@ public class XteaClient
 		{
 			InputStream in = response.body().byteStream();
 			// CHECKSTYLE:OFF
-			return RuneLiteAPI.GSON.fromJson(new InputStreamReader(in), new TypeToken<List<XteaKey>>()
-			{
-			}.getType());
+			return RuneLiteAPI.GSON.fromJson(new InputStreamReader(in), new TypeToken<List<XteaKey>>() {}.getType());
 			// CHECKSTYLE:ON
 		}
 		catch (JsonParseException ex)
@@ -116,7 +112,7 @@ public class XteaClient
 
 	public XteaKey get(int region) throws IOException
 	{
-		HttpUrl url = RuneLiteAPI.getPlusApiBase().newBuilder()
+		HttpUrl url = RuneLiteAPI.getOpenOSRSApiBase().newBuilder()
 			.addPathSegment("xtea")
 			.addPathSegment(Integer.toString(region))
 			.build();

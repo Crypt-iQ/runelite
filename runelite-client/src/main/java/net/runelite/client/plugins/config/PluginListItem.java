@@ -44,6 +44,8 @@ import net.runelite.client.config.ConfigDescriptor;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.plugins.PluginType;
+import net.runelite.client.ui.ColorScheme;
 import net.runelite.client.ui.PluginPanel;
 import net.runelite.client.ui.components.IconButton;
 import net.runelite.client.util.ImageUtil;
@@ -58,13 +60,13 @@ public class PluginListItem extends JPanel
 	private static final ImageIcon CONFIG_ICON;
 	private static final ImageIcon CONFIG_ICON_HOVER;
 	private static final ImageIcon ON_SWITCHER;
-	private static final ImageIcon OFF_SWITCHER;
+	public static final ImageIcon OFF_SWITCHER;
 	private static final ImageIcon ON_STAR;
 	private static final ImageIcon OFF_STAR;
 
 	private final ConfigPanel configPanel;
 
-	@Getter
+	@Getter(AccessLevel.PACKAGE)
 	@Nullable
 	private final Plugin plugin;
 
@@ -82,19 +84,25 @@ public class PluginListItem extends JPanel
 	@Getter(AccessLevel.PUBLIC)
 	private final String description;
 
+	@Getter(AccessLevel.PUBLIC)
+	private final PluginType pluginType;
+
 	private final List<String> keywords = new ArrayList<>();
 
 	private final IconButton pinButton = new IconButton(OFF_STAR);
 	private final IconButton configButton = new IconButton(CONFIG_ICON, CONFIG_ICON_HOVER);
 	private final IconButton toggleButton = new IconButton(OFF_SWITCHER);
 
+	@Getter(AccessLevel.PACKAGE)
 	private boolean isPluginEnabled = false;
 
-	@Getter
+	@Getter(AccessLevel.PACKAGE)
 	private boolean isPinned = false;
 
-	@Getter
+	@Getter(AccessLevel.PACKAGE)
 	private boolean isHidden = false;
+
+	private Color color = null;
 
 	static
 	{
@@ -102,8 +110,8 @@ public class PluginListItem extends JPanel
 		BufferedImage onSwitcher = ImageUtil.getResourceStreamFromClass(ConfigPanel.class, "switcher_on.png");
 		BufferedImage onStar = ImageUtil.getResourceStreamFromClass(ConfigPanel.class, "star_on.png");
 		CONFIG_ICON = new ImageIcon(configIcon);
-		ON_SWITCHER = new ImageIcon(ImageUtil.recolorImage(onSwitcher, new Color(0, 106, 221)));
-		ON_STAR = new ImageIcon(ImageUtil.recolorImage(onStar, new Color(0, 106, 221)));
+		ON_SWITCHER = new ImageIcon(ImageUtil.recolorImage(onSwitcher, ColorScheme.BRAND_BLUE));
+		ON_STAR = new ImageIcon(ImageUtil.recolorImage(onStar, ColorScheme.BRAND_BLUE));
 		CONFIG_ICON_HOVER = new ImageIcon(ImageUtil.grayscaleOffset(configIcon, -100));
 		BufferedImage offSwitcherImage = ImageUtil.flipImage(
 			ImageUtil.grayscaleOffset(
@@ -131,20 +139,20 @@ public class PluginListItem extends JPanel
 				@Nullable Config config, @Nullable ConfigDescriptor configDescriptor)
 	{
 		this(configPanel, configManager, plugin, config, configDescriptor,
-			descriptor.name(), descriptor.description(), descriptor.tags());
+			descriptor.name(), descriptor.description(), descriptor.type(), descriptor.tags());
 	}
 
 	/**
 	 * Creates a new {@code PluginListItem} for a core configuration.
 	 */
 	PluginListItem(ConfigPanel configPanel, ConfigManager configManager, Config config, ConfigDescriptor configDescriptor,
-				String name, String description, String... tags)
+				String name, String description, PluginType pluginType, String... tags)
 	{
-		this(configPanel, configManager, null, config, configDescriptor, name, description, tags);
+		this(configPanel, configManager, null, config, configDescriptor, name, description, pluginType, tags);
 	}
 
 	private PluginListItem(ConfigPanel configPanel, ConfigManager configManager, @Nullable Plugin plugin, @Nullable Config config,
-						@Nullable ConfigDescriptor configDescriptor, String name, String description, String... tags)
+						@Nullable ConfigDescriptor configDescriptor, String name, String description, PluginType pluginType, String... tags)
 	{
 		this.configPanel = configPanel;
 		this.plugin = plugin;
@@ -152,6 +160,7 @@ public class PluginListItem extends JPanel
 		this.configDescriptor = configDescriptor;
 		this.name = name;
 		this.description = description;
+		this.pluginType = pluginType;
 		Collections.addAll(keywords, name.toLowerCase().split(" "));
 		Collections.addAll(keywords, description.toLowerCase().split(" "));
 		Collections.addAll(keywords, tags);
@@ -206,7 +215,7 @@ public class PluginListItem extends JPanel
 		buttonPanel.add(toggleButton);
 	}
 
-	private void attachToggleButtonListener(IconButton button)
+	void attachToggleButtonListener(IconButton button)
 	{
 		// no need for a listener if there is no plugin to enable / disable
 		if (plugin == null)
@@ -231,15 +240,6 @@ public class PluginListItem extends JPanel
 		});
 	}
 
-	IconButton createToggleButton()
-	{
-		IconButton button = new IconButton(OFF_SWITCHER);
-		button.setPreferredSize(new Dimension(25, 0));
-		updateToggleButton(button);
-		attachToggleButtonListener(button);
-		return button;
-	}
-
 	void setPluginEnabled(boolean enabled)
 	{
 		isPluginEnabled = enabled;
@@ -253,12 +253,28 @@ public class PluginListItem extends JPanel
 		pinButton.setToolTipText(pinned ? "Unpin plugin" : "Pin plugin");
 	}
 
+	Color getColor()
+	{
+		return this.color == null ? Color.WHITE : this.color;
+	}
+
+	public void setColor(Color color)
+	{
+		if (color == null)
+		{
+			return;
+		}
+
+		this.color = color;
+		this.nameLabel.setForeground(color);
+	}
+
 	public void setHidden(boolean hidden)
 	{
 		isHidden = hidden;
 	}
 
-	private void updateToggleButton(IconButton button)
+	void updateToggleButton(IconButton button)
 	{
 		button.setIcon(isPluginEnabled ? ON_SWITCHER : OFF_SWITCHER);
 		button.setToolTipText(isPluginEnabled ? "Disable plugin" : "Enable plugin");

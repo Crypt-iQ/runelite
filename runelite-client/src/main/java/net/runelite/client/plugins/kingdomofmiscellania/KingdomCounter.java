@@ -28,7 +28,7 @@ package net.runelite.client.plugins.kingdomofmiscellania;
 import java.awt.image.BufferedImage;
 import javax.inject.Singleton;
 import net.runelite.client.ui.overlay.infobox.Counter;
-import net.runelite.client.util.StackFormatter;
+import net.runelite.client.util.QuantityFormatter;
 
 @Singleton
 class KingdomCounter extends Counter
@@ -50,12 +50,11 @@ class KingdomCounter extends Counter
 	@Override
 	public String getTooltip()
 	{
-		return new StringBuilder("Favor: ")
-			.append(plugin.getFavor())
-			.append("/127")
-			.append("</br>")
-			.append("Coffer: ")
-			.append(StackFormatter.quantityToRSStackSize(plugin.getCoffer()))
-			.toString();
+		return "Favor: " +
+			plugin.getFavor() +
+			"/127" +
+			"</br>" +
+			"Coffer: " +
+			QuantityFormatter.quantityToStackSize(plugin.getCoffer());
 	}
 }

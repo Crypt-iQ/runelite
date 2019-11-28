@@ -40,8 +40,8 @@ import java.awt.image.BufferedImage;
 import javax.annotation.Nullable;
 import javax.inject.Singleton;
 import javax.swing.ImageIcon;
-import javax.swing.JMenuItem;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.border.EmptyBorder;
@@ -50,14 +50,14 @@ import net.runelite.api.GrandExchangeOfferState;
 import static net.runelite.api.GrandExchangeOfferState.CANCELLED_BUY;
 import static net.runelite.api.GrandExchangeOfferState.CANCELLED_SELL;
 import static net.runelite.api.GrandExchangeOfferState.EMPTY;
-import static net.runelite.client.plugins.grandexchange.GrandExchangeItemPanel.geLink;
 import net.runelite.api.ItemDefinition;
+import static net.runelite.client.plugins.grandexchange.GrandExchangeItemPanel.geLink;
 import net.runelite.client.ui.ColorScheme;
 import net.runelite.client.ui.FontManager;
 import net.runelite.client.ui.components.ThinProgressBar;
 import net.runelite.client.util.ColorUtil;
 import net.runelite.client.util.ImageUtil;
-import net.runelite.client.util.StackFormatter;
+import net.runelite.client.util.QuantityFormatter;
 
 @Singleton
 class GrandExchangeOfferSlot extends JPanel
@@ -228,17 +228,17 @@ class GrandExchangeOfferSlot extends JPanel
 				|| newOffer.getState() == GrandExchangeOfferState.CANCELLED_BUY;
 
 			String offerState = (buying ? "Bought " : "Sold ")
-				+ StackFormatter.quantityToRSDecimalStack(newOffer.getQuantitySold()) + " / "
-				+ StackFormatter.quantityToRSDecimalStack(newOffer.getTotalQuantity());
+				+ QuantityFormatter.quantityToRSDecimalStack(newOffer.getQuantitySold()) + " / "
+				+ QuantityFormatter.quantityToRSDecimalStack(newOffer.getTotalQuantity());
 
 			offerInfo.setText(offerState);
 
-			itemPrice.setText(htmlLabel("Price each: ", StackFormatter.formatNumber(newOffer.getPrice())));
+			itemPrice.setText(htmlLabel("Price each: ", QuantityFormatter.formatNumber(newOffer.getPrice())));
 
 			String action = buying ? "Spent: " : "Received: ";
 
-			offerSpent.setText(htmlLabel(action, StackFormatter.formatNumber(newOffer.getSpent()) + " / "
-				+ StackFormatter.formatNumber(newOffer.getPrice() * newOffer.getTotalQuantity())));
+			offerSpent.setText(htmlLabel(action, QuantityFormatter.formatNumber(newOffer.getSpent()) + " / "
+				+ QuantityFormatter.formatNumber(newOffer.getPrice() * newOffer.getTotalQuantity())));
 
 			progressBar.setForeground(getProgressColor(newOffer));
 			progressBar.setMaximumValue(newOffer.getTotalQuantity());

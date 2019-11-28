@@ -27,6 +27,7 @@
 package net.runelite.client.plugins.bank;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Strings;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multiset;
@@ -42,31 +43,36 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import net.runelite.api.Client;
 import static net.runelite.api.Constants.HIGH_ALCHEMY_MULTIPLIER;
+import net.runelite.api.FontID;
 import net.runelite.api.InventoryID;
 import net.runelite.api.Item;
-import net.runelite.api.FontID;
 import net.runelite.api.ItemContainer;
 import net.runelite.api.ItemDefinition;
 import net.runelite.api.ItemID;
 import net.runelite.api.MenuEntry;
-import net.runelite.api.events.ConfigChanged;
+import net.runelite.api.SpriteID;
+import net.runelite.api.VarClientInt;
+import net.runelite.api.VarClientStr;
 import net.runelite.api.Varbits;
 import net.runelite.api.events.ItemContainerChanged;
 import net.runelite.api.events.MenuEntryAdded;
 import net.runelite.api.events.MenuShouldLeftClick;
 import net.runelite.api.events.ScriptCallbackEvent;
+import net.runelite.api.events.VarClientStrChanged;
 import net.runelite.api.events.WidgetLoaded;
+import net.runelite.api.vars.InputType;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetID;
 import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
-import net.runelite.client.eventbus.EventBus;
+import net.runelite.client.eventbus.Subscribe;
+import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.plugins.banktags.tabs.BankSearch;
-import net.runelite.client.util.StackFormatter;
+import net.runelite.client.util.QuantityFormatter;
 
 @PluginDescriptor(
 	name = "Bank",
@@ -89,16 +95,16 @@ public class BankPlugin extends Plugin
 	);
 
 	private static final List<WidgetInfo> BANK_PINS = ImmutableList.of(
-			WidgetInfo.BANK_PIN_1,
-			WidgetInfo.BANK_PIN_2,
-			WidgetInfo.BANK_PIN_3,
-			WidgetInfo.BANK_PIN_4,
-			WidgetInfo.BANK_PIN_5,
-			WidgetInfo.BANK_PIN_6,
-			WidgetInfo.BANK_PIN_7,
-			WidgetInfo.BANK_PIN_8,
-			WidgetInfo.BANK_PIN_9,
-			WidgetInfo.BANK_PIN_10
+		WidgetInfo.BANK_PIN_1,
+		WidgetInfo.BANK_PIN_2,
+		WidgetInfo.BANK_PIN_3,
+		WidgetInfo.BANK_PIN_4,
+		WidgetInfo.BANK_PIN_5,
+		WidgetInfo.BANK_PIN_6,
+		WidgetInfo.BANK_PIN_7,
+		WidgetInfo.BANK_PIN_8,
+		WidgetInfo.BANK_PIN_9,
+		WidgetInfo.BANK_PIN_10
 	);
 
 	private static final String DEPOSIT_WORN = "Deposit worn items";
@@ -128,9 +134,6 @@ public class BankPlugin extends Plugin
 	private BankSearch bankSearch;
 
 	@Inject
-	private EventBus eventBus;
-
-	@Inject
 	private ContainerCalculation bankCalculation;
 
 	@Inject
@@ -139,6 +142,7 @@ public class BankPlugin extends Plugin
 	private boolean forceRightClickFlag;
 	private boolean largePinNumbers;
 	private Multiset<Integer> itemQuantities; // bank item quantities for bank value search
+	private String searchString;
 
 	@Provides
 	BankConfig getConfig(ConfigManager configManager)
@@ -156,31 +160,21 @@ public class BankPlugin extends Plugin
 	private boolean rightClickBankLoot;
 
 	@Override
-	protected void startUp() throws Exception
+	protected void startUp()
 	{
 		updateConfig();
-		addSubscriptions();
+		searchString = "";
 	}
 
 	@Override
 	protected void shutDown()
 	{
-		eventBus.unregister(this);
 		clientThread.invokeLater(() -> bankSearch.reset(false));
 		forceRightClickFlag = false;
 		itemQuantities = null;
 	}
 
-	private void addSubscriptions()
-	{
-		eventBus.subscribe(ConfigChanged.class, this, this::onConfigChanged);
-		eventBus.subscribe(MenuShouldLeftClick.class, this, this::onMenuShouldLeftClick);
-		eventBus.subscribe(MenuEntryAdded.class, this, this::onMenuEntryAdded);
-		eventBus.subscribe(ScriptCallbackEvent.class, this, this::onScriptCallbackEvent);
-		eventBus.subscribe(WidgetLoaded.class, this, this::onWidgetLoaded);
-		eventBus.subscribe(ItemContainerChanged.class, this, this::onItemContainerChanged);
-	}
-
+	@Subscribe
 	private void onMenuShouldLeftClick(MenuShouldLeftClick event)
 	{
 		if (!forceRightClickFlag)
@@ -202,6 +196,7 @@ public class BankPlugin extends Plugin
 		}
 	}
 
+	@Subscribe
 	private void onMenuEntryAdded(MenuEntryAdded event)
 	{
 		if ((event.getOption().equals(DEPOSIT_WORN) && this.rightClickBankEquip)
@@ -212,6 +207,7 @@ public class BankPlugin extends Plugin
 		}
 	}
 
+	@Subscribe
 	private void onScriptCallbackEvent(ScriptCallbackEvent event)
 	{
 		if (event.getEventName().equals("bankPinButtons") && this.largePinNumbers)
@@ -256,6 +252,7 @@ public class BankPlugin extends Plugin
 		}
 	}
 
+	@Subscribe
 	private void onWidgetLoaded(WidgetLoaded event)
 	{
 		if (event.getGroupId() != WidgetID.SEED_VAULT_GROUP_ID || !config.seedVaultValue())
@@ -266,7 +263,36 @@ public class BankPlugin extends Plugin
 		updateSeedVaultTotal();
 	}
 
-	private void onItemContainerChanged(ItemContainerChanged event)
+	@Subscribe
+	public void onVarClientStrChanged(VarClientStrChanged event)
+	{
+		String searchVar = client.getVar(VarClientStr.INPUT_TEXT);
+
+		if (!searchVar.equals(searchString))
+		{
+			Widget searchButtonBackground = client.getWidget(WidgetInfo.BANK_SEARCH_BUTTON_BACKGROUND);
+			if (searchButtonBackground != null && searchButtonBackground.hasListener())
+			{
+				searchButtonBackground.setOnTimerListener((Object[]) null);
+				searchButtonBackground.setHasListener(false);
+			}
+
+			clientThread.invokeLater(() -> bankSearch.layoutBank());
+			searchString = searchVar;
+		}
+
+		if (client.getVar(VarClientInt.INPUT_TYPE) != InputType.SEARCH.getType() && Strings.isNullOrEmpty(client.getVar(VarClientStr.INPUT_TEXT)))
+		{
+			Widget searchBackground = client.getWidget(WidgetInfo.BANK_SEARCH_BUTTON_BACKGROUND);
+			if (searchBackground != null)
+			{
+				searchBackground.setSpriteId(SpriteID.EQUIPMENT_SLOT_TILE);
+			}
+		}
+	}
+
+	@Subscribe
+	public void onItemContainerChanged(ItemContainerChanged event)
 	{
 		int containerId = event.getContainerId();
 
@@ -297,11 +323,11 @@ public class BankPlugin extends Plugin
 
 			if (this.showExact)
 			{
-				strCurrentTab += StackFormatter.formatNumber(gePrice) + ")";
+				strCurrentTab += QuantityFormatter.formatNumber(gePrice) + ")";
 			}
 			else
 			{
-				strCurrentTab += StackFormatter.quantityToStackSize(gePrice) + ")";
+				strCurrentTab += QuantityFormatter.quantityToStackSize(gePrice) + ")";
 			}
 		}
 
@@ -316,11 +342,11 @@ public class BankPlugin extends Plugin
 
 			if (this.showExact)
 			{
-				strCurrentTab += StackFormatter.formatNumber(haPrice) + ")";
+				strCurrentTab += QuantityFormatter.formatNumber(haPrice) + ")";
 			}
 			else
 			{
-				strCurrentTab += StackFormatter.quantityToStackSize(haPrice) + ")";
+				strCurrentTab += QuantityFormatter.quantityToStackSize(haPrice) + ")";
 			}
 		}
 
@@ -391,6 +417,7 @@ public class BankPlugin extends Plugin
 		return itemContainer.getItems();
 	}
 
+	@Subscribe
 	private void onConfigChanged(ConfigChanged event)
 	{
 		if (!event.getGroup().equals("bank"))
@@ -479,7 +506,7 @@ public class BankPlugin extends Plugin
 			long compare;
 			try
 			{
-				compare = StackFormatter.stackSizeToQuantity(matcher.group("num"));
+				compare = QuantityFormatter.parseQuantity(matcher.group("num"));
 			}
 			catch (ParseException e)
 			{
@@ -508,8 +535,8 @@ public class BankPlugin extends Plugin
 			long compare1, compare2;
 			try
 			{
-				compare1 = StackFormatter.stackSizeToQuantity(num1);
-				compare2 = StackFormatter.stackSizeToQuantity(num2);
+				compare1 = QuantityFormatter.parseQuantity(num1);
+				compare2 = QuantityFormatter.parseQuantity(num2);
 			}
 			catch (ParseException e)
 			{

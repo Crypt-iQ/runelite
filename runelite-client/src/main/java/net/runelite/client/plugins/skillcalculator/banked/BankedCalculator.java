@@ -41,13 +41,13 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.Experience;
 import net.runelite.api.Skill;
-import net.runelite.client.game.AsyncBufferedImage;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.plugins.skillcalculator.SkillCalculatorConfig;
 import net.runelite.client.plugins.skillcalculator.UICalculatorInputArea;
@@ -61,6 +61,7 @@ import net.runelite.client.plugins.skillcalculator.banked.components.SelectionGr
 import net.runelite.client.ui.ColorScheme;
 import net.runelite.client.ui.DynamicGridLayout;
 import net.runelite.client.ui.FontManager;
+import net.runelite.client.util.AsyncBufferedImage;
 
 @Slf4j
 public class BankedCalculator extends JPanel
@@ -68,7 +69,7 @@ public class BankedCalculator extends JPanel
 	public static final DecimalFormat XP_FORMAT_COMMA = new DecimalFormat("#,###.#");
 
 	private final Client client;
-	@Getter
+	@Getter(AccessLevel.PUBLIC)
 	private final SkillCalculatorConfig config;
 	private final UICalculatorInputArea uiInput;
 	private final ItemManager itemManager;
@@ -82,17 +83,17 @@ public class BankedCalculator extends JPanel
 	private final ModifyPanel modifyPanel;
 	private SelectionGrid itemGrid;
 
-	@Setter
+	@Setter(AccessLevel.PACKAGE)
 	private Map<Integer, Integer> bankMap = new HashMap<>();
 
-	@Getter
+	@Getter(AccessLevel.PACKAGE)
 	private Skill currentSkill;
 
-	@Getter
+	@Getter(AccessLevel.PUBLIC)
 	private int skillLevel, skillExp, endLevel, endExp;
 
 	private final Collection<JCheckBox> xpModifierButtons = new ArrayList<>();
-	@Getter
+	@Getter(AccessLevel.PUBLIC)
 	private float xpFactor = 1.0f;
 
 	BankedCalculator(UICalculatorInputArea uiInput, Client client, SkillCalculatorConfig config, ItemManager itemManager)

@@ -30,6 +30,10 @@ package net.runelite.api;
 public enum InventoryID
 {
 	/**
+	 * Reward from fishing trawler
+	 */
+	FISHING_TRAWLER_REWARD(0),
+	/**
 	 * Standard player inventory.
 	 */
 	INVENTORY(93),
@@ -94,13 +98,14 @@ public enum InventoryID
 
 	public static InventoryID getValue(int value)
 	{
-		for (InventoryID e: InventoryID.values())
+		for (InventoryID e : InventoryID.values())
 		{
 			if (e.id == value)
 			{
 				return e;
 			}
 		}
-		return null;
+
+		throw new IllegalArgumentException("No InventoryID with id " + value + " exists");
 	}
 }

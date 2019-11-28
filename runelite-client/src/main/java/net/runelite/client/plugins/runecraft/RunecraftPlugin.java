@@ -28,11 +28,11 @@ import com.google.common.collect.ImmutableSet;
 import com.google.inject.Provides;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Stream;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
 import net.runelite.api.DecorativeObject;
@@ -43,17 +43,20 @@ import net.runelite.api.ItemContainer;
 import net.runelite.api.ItemID;
 import net.runelite.api.NPC;
 import net.runelite.api.NpcID;
+import net.runelite.api.VarPlayer;
 import net.runelite.api.events.ChatMessage;
-import net.runelite.api.events.ConfigChanged;
 import net.runelite.api.events.DecorativeObjectDespawned;
 import net.runelite.api.events.DecorativeObjectSpawned;
 import net.runelite.api.events.GameStateChanged;
+import net.runelite.api.events.GameTick;
 import net.runelite.api.events.ItemContainerChanged;
 import net.runelite.api.events.NpcDespawned;
 import net.runelite.api.events.NpcSpawned;
 import net.runelite.client.Notifier;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.EventBus;
+import net.runelite.client.eventbus.Subscribe;
+import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.menus.BaseComparableEntry;
 import static net.runelite.client.menus.ComparableEntries.newBaseComparableEntry;
 import net.runelite.client.menus.MenuManager;
@@ -71,8 +74,14 @@ import net.runelite.client.ui.overlay.OverlayManager;
 	tags = {"abyssal", "minimap", "overlay", "rifts", "rc", "runecrafting"}
 )
 @Singleton
+@Getter(AccessLevel.PACKAGE)
+@Slf4j
 public class RunecraftPlugin extends Plugin
 {
+	private static final int MEDIUM_DEGRADE = 46;
+	private static final int LARGE_DEGRADE = 30;
+	private static final int GIANT_DEGRADE = 11;
+	private static final Object POUCH_TICK = new Object();
 	private static final BankComparableEntry POUCH = new BankComparableEntry("fill", "pouch", false);
 	private static final BaseComparableEntry EMPTY_SMALL = newBaseComparableEntry("empty", "small pouch");
 	private static final BaseComparableEntry EMPTY_MEDIUM = newBaseComparableEntry("empty", "medium pouch");
@@ -88,9 +97,6 @@ public class RunecraftPlugin extends Plugin
 		ItemID.LARGE_POUCH_5513,
 		ItemID.GIANT_POUCH_5515
 	);
-
-	@Getter(AccessLevel.PACKAGE)
-	private final Set<AbyssRifts> rifts = new HashSet<>();
 
 	@Inject
 	private Client client;
@@ -108,6 +114,9 @@ public class RunecraftPlugin extends Plugin
 	private RunecraftOverlay runecraftOverlay;
 
 	@Inject
+	private PouchOverlay pouchOverlay;
+
+	@Inject
 	private RunecraftConfig config;
 
 	@Inject
@@ -119,23 +128,23 @@ public class RunecraftPlugin extends Plugin
 	@Inject
 	private EventBus eventBus;
 
-	@Getter(AccessLevel.PACKAGE)
+	private final Set<AbyssRifts> rifts = new HashSet<>();
 	private final Set<DecorativeObject> abyssObjects = new HashSet<>();
-	@Getter(AccessLevel.PACKAGE)
 	private boolean degradedPouchInInventory;
-	@Getter(AccessLevel.PACKAGE)
 	private boolean degradingNotification;
-	@Getter(AccessLevel.PACKAGE)
 	private boolean essPouch;
-	@Getter(AccessLevel.PACKAGE)
 	private boolean hightlightDarkMage;
-	@Getter(AccessLevel.PACKAGE)
 	private boolean lavas;
-	@Getter(AccessLevel.PACKAGE)
 	private boolean showClickBox;
-	@Getter(AccessLevel.PACKAGE)
 	private boolean showRifts;
-	@Getter(AccessLevel.PACKAGE)
+	private boolean degradeOverlay;
+	private boolean medDegrade;
+	private boolean largeDegrade;
+	private boolean giantDegrade;
+	private int mediumCharges = MEDIUM_DEGRADE;
+	private int largeCharges = LARGE_DEGRADE;
+	private int giantCharges = GIANT_DEGRADE;
+	private int pouchVar = 0;
 	private NPC darkMage;
 
 	@Provides
@@ -145,10 +154,9 @@ public class RunecraftPlugin extends Plugin
 	}
 
 	@Override
-	protected void startUp() throws Exception
+	protected void startUp()
 	{
 		updateConfig();
-		addSubscriptions();
 		overlayManager.add(abyssOverlay);
 		overlayManager.add(abyssMinimapOverlay);
 		overlayManager.add(runecraftOverlay);
@@ -156,9 +164,8 @@ public class RunecraftPlugin extends Plugin
 	}
 
 	@Override
-	protected void shutDown() throws Exception
+	protected void shutDown()
 	{
-		eventBus.unregister(this);
 		abyssObjects.clear();
 		darkMage = null;
 		degradedPouchInInventory = false;
@@ -168,18 +175,88 @@ public class RunecraftPlugin extends Plugin
 		removeSwaps();
 	}
 
-	private void addSubscriptions()
+	private void onGameTick(GameTick event)
 	{
-		eventBus.subscribe(ConfigChanged.class, this, this::onConfigChanged);
-		eventBus.subscribe(ChatMessage.class, this, this::onChatMessage);
-		eventBus.subscribe(DecorativeObjectSpawned.class, this, this::onDecorativeObjectSpawned);
-		eventBus.subscribe(DecorativeObjectDespawned.class, this, this::onDecorativeObjectDespawned);
-		eventBus.subscribe(GameStateChanged.class, this, this::onGameStateChanged);
-		eventBus.subscribe(ItemContainerChanged.class, this, this::onItemContainerChanged);
-		eventBus.subscribe(NpcSpawned.class, this, this::onNpcSpawned);
-		eventBus.subscribe(NpcDespawned.class, this, this::onNpcDespawned);
+		final int before = pouchVar;
+		pouchVar = client.getVar(VarPlayer.POUCH_STATUS);
+
+		if (pouchVar == before)
+		{
+			return;
+		}
+
+		if ((pouchVar & 0x8) > 0 && (before & 0x8) <= 0)
+		{
+			if (giantCharges > 0)
+			{
+				giantCharges--;
+			}
+		}
+		if ((pouchVar & 0x4) > 0 && (before & 0x4) <= 0)
+		{
+			if (largeCharges > 0)
+			{
+				largeCharges--;
+			}
+		}
+		if ((pouchVar & 0x2) > 0 && (before & 0x2) <= 0)
+		{
+			if (mediumCharges > 0)
+			{
+				mediumCharges--;
+			}
+		}
 	}
 
+	@Subscribe
+	private void onItemContainerChanged(ItemContainerChanged event)
+	{
+		final ItemContainer container = event.getItemContainer();
+
+		if (container == client.getItemContainer(InventoryID.INVENTORY))
+		{
+			degradedPouchInInventory = false;
+
+			for (Item item : container.getItems())
+			{
+				if (!medDegrade && item.getId() == ItemID.MEDIUM_POUCH_5511)
+				{
+					medDegrade = true;
+					mediumCharges = 0;
+					degradedPouchInInventory = true;
+				}
+				else if (!largeDegrade && item.getId() == ItemID.LARGE_POUCH_5513)
+				{
+					largeDegrade = true;
+					largeCharges = 0;
+					degradedPouchInInventory = true;
+				}
+				else if (!giantDegrade && item.getId() == ItemID.GIANT_POUCH_5515)
+				{
+					giantDegrade = true;
+					giantCharges = 0;
+					degradedPouchInInventory = true;
+				}
+				else if (medDegrade && item.getId() == ItemID.MEDIUM_POUCH)
+				{
+					medDegrade = false;
+					mediumCharges = MEDIUM_DEGRADE;
+				}
+				else if (largeDegrade && item.getId() == ItemID.LARGE_POUCH)
+				{
+					largeDegrade = false;
+					largeCharges = LARGE_DEGRADE;
+				}
+				else if (giantDegrade && item.getId() == ItemID.GIANT_POUCH)
+				{
+					giantDegrade = false;
+					giantCharges = GIANT_DEGRADE;
+				}
+			}
+		}
+	}
+
+	@Subscribe
 	private void onConfigChanged(ConfigChanged event)
 	{
 		if (!event.getGroup().equals("runecraft"))
@@ -196,6 +273,7 @@ public class RunecraftPlugin extends Plugin
 		}
 	}
 
+	@Subscribe
 	private void onChatMessage(ChatMessage event)
 	{
 		if (event.getType() != ChatMessageType.GAMEMESSAGE)
@@ -209,6 +287,7 @@ public class RunecraftPlugin extends Plugin
 		}
 	}
 
+	@Subscribe
 	private void onDecorativeObjectSpawned(DecorativeObjectSpawned event)
 	{
 		final DecorativeObject decorativeObject = event.getDecorativeObject();
@@ -218,12 +297,14 @@ public class RunecraftPlugin extends Plugin
 		}
 	}
 
+	@Subscribe
 	private void onDecorativeObjectDespawned(DecorativeObjectDespawned event)
 	{
 		final DecorativeObject decorativeObject = event.getDecorativeObject();
 		abyssObjects.remove(decorativeObject);
 	}
 
+	@Subscribe
 	private void onGameStateChanged(GameStateChanged event)
 	{
 		final GameState gameState = event.getGameState();
@@ -245,17 +326,7 @@ public class RunecraftPlugin extends Plugin
 		}
 	}
 
-	private void onItemContainerChanged(ItemContainerChanged event)
-	{
-		final ItemContainer container = event.getItemContainer();
-
-		if (container == client.getItemContainer(InventoryID.INVENTORY))
-		{
-			final Item[] items = container.getItems();
-			degradedPouchInInventory = Stream.of(items).anyMatch(i -> DEGRADED_POUCHES.contains(i.getId()));
-		}
-	}
-
+	@Subscribe
 	private void onNpcSpawned(NpcSpawned event)
 	{
 		final NPC npc = event.getNpc();
@@ -266,6 +337,7 @@ public class RunecraftPlugin extends Plugin
 		}
 	}
 
+	@Subscribe
 	private void onNpcDespawned(NpcDespawned event)
 	{
 		final NPC npc = event.getNpc();
@@ -339,6 +411,18 @@ public class RunecraftPlugin extends Plugin
 		this.degradingNotification = config.degradingNotification();
 		this.showRifts = config.showRifts();
 		this.showClickBox = config.showClickBox();
+		this.degradeOverlay = config.degradeOverlay();
+
+		if (this.degradeOverlay)
+		{
+			overlayManager.add(pouchOverlay);
+			eventBus.subscribe(GameTick.class, POUCH_TICK, this::onGameTick);
+		}
+		else
+		{
+			overlayManager.remove(pouchOverlay);
+			eventBus.unregister(POUCH_TICK);
+		}
 
 		updateRifts();
 	}

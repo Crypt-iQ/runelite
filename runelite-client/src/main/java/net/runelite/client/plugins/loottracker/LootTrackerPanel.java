@@ -46,9 +46,11 @@ import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.border.EmptyBorder;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -60,7 +62,7 @@ import net.runelite.client.ui.PluginPanel;
 import net.runelite.client.ui.components.PluginErrorPanel;
 import net.runelite.client.util.ColorUtil;
 import net.runelite.client.util.ImageUtil;
-import net.runelite.client.util.StackFormatter;
+import net.runelite.client.util.QuantityFormatter;
 import net.runelite.http.api.loottracker.LootTrackerClient;
 
 @Slf4j
@@ -90,6 +92,10 @@ class LootTrackerPanel extends PluginPanel
 
 	private static final String HTML_LABEL_TEMPLATE =
 		"<html><body style='color:%s'>%s<span style='color:white'>%s</span></body></html>";
+	private static final String SYNC_RESET_ALL_WARNING_TEXT =
+		"This will permanently delete the current loot from both the client and the RuneLite website.";
+	private static final String NO_SYNC_RESET_ALL_WARNING_TEXT =
+		"This will permanently delete the current loot from the client.";
 
 	// When there is no loot, display this
 	private final PluginErrorPanel errorPanel = new PluginErrorPanel();
@@ -112,7 +118,6 @@ class LootTrackerPanel extends PluginPanel
 	private final JLabel groupedLootBtn = new JLabel();
 	private final JLabel resetIcon = new JLabel();
 	private final JLabel collapseBtn = new JLabel();
-	private JComboBox dateFilterComboBox = new JComboBox<>(new Vector<>(Arrays.asList(LootRecordDateFilter.values())));
 
 	// Log collection
 	private final List<LootTrackerRecord> records = new ArrayList<>();
@@ -165,8 +170,8 @@ class LootTrackerPanel extends PluginPanel
 		EXPAND_ICON = new ImageIcon(expandedImg);
 	}
 
-	@Getter
-	@Setter
+	@Getter(AccessLevel.PACKAGE)
+	@Setter(AccessLevel.PACKAGE)
 	private LootRecordSortType lootRecordSortType = LootRecordSortType.TIMESTAMP;
 
 	LootTrackerPanel(final LootTrackerPlugin plugin, final ItemManager itemManager, final LootTrackerConfig config)
@@ -296,14 +301,14 @@ class LootTrackerPanel extends PluginPanel
 			}
 		});
 
+		JComboBox dateFilterComboBox = new JComboBox<>(new Vector<>(Arrays.asList(LootRecordDateFilter.values())));
 		dateFilterComboBox.setSelectedItem(this.dateFilter);
 		dateFilterComboBox.setToolTipText("Filter the displayed loot records by date");
 		dateFilterComboBox.setMaximumSize(new Dimension(15, 0));
 		dateFilterComboBox.setMaximumRowCount(3);
 		dateFilterComboBox.addItemListener(e ->
 			{
-				final LootRecordDateFilter dateFilterSelected = (LootRecordDateFilter) e.getItem();
-				dateFilter = dateFilterSelected;
+				dateFilter = (LootRecordDateFilter) e.getItem();
 				rebuild();
 			}
 		);
@@ -385,6 +390,18 @@ class LootTrackerPanel extends PluginPanel
 		final JMenuItem reset = new JMenuItem("Reset All");
 		reset.addActionListener(e ->
 		{
+			final LootTrackerClient client = plugin.getLootTrackerClient();
+			final boolean syncLoot = client != null && config.syncPanel();
+			final int result = JOptionPane.showOptionDialog(overallPanel,
+				syncLoot ? SYNC_RESET_ALL_WARNING_TEXT : NO_SYNC_RESET_ALL_WARNING_TEXT,
+				"Are you sure?", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE,
+				null, new String[]{"Yes", "No"}, "No");
+
+			if (result != JOptionPane.YES_OPTION)
+			{
+				return;
+			}
+
 			// If not in detailed view, remove all, otherwise only remove for the currently detailed title
 			records.removeIf(r -> r.matches(currentView));
 			boxes.removeIf(b -> b.matches(currentView));
@@ -393,8 +410,7 @@ class LootTrackerPanel extends PluginPanel
 			logsContainer.repaint();
 
 			// Delete all loot, or loot matching the current view
-			LootTrackerClient client = plugin.getLootTrackerClient();
-			if (client != null && config.syncPanel())
+			if (syncLoot)
 			{
 				client.delete(currentView);
 			}
@@ -419,7 +435,7 @@ class LootTrackerPanel extends PluginPanel
 		actionsContainer.setVisible(true);
 	}
 
-	void updateCollapseText()
+	private void updateCollapseText()
 	{
 		if (isAllCollapsed())
 		{
@@ -436,7 +452,7 @@ class LootTrackerPanel extends PluginPanel
 	private boolean isAllCollapsed()
 	{
 		return boxes.stream()
-			.filter(i -> i.isCollapsed())
+			.filter(LootTrackerBox::isCollapsed)
 			.count() == boxes.size();
 	}
 
@@ -582,7 +598,7 @@ class LootTrackerPanel extends PluginPanel
 
 			if (this.plugin.client.getGameState().equals(GameState.LOGGED_IN))
 			{
-				if (!(this.plugin.client.getLocalPlayer().getName().equals(records.get(i).getLocalUsername())))
+				if (this.plugin.client.getLocalPlayer() == null || !(this.plugin.client.getLocalPlayer().getName().equals(records.get(i).getLocalUsername())))
 				{
 					continue;
 				}
@@ -597,7 +613,6 @@ class LootTrackerPanel extends PluginPanel
 				if (records.get(i).getTimestamp().toEpochMilli() > dateFilter.getDuration().toMillis())
 				{
 					buildBox(records.get(i));
-					continue;
 				}
 			}
 			else
@@ -668,7 +683,7 @@ class LootTrackerPanel extends PluginPanel
 
 		// Create box
 		final LootTrackerBox box = new LootTrackerBox(record.getTimestamp().toEpochMilli(), itemManager, record.getTitle(), record.getSubTitle(),
-			hideIgnoredItems, config.displayDate(), plugin::toggleItem);
+			hideIgnoredItems, config.priceType(), config.showPriceType(), config.displayDate(), plugin::toggleItem);
 		box.combine(record);
 
 		// Create popup menu
@@ -764,7 +779,8 @@ class LootTrackerPanel extends PluginPanel
 	private void updateOverall()
 	{
 		long overallKills = 0;
-		long overallGp = 0;
+		long overallGe = 0;
+		long overallHa = 0;
 
 		for (LootTrackerRecord record : records)
 		{
@@ -808,7 +824,8 @@ class LootTrackerPanel extends PluginPanel
 					continue;
 				}
 
-				overallGp += item.getPrice();
+				overallGe += item.getGePrice();
+				overallHa += item.getHaPrice();
 			}
 
 			if (present > 0)
@@ -817,15 +834,23 @@ class LootTrackerPanel extends PluginPanel
 			}
 		}
 
+		String priceType = "";
+		if (config.showPriceType())
+		{
+			priceType = config.priceType() == LootTrackerPriceType.HIGH_ALCHEMY ? "HA " : "GE ";
+		}
+
 		overallKillsLabel.setText(htmlLabel("Total count: ", overallKills));
-		overallGpLabel.setText(htmlLabel("Total value: ", overallGp));
+		overallGpLabel.setText(htmlLabel("Total " + priceType + "value: ", config.priceType() == LootTrackerPriceType.HIGH_ALCHEMY ? overallHa : overallGe));
+		overallGpLabel.setToolTipText("<html>Total GE price: " + QuantityFormatter.formatNumber(overallGe)
+			+ "<br>Total HA price: " + QuantityFormatter.formatNumber(overallHa) + "</html>");
 
 		updateCollapseText();
 	}
 
 	private static String htmlLabel(String key, long value)
 	{
-		final String valueStr = StackFormatter.quantityToStackSize(value);
+		final String valueStr = QuantityFormatter.quantityToStackSize(value);
 		return String.format(HTML_LABEL_TEMPLATE, ColorUtil.toHexColor(ColorScheme.LIGHT_GRAY_COLOR), key, valueStr);
 	}
 }

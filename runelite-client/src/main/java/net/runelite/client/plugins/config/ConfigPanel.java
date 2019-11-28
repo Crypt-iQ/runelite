@@ -26,6 +26,7 @@ package net.runelite.client.plugins.config;
 
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -99,9 +100,9 @@ import net.runelite.client.config.ConfigSection;
 import net.runelite.client.config.ConfigTitleSection;
 import net.runelite.client.config.Keybind;
 import net.runelite.client.config.ModifierlessKeybind;
+import net.runelite.client.config.OpenOSRSConfig;
 import net.runelite.client.config.Range;
 import net.runelite.client.config.RuneLiteConfig;
-import net.runelite.client.config.OpenOSRSConfig;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.plugins.PluginInstantiationException;
@@ -139,7 +140,7 @@ public class ConfigPanel extends PluginPanel
 	private static final String RUNELITE_GROUP_NAME = RuneLiteConfig.class.getAnnotation(ConfigGroup.class).value();
 	private static final String PINNED_PLUGINS_CONFIG_KEY = "pinnedPlugins";
 	private static final String RUNELITE_PLUGIN = "RuneLite";
-	private static final String openosrs_PLUGIN = "OpenOSRS";
+	private static final String OPENOSRS_PLUGIN = "OpenOSRS";
 	private static final String CHAT_COLOR_PLUGIN = "Chat Color";
 	private final PluginManager pluginManager;
 	private final ConfigManager configManager;
@@ -148,7 +149,7 @@ public class ConfigPanel extends PluginPanel
 	private final OpenOSRSConfig OpenOSRSConfig;
 	private final ChatColorConfig chatColorConfig;
 	private final ColorPickerManager colorPickerManager;
-	public static List<PluginListItem> pluginList = new ArrayList<>();
+	public static final List<PluginListItem> pluginList = new ArrayList<>();
 
 	private final IconTextField searchBar = new IconTextField();
 	private final JPanel topPanel;
@@ -157,6 +158,9 @@ public class ConfigPanel extends PluginPanel
 
 	private boolean showingPluginList = true;
 	private int scrollBarPosition = 0;
+
+	private static final ImmutableList<PluginType> definedOrder = ImmutableList.of(PluginType.IMPORTANT, PluginType.EXTERNAL, PluginType.PVM, PluginType.SKILLING, PluginType.PVP, PluginType.UTILITY, PluginType.GENERAL_USE);
+	private static final Comparator<PluginListItem> categoryComparator = Comparator.comparing(plugin -> definedOrder.indexOf(plugin.getPluginType()));
 
 	static
 	{
@@ -284,121 +288,23 @@ public class ConfigPanel extends PluginPanel
 		// set OpenOSRS config on top, as it should always have been
 		final PluginListItem openosrs = new PluginListItem(this, configManager, OpenOSRSConfig,
 			configManager.getConfigDescriptor(OpenOSRSConfig),
-			openosrs_PLUGIN, "OpenOSRS client settings", "client");
-		openosrs.setPinned(pinnedPlugins.contains(openosrs_PLUGIN));
+			OPENOSRS_PLUGIN, "OpenOSRS client settings", PluginType.IMPORTANT, "client");
+		openosrs.setPinned(pinnedPlugins.contains(OPENOSRS_PLUGIN));
 		openosrs.nameLabel.setForeground(Color.WHITE);
 		pluginList.add(openosrs);
 
 		// set RuneLite config on top, as it should always have been
 		final PluginListItem runeLite = new PluginListItem(this, configManager, runeLiteConfig,
 			configManager.getConfigDescriptor(runeLiteConfig),
-			RUNELITE_PLUGIN, "RuneLite client settings", "client");
+			RUNELITE_PLUGIN, "RuneLite client settings", PluginType.IMPORTANT, "client");
 		runeLite.setPinned(pinnedPlugins.contains(RUNELITE_PLUGIN));
 		runeLite.nameLabel.setForeground(Color.WHITE);
 		pluginList.add(runeLite);
 
-		List<PluginListItem> externalPlugins = new ArrayList<>();
-		// populate pluginList with all external Plugins
-		pluginManager.getPlugins().stream()
-			.filter(plugin -> plugin.getClass().getAnnotation(PluginDescriptor.class).type().equals(PluginType.EXTERNAL))
-			.forEach(plugin ->
-			{
-				final PluginDescriptor descriptor = plugin.getClass().getAnnotation(PluginDescriptor.class);
-				final Config config = pluginManager.getPluginConfigProxy(plugin);
-				final ConfigDescriptor configDescriptor = config == null ? null : configManager.getConfigDescriptor(config);
-
-				final PluginListItem listItem = new PluginListItem(this, configManager, plugin, descriptor, config, configDescriptor);
-				listItem.setPinned(pinnedPlugins.contains(listItem.getName()));
-				externalPlugins.add(listItem);
-			});
-
-		externalPlugins.sort(Comparator.comparing(PluginListItem::getName));
-		pluginList.addAll(externalPlugins);
-
-		List<PluginListItem> pvmPlugins = new ArrayList<>();
-
-		// populate pluginList with all non-hidden plugins
-		pluginManager.getPlugins().stream()
-			.filter(plugin -> plugin.getClass().getAnnotation(PluginDescriptor.class).type().equals(PluginType.PVM))
-			.forEach(plugin ->
-			{
-				final PluginDescriptor descriptor = plugin.getClass().getAnnotation(PluginDescriptor.class);
-				final Config config = pluginManager.getPluginConfigProxy(plugin);
-				final ConfigDescriptor configDescriptor = config == null ? null : configManager.getConfigDescriptor(config);
-
-				final PluginListItem listItem = new PluginListItem(this, configManager, plugin, descriptor, config, configDescriptor);
-				listItem.setPinned(pinnedPlugins.contains(listItem.getName()));
-				pvmPlugins.add(listItem);
-			});
-
-		pvmPlugins.sort(Comparator.comparing(PluginListItem::getName));
-		pluginList.addAll(pvmPlugins);
-
-		List<PluginListItem> skillingPlugins = new ArrayList<>();
-
-		// populate pluginList with all non-hidden plugins
-		pluginManager.getPlugins().stream()
-			.filter(plugin -> plugin.getClass().getAnnotation(PluginDescriptor.class).type().equals(PluginType.SKILLING))
-			.forEach(plugin ->
-			{
-				final PluginDescriptor descriptor = plugin.getClass().getAnnotation(PluginDescriptor.class);
-				final Config config = pluginManager.getPluginConfigProxy(plugin);
-				final ConfigDescriptor configDescriptor = config == null ? null : configManager.getConfigDescriptor(config);
-
-				final PluginListItem listItem = new PluginListItem(this, configManager, plugin, descriptor, config, configDescriptor);
-				listItem.setPinned(pinnedPlugins.contains(listItem.getName()));
-				skillingPlugins.add(listItem);
-			});
-
-		skillingPlugins.sort(Comparator.comparing(PluginListItem::getName));
-		pluginList.addAll(skillingPlugins);
-
-		List<PluginListItem> pvpPlugins = new ArrayList<>();
-		// populate pluginList with all PVP Plugins
-		pluginManager.getPlugins().stream()
-			.filter(plugin -> plugin.getClass().getAnnotation(PluginDescriptor.class).type().equals(PluginType.PVP))
-			.forEach(plugin ->
-			{
-				final PluginDescriptor descriptor = plugin.getClass().getAnnotation(PluginDescriptor.class);
-				final Config config = pluginManager.getPluginConfigProxy(plugin);
-				final ConfigDescriptor configDescriptor = config == null ? null : configManager.getConfigDescriptor(config);
-
-				final PluginListItem listItem = new PluginListItem(this, configManager, plugin, descriptor, config, configDescriptor);
-				listItem.setPinned(pinnedPlugins.contains(listItem.getName()));
-				pvpPlugins.add(listItem);
-			});
-
-		pvpPlugins.sort(Comparator.comparing(PluginListItem::getName));
-		pluginList.addAll(pvpPlugins);
-
-		List<PluginListItem> utilPlugins = new ArrayList<>();
-		// populate pluginList with all PVP Plugins
-		pluginManager.getPlugins().stream()
-			.filter(plugin -> plugin.getClass().getAnnotation(PluginDescriptor.class).type().equals(PluginType.UTILITY))
-			.forEach(plugin ->
-			{
-				final PluginDescriptor descriptor = plugin.getClass().getAnnotation(PluginDescriptor.class);
-				final Config config = pluginManager.getPluginConfigProxy(plugin);
-				final ConfigDescriptor configDescriptor = config == null ? null : configManager.getConfigDescriptor(config);
-
-				final PluginListItem listItem = new PluginListItem(this, configManager, plugin, descriptor, config, configDescriptor);
-				listItem.setPinned(pinnedPlugins.contains(listItem.getName()));
-				utilPlugins.add(listItem);
-			});
-
-		utilPlugins.sort(Comparator.comparing(PluginListItem::getName));
-		pluginList.addAll(utilPlugins);
-
 		// populate pluginList with all vanilla RL plugins
-		List<PluginListItem> vanillaPlugins = new ArrayList<>();
+		List<PluginListItem> plugins = new ArrayList<>();
 		pluginManager.getPlugins().stream()
 			.filter(plugin -> !plugin.getClass().getAnnotation(PluginDescriptor.class).hidden())
-			.filter(plugin -> !plugin.getClass().getAnnotation(PluginDescriptor.class).type().equals(PluginType.PVM))
-			.filter(plugin -> !plugin.getClass().getAnnotation(PluginDescriptor.class).type().equals(PluginType.PVP))
-			.filter(plugin -> !plugin.getClass().getAnnotation(PluginDescriptor.class).type().equals(PluginType.SKILLING))
-			.filter(plugin -> !plugin.getClass().getAnnotation(PluginDescriptor.class).type().equals(PluginType.UTILITY))
-			.filter(plugin -> !plugin.getClass().getAnnotation(PluginDescriptor.class).type().equals(PluginType.PLUGIN_ORGANIZER))
-			.filter(plugin -> !plugin.getClass().getAnnotation(PluginDescriptor.class).type().equals(PluginType.EXTERNAL))
 			.forEach(plugin ->
 				{
 					final PluginDescriptor descriptor = plugin.getClass().getAnnotation(PluginDescriptor.class);
@@ -407,32 +313,21 @@ public class ConfigPanel extends PluginPanel
 
 					final PluginListItem listItem = new PluginListItem(this, configManager, plugin, descriptor, config, configDescriptor);
 					listItem.setPinned(pinnedPlugins.contains(listItem.getName()));
-					vanillaPlugins.add(listItem);
+					listItem.setColor(getColorByCategory(OpenOSRSConfig, listItem.getPluginType()));
+					listItem.setHidden(getHiddenByCategory(OpenOSRSConfig, listItem.getPluginType()));
+					plugins.add(listItem);
 				}
 			);
 
 		final PluginListItem chatColor = new PluginListItem(this, configManager, chatColorConfig,
 			configManager.getConfigDescriptor(chatColorConfig),
-			CHAT_COLOR_PLUGIN, "Recolor chat text", "colour", "messages");
+			CHAT_COLOR_PLUGIN, "Recolor chat text", PluginType.GENERAL_USE, "colour", "messages");
 		chatColor.setPinned(pinnedPlugins.contains(CHAT_COLOR_PLUGIN));
-		chatColor.nameLabel.setForeground(Color.WHITE);
-		vanillaPlugins.add(chatColor);
+		plugins.add(chatColor);
 
-		vanillaPlugins.sort(Comparator.comparing(PluginListItem::getName));
-		pluginList.addAll(vanillaPlugins);
+		pluginList.addAll(plugins);
 
-		// Add plugin sorter to bottom
-		pluginManager.getPlugins().stream()
-			.filter(plugin -> plugin.getClass().getAnnotation(PluginDescriptor.class).type().equals(PluginType.PLUGIN_ORGANIZER))
-			.forEach(plugin ->
-			{
-				final PluginDescriptor descriptor = plugin.getClass().getAnnotation(PluginDescriptor.class);
-				final Config config = pluginManager.getPluginConfigProxy(plugin);
-				final ConfigDescriptor configDescriptor = config == null ? null : configManager.getConfigDescriptor(config);
-
-				final PluginListItem listItem = new PluginListItem(this, configManager, plugin, descriptor, config, configDescriptor);
-				pluginList.add(listItem);
-			});
+		ConfigPanel.sortPluginList(OpenOSRSConfig, null);
 	}
 
 	void refreshPluginList()
@@ -580,9 +475,16 @@ public class ConfigPanel extends PluginPanel
 
 		String name = listItem.getName();
 		JLabel title = new JLabel(name);
-		title.setForeground(Color.WHITE);
+		title.setForeground(listItem.getColor());
 		title.setToolTipText("<html>" + name + ":<br>" + listItem.getDescription() + "</html>");
 		topPanel.add(title);
+
+		IconButton toggleButton = new IconButton(PluginListItem.OFF_SWITCHER);
+		toggleButton.setPreferredSize(new Dimension(25, 0));
+		listItem.updateToggleButton(toggleButton);
+		listItem.attachToggleButtonListener(toggleButton);
+
+		topPanel.add(toggleButton, BorderLayout.EAST);
 
 		final Map<String, JPanel> sectionWidgets = new HashMap<>();
 		final Map<String, JPanel> titleSectionWidgets = new HashMap<>();
@@ -1336,11 +1238,13 @@ public class ConfigPanel extends PluginPanel
 				cid.getItem().keyName(), EnumSet.class);
 			if (enumSet == null)
 			{
+				//noinspection unchecked
 				enumSet = EnumSet.noneOf(enumType);
 			}
 			enumSet.clear();
 
 			EnumSet finalEnumSet = enumSet;
+			//noinspection unchecked
 			jList.getSelectedValuesList().forEach(value ->
 				finalEnumSet.add(Enum.valueOf(cid.getItem().enumClass(), value.toString())));
 
@@ -1492,5 +1396,71 @@ public class ConfigPanel extends PluginPanel
 	private void reloadPluginlist(PluginListItem listItem, Config config, ConfigDescriptor cd)
 	{
 		openGroupConfigPanel(listItem, config, cd, true);
+	}
+
+	public static Color getColorByCategory(OpenOSRSConfig openOSRSConfig, PluginType pluginType)
+	{
+		switch (pluginType)
+		{
+			case EXTERNAL:
+				return openOSRSConfig.externalColor();
+			case PVM:
+				return openOSRSConfig.pvmColor();
+			case PVP:
+				return openOSRSConfig.pvpColor();
+			case SKILLING:
+				return openOSRSConfig.skillingColor();
+			case UTILITY:
+				return openOSRSConfig.utilityColor();
+		}
+
+		return null;
+	}
+
+	public static boolean getHiddenByCategory(OpenOSRSConfig openOSRSConfig, PluginType pluginType)
+	{
+		if (pluginType == PluginType.IMPORTANT || pluginType == PluginType.GENERAL_USE)
+		{
+			return false;
+		}
+
+		if (openOSRSConfig.hidePlugins())
+		{
+			return true;
+		}
+
+		switch (pluginType)
+		{
+			case EXTERNAL:
+				return openOSRSConfig.hideExternalPlugins();
+			case PVM:
+				return openOSRSConfig.hidePvmPlugins();
+			case PVP:
+				return openOSRSConfig.hidePvpPlugins();
+			case SKILLING:
+				return openOSRSConfig.hideSkillingPlugins();
+			case UTILITY:
+				return openOSRSConfig.hideUtilityPlugins();
+		}
+
+		return false;
+	}
+
+	public static void sortPluginList(OpenOSRSConfig openOSRSConfig, Comparator<PluginListItem> comparator)
+	{
+		if (comparator != null)
+		{
+			ConfigPanel.pluginList.sort(comparator.thenComparing(PluginListItem::getName));
+			return;
+		}
+
+		if (openOSRSConfig.pluginSortMode() == net.runelite.client.config.OpenOSRSConfig.SortStyle.CATEGORY)
+		{
+			ConfigPanel.pluginList.sort(categoryComparator.thenComparing(PluginListItem::getName));
+		}
+		else
+		{
+			ConfigPanel.pluginList.sort(Comparator.comparing(PluginListItem::getName));
+		}
 	}
 }

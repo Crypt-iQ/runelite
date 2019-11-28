@@ -27,7 +27,6 @@ package net.runelite.client.config;
 import com.google.inject.Guice;
 import com.google.inject.testing.fieldbinder.Bind;
 import com.google.inject.testing.fieldbinder.BoundFieldModule;
-import java.io.IOException;
 import java.time.Instant;
 import java.util.UUID;
 import java.util.concurrent.ScheduledExecutorService;
@@ -56,6 +55,10 @@ public class ConfigManagerTest
 	@Bind
 	RuneLiteConfig runeliteConfig;
 
+	@Mock
+	@Bind
+	private OpenOSRSConfig openOSRSConfig;
+
 	@Inject
 	ConfigManager manager;
 
@@ -66,7 +69,7 @@ public class ConfigManagerTest
 	}
 
 	@Test
-	public void testGetConfig() throws IOException
+	public void testGetConfig()
 	{
 		AccountSession accountSession = new AccountSession(UUID.randomUUID(), Instant.now());
 		accountSession.setUsername("test");
@@ -78,7 +81,7 @@ public class ConfigManagerTest
 	}
 
 	@Test
-	public void testGetConfigDefault() throws IOException
+	public void testGetConfigDefault()
 	{
 		AccountSession accountSession = new AccountSession(UUID.randomUUID(), Instant.now());
 		accountSession.setUsername("test");
@@ -88,7 +91,7 @@ public class ConfigManagerTest
 	}
 
 	@Test
-	public void testSetConfig() throws IOException
+	public void testSetConfig()
 	{
 		AccountSession accountSession = new AccountSession(UUID.randomUUID(), Instant.now());
 		accountSession.setUsername("test");
@@ -100,7 +103,7 @@ public class ConfigManagerTest
 	}
 
 	@Test
-	public void testGetConfigDescriptor() throws IOException
+	public void testGetConfigDescriptor()
 	{
 		AccountSession accountSession = new AccountSession(UUID.randomUUID(), Instant.now());
 		accountSession.setUsername("test");

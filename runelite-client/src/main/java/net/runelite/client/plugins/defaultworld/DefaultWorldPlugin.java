@@ -34,7 +34,7 @@ import net.runelite.api.GameState;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
-import net.runelite.client.eventbus.EventBus;
+import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.SessionOpen;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
@@ -58,9 +58,6 @@ public class DefaultWorldPlugin extends Plugin
 	private DefaultWorldConfig config;
 
 	@Inject
-	private EventBus eventBus;
-
-	@Inject
 	private ClientThread clientThread;
 
 	@Inject
@@ -70,27 +67,18 @@ public class DefaultWorldPlugin extends Plugin
 	private boolean worldChangeRequired;
 
 	@Override
-	protected void startUp() throws Exception
+	protected void startUp()
 	{
-		addSubscriptions();
 
 		worldChangeRequired = true;
 		applyWorld();
 	}
 
 	@Override
-	protected void shutDown() throws Exception
+	protected void shutDown()
 	{
-		eventBus.unregister(this);
-
 		worldChangeRequired = true;
 		changeWorld(worldCache);
-	}
-
-	private void addSubscriptions()
-	{
-		eventBus.subscribe(SessionOpen.class, this, this::onSessionOpen);
-		eventBus.subscribe(GameStateChanged.class, this, this::onGameStateChanged);
 	}
 
 	@Provides
@@ -99,14 +87,21 @@ public class DefaultWorldPlugin extends Plugin
 		return configManager.getConfig(DefaultWorldConfig.class);
 	}
 
+	@Subscribe
 	private void onSessionOpen(SessionOpen event)
 	{
 		worldChangeRequired = true;
 		applyWorld();
 	}
 
+	@Subscribe(takeUntil = 2)
 	private void onGameStateChanged(GameStateChanged event)
 	{
+		if (event.getGameState() == GameState.LOGGED_IN)
+		{
+			config.lastWorld(client.getWorld());
+		}
+
 		applyWorld();
 	}
 
@@ -170,7 +165,7 @@ public class DefaultWorldPlugin extends Plugin
 			log.debug("Stored old world {}", worldCache);
 		}
 
-		final int newWorld = config.getWorld();
+		final int newWorld = !config.useLastWorld() ? config.getWorld() : config.lastWorld();
 		changeWorld(newWorld);
 	}
 }

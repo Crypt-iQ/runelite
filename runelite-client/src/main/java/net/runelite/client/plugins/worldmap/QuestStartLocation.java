@@ -25,9 +25,10 @@
  */
 package net.runelite.client.plugins.worldmap;
 
+import lombok.AccessLevel;
 import lombok.Getter;
-import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.Quest;
+import net.runelite.api.coords.WorldPoint;
 
 // Some quests are in the same spot, but they are done in order. If multiple
 // quests start in the same location, an array of quests is expected.
@@ -58,7 +59,7 @@ enum QuestStartLocation
 	//Members' Quests
 	ANIMAL_MAGNETISM(Quest.ANIMAL_MAGNETISM, new WorldPoint(3094, 3360, 0)),
 	ANOTHER_SLICE_OF_HAM(Quest.ANOTHER_SLICE_OF_HAM, new WorldPoint(2799, 5428, 0)),
-	THE_ASCENT_OF_ARCEUUS(Quest.THE_ASCENT_OF_ARCEUUS, new WorldPoint(1700, 3742, 0)),
+	THE_ASCENT_OF_ARCEUUS(Quest.THE_ASCENT_OF_ARCEUUS, new WorldPoint(1699, 3742, 0)),
 	BETWEEN_A_ROCK(Quest.BETWEEN_A_ROCK, new WorldPoint(2823, 10168, 0)),
 	BIG_CHOMPY_BIRD_HUNTING(Quest.BIG_CHOMPY_BIRD_HUNTING, new WorldPoint(2629, 2981, 0)),
 	BIOHAZARD(Quest.BIOHAZARD, new WorldPoint(2591, 3335, 0)),
@@ -72,7 +73,7 @@ enum QuestStartLocation
 	DARKNESS_OF_HALLOWVALE(Quest.DARKNESS_OF_HALLOWVALE, new WorldPoint(3494, 9628, 0)),
 	DEATH_PLATEAU_TROLL_STRONGHOLD(new Quest[]{Quest.DEATH_PLATEAU, Quest.TROLL_STRONGHOLD}, new WorldPoint(2895, 3528, 0)),
 	DEATH_TO_THE_DORGESHUUN(Quest.DEATH_TO_THE_DORGESHUUN, new WorldPoint(3316, 9613, 0)),
-	THE_DEPTHS_OF_DESPAIR(Quest.THE_DEPTHS_OF_DESPAIR, new WorldPoint(1780, 3569, 0)),
+	THE_DEPTHS_OF_DESPAIR(Quest.THE_DEPTHS_OF_DESPAIR, new WorldPoint(1781, 3570, 0)),
 	DESERT_TREASURE(Quest.DESERT_TREASURE, new WorldPoint(3177, 3043, 0)),
 	DEVIOUS_MINDS(Quest.DEVIOUS_MINDS, new WorldPoint(3405, 3492, 0)),
 	THE_DIG_SITE(Quest.THE_DIG_SITE, new WorldPoint(3363, 3337, 0)),
@@ -96,6 +97,7 @@ enum QuestStartLocation
 	THE_FORSAKEN_TOWER(Quest.THE_FORSAKEN_TOWER, new WorldPoint(1484, 3747, 0)),
 	THE_FREMENNIK_ISLES(Quest.THE_FREMENNIK_ISLES, new WorldPoint(2645, 3711, 0)),
 	THE_FREMENNIK_TRIALS(Quest.THE_FREMENNIK_TRIALS, new WorldPoint(2657, 3669, 0)),
+	THE_FREMENNIK_EXILES(Quest.THE_FREMENNIK_EXILES, new WorldPoint(2658, 3669, 0)),
 	GARDEN_OF_TRANQUILLITY(Quest.GARDEN_OF_TRANQUILLITY, new WorldPoint(3227, 3477, 0)),
 	GERTRUDES_CAT_RATCATCHERS(Quest.GERTRUDES_CAT, new WorldPoint(3150, 3411, 0)),
 	GHOSTS_AHOY(Quest.GHOSTS_AHOY, new WorldPoint(3677, 3510, 0)),
@@ -117,7 +119,7 @@ enum QuestStartLocation
 	LEGENDS_QUEST(Quest.LEGENDS_QUEST, new WorldPoint(2725, 3367, 0)),
 	LOST_CITY(Quest.LOST_CITY, new WorldPoint(3149, 3205, 0)),
 	THE_LOST_TRIBE(Quest.THE_LOST_TRIBE, new WorldPoint(3211, 3224, 0)),
-	LUNAR_DIPLOMACY(Quest.LUNAR_DIPLOMACY, new WorldPoint(2619, 3689, 0)),
+	LUNAR_DIPLOMACY(Quest.LUNAR_DIPLOMACY, new WorldPoint(2618, 3691, 0)),
 	MAKING_FRIENDS_WITH_MY_ARM(Quest.MAKING_FRIENDS_WITH_MY_ARM, new WorldPoint(2904, 10092, 0)),
 	MAKING_HISTORY(Quest.MAKING_HISTORY, new WorldPoint(2435, 3346, 0)),
 	MONKS_FRIEND(Quest.MONKS_FRIEND, new WorldPoint(2605, 3209, 0)),
@@ -166,10 +168,10 @@ enum QuestStartLocation
 	WITCHS_HOUSE(Quest.WITCHS_HOUSE, new WorldPoint(2927, 3456, 0)),
 	ZOGRE_FLESH_EATERS(Quest.ZOGRE_FLESH_EATERS, new WorldPoint(2442, 3051, 0));
 
-	@Getter
+	@Getter(AccessLevel.PACKAGE)
 	private final WorldPoint location;
 
-	@Getter
+	@Getter(AccessLevel.PACKAGE)
 	private final Quest[] quests;
 
 	QuestStartLocation(Quest[] quests, WorldPoint location)

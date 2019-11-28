@@ -24,13 +24,12 @@
  */
 package net.runelite.client.plugins.timetracking;
 
-import java.awt.Dimension;
 import java.time.LocalDateTime;
 import java.time.format.TextStyle;
 import java.time.temporal.ChronoUnit;
 import java.util.Locale;
 import javax.swing.JPanel;
-import net.runelite.client.util.StackFormatter;
+import net.runelite.client.util.QuantityFormatter;
 
 public abstract class TabContentPanel extends JPanel
 {
@@ -42,12 +41,6 @@ public abstract class TabContentPanel extends JPanel
 	public abstract int getUpdateInterval();
 
 	public abstract void update();
-
-	@Override
-	public Dimension getPreferredSize()
-	{
-		return super.getPreferredSize();
-	}
 
 	protected static String getFormattedEstimate(long remainingSeconds, boolean useRelativeTime)
 	{
@@ -82,7 +75,7 @@ public abstract class TabContentPanel extends JPanel
 				sb.append(endTime.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.getDefault())).append(" ");
 			}
 
-			sb.append("at ").append(StackFormatter.getPlatformTimeStringFromLocalDateTime(endTime));
+			sb.append("at ").append(QuantityFormatter.getPlatformTimeStringFromLocalDateTime(endTime));
 			return sb.toString();
 		}
 	}

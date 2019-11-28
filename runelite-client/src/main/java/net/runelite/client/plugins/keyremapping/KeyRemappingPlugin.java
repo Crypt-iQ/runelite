@@ -38,14 +38,14 @@ import net.runelite.api.IconID;
 import net.runelite.api.VarClientInt;
 import net.runelite.api.VarClientStr;
 import net.runelite.api.Varbits;
-import net.runelite.api.events.ConfigChanged;
 import net.runelite.api.events.ScriptCallbackEvent;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.config.ModifierlessKeybind;
-import net.runelite.client.eventbus.EventBus;
+import net.runelite.client.eventbus.Subscribe;
+import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.input.KeyManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
@@ -79,9 +79,6 @@ public class KeyRemappingPlugin extends Plugin
 
 	@Inject
 	private KeyRemappingListener inputListener;
-
-	@Inject
-	private EventBus eventBus;
 
 	@Getter(AccessLevel.PACKAGE)
 	@Setter(AccessLevel.PACKAGE)
@@ -128,10 +125,9 @@ public class KeyRemappingPlugin extends Plugin
 	private ModifierlessKeybind esc;
 
 	@Override
-	protected void startUp() throws Exception
+	protected void startUp()
 	{
 		updateConfig();
-		addSubscriptions();
 
 		typing = false;
 		keyManager.registerKeyListener(inputListener);
@@ -148,10 +144,8 @@ public class KeyRemappingPlugin extends Plugin
 	}
 
 	@Override
-	protected void shutDown() throws Exception
+	protected void shutDown()
 	{
-		eventBus.unregister(this);
-
 		clientThread.invoke(() ->
 		{
 			if (client.getGameState() == GameState.LOGGED_IN)
@@ -161,12 +155,6 @@ public class KeyRemappingPlugin extends Plugin
 		});
 
 		keyManager.unregisterKeyListener(inputListener);
-	}
-
-	private void addSubscriptions()
-	{
-		eventBus.subscribe(ConfigChanged.class, this, this::onConfigChanged);
-		eventBus.subscribe(ScriptCallbackEvent.class, this, this::onScriptCallbackEvent);
 	}
 
 	@Provides
@@ -209,6 +197,7 @@ public class KeyRemappingPlugin extends Plugin
 		return w == null || w.isSelfHidden();
 	}
 
+	@Subscribe
 	private void onConfigChanged(ConfigChanged configChanged)
 	{
 		if (!configChanged.getGroup().equals("keyremapping"))
@@ -229,6 +218,7 @@ public class KeyRemappingPlugin extends Plugin
 		);
 	}
 
+	@Subscribe
 	private void onScriptCallbackEvent(ScriptCallbackEvent scriptCallbackEvent)
 	{
 		switch (scriptCallbackEvent.getEventName())
