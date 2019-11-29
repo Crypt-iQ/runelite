@@ -38,11 +38,12 @@ import net.runelite.asm.attributes.annotation.Annotation;
 import net.runelite.asm.attributes.code.Instruction;
 import net.runelite.asm.attributes.code.InstructionType;
 import net.runelite.asm.attributes.code.Instructions;
+import net.runelite.asm.attributes.code.Label;
 import net.runelite.asm.attributes.code.instruction.types.InvokeInstruction;
 import net.runelite.asm.attributes.code.instruction.types.ReturnInstruction;
-import net.runelite.asm.attributes.code.instructions.ALoad;
-import net.runelite.asm.attributes.code.instructions.InvokeStatic;
-import net.runelite.asm.attributes.code.instructions.InvokeVirtual;
+import net.runelite.asm.attributes.code.instructions.*;
+import net.runelite.asm.pool.Class;
+import net.runelite.asm.pool.Field;
 import net.runelite.asm.signature.Signature;
 import net.runelite.deob.DeobAnnotations;
 import org.slf4j.Logger;
@@ -138,6 +139,7 @@ public class InjectHookMethod
 
 		Signature signature = builder.build();
 
+		// Finds out *where* we should insert instructions
 		List<Integer> insertIndexes = findHookLocations(hookName, end, vanillaMethod);
 		insertIndexes.sort((a, b) -> Integer.compare(b, a));
 
@@ -207,9 +209,111 @@ public class InjectHookMethod
 			instructions.addInstruction(insertPos++, (Instruction) invoke);
 		}
 
-		logger.info("Injected method hook {} in {} with {} args: {}",
-			hookName, vanillaMethod, signature.size(),
-			signature.getArguments());
+		if (hookName.equals("removeFriend")) {
+			Instruction newIns = new GetStatic(instructions, new Field(new Class("gx"), "w", new Type("Lgx;")));
+			Instruction replace = null;
+
+			int index1 = -1;
+			int index2 = -1;
+			for (Instruction i : instructions.getInstructions()) {
+				if (i.toString().equals("getstatic static Lgx; gx.ai in bb.s(Ljava/lang/String;I)V")) {
+					logger.info("instruction {}", i);
+					replace = i;
+				}
+				if (i.toString().equals("invokevirtual kf.ac(II)V in bb.s(Ljava/lang/String;I)V")) {
+					// The previous five calls need to be replaced...
+					index1 = instructions.getInstructions().indexOf(i);
+				}
+				if (i.toString().equals("invokevirtual kf.bl(Ljava/lang/String;I)V in bb.s(Ljava/lang/String;I)V")) {
+					// The previous three calls need to be replaced...
+					index2 = instructions.getInstructions().indexOf(i);
+				}
+			}
+
+			assert replace != null;
+			assert index1 != -1;
+			assert index2 != -1;
+
+			// Refreshes the bytecode before printing.
+			newIns.lookup();
+
+			logger.info("replace ins {}", newIns);
+
+			// Replace the old ClientPacket variable.
+			instructions.replace(replace, newIns);
+
+			// But now we also need to replace the arguments with index1 - 4, index2 - 2
+			// writeInt
+			// writeShort
+			// writeShort
+			// If we are loading a method, how will this be done?
+			//
+			// BIPUSH
+			// INVOKEVIRTUAL
+			//
+			// GETFIELD
+			// BIPUSH
+			// INVOKEVIRTUAL
+			//
+			// BIPUSH
+			// INVOKEVIRTUAL
+
+			// Grab the Instruction at index1 - 4, it should be an ALOAD. Replace it.
+//			Instruction replaceAload = instructions.getInstructions().get(index1 - 4);
+//			Instruction newBipush = new BiPush(instructions, Byte.parseByte("97"));
+//			newBipush.lookup();
+//			instructions.replace(replaceAload, newBipush);
+//
+//			// Grab the Instruction at index1 - 3, it should be an LDC. Replace it.
+//			Instruction replaceLDC = instructions.getInstructions().get(index1 - 3);
+//			Instruction newWrite = new InvokeVirtual(instructions, new net.runelite.asm.pool.Method(new Class("kf"), "ba", new Signature("(II)V")));
+//			newWrite.lookup();
+//			instructions.replace(replaceLDC, newWrite);
+//
+//			// Grab the Instruction at index1 - 2, it should be an INVOKESTATIC. Replace it.
+//			Instruction replaceInvoke = instructions.getInstructions().get(index1 - 2);
+//			Instruction newField = new GetField(instructions, new Field(new Class("gk"), "n", new Type("Lkf;")));
+//			newField.lookup();
+//			instructions.replace(replaceInvoke, newField);
+//
+//			// Grab the Instruction at index1 - 1, it should be an LDC. Replace it.
+//			Instruction secondLDC = instructions.getInstructions().get(index1 - 1);
+//			Instruction secondBipush = new BiPush(instructions, Byte.parseByte("98"));
+//			secondBipush.lookup();
+//			instructions.replace(secondLDC, secondBipush);
+//
+//			// Grab the Instruction at index1, it should be an INVOKEVIRTUAL. Replace it.
+//			Instruction replaceVirtual = instructions.getInstructions().get(index1);
+//			Instruction secondWrite = new InvokeVirtual(instructions, new net.runelite.asm.pool.Method(new Class("kf"), "at", new Signature("(II)V")));
+//			secondWrite.lookup();
+//			instructions.replace(replaceVirtual, secondWrite);
+
+			// Grab the Instruction at index2 - 2, it should be an ALOAD. Replace it.
+//			Instruction secondAload = instructions.getInstructions().get(index2 - 2);
+//			Instruction newNop = new NOP(instructions);
+//			newNop.lookup();
+//			instructions.replace(secondAload, newNop);
+
+			// Grab the Instruction at index2 - 1, it should be an LDC. Replace it.
+//			Instruction thirdLDC = instructions.getInstructions().get(index2 - 1);
+//			Instruction thirdBipush = new BiPush(instructions, Byte.parseByte("99"));
+//			thirdBipush.lookup();
+//			instructions.replace(thirdLDC, thirdBipush);
+
+			// Grab the Instruction at index2, it should be an INVOKEVIRTUAL. Replace it.
+//			Instruction secondVirtual = instructions.getInstructions().get(index2);
+//			Instruction thirdWrite = new InvokeVirtual(instructions, new net.runelite.asm.pool.Method(new Class("kf"), "at", new Signature("(II)V")));
+//			thirdWrite.lookup();
+//			instructions.replace(secondVirtual, thirdWrite);
+
+			logger.info("Injected method hook {} in {} with {} args: {}, ins: {}",
+				hookName, vanillaMethod, signature.size(),
+				signature.getArguments(), instructions.getInstructions());
+		}
+
+//		logger.info("Injected method hook {} in {} with {} args: {}",
+//			hookName, vanillaMethod, signature.size(),
+//			signature.getArguments());
 	}
 
 	private List<Integer> findHookLocations(String hookName, boolean end, Method vanillaMethod) throws InjectionException
