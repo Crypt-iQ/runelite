@@ -32,6 +32,9 @@ val vanillaJar = "${buildDir}/vanilla-${ProjectVersions.rsversion}.jar"
 val vanilla = configurations.create("vanilla")
 
 dependencies {
+    annotationProcessor("org.projectlombok:lombok:1.18.10")
+    compileOnly("org.projectlombok:lombok:1.18.10")
+    implementation(Libraries.slf4jApi)
     annotationProcessor(Libraries.sisu)
 
     compileOnly(Libraries.mavenPluginAnnotations)
