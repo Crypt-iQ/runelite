@@ -3175,6 +3175,7 @@ public final class Client extends GameShell implements Usernamed {
 
 					var5 = (int)var16;
 					PacketBufferNode var18 = ModelData0.getPacketBufferNode(ClientPacket.field2224, packetWriter.isaacCipher);
+					// x,y coords are recorded...
 					var18.packetBuffer.writeShort((MouseHandler.MouseHandler_lastButton == 2 ? 1 : 0) + (var5 << 1));
 					var18.packetBuffer.writeShort(var4);
 					var18.packetBuffer.writeShort(var3);

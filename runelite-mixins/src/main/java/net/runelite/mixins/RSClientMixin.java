@@ -1325,74 +1325,74 @@ public abstract class RSClientMixin implements RSClient
 		return null;
 	}
 
-	@Copy("menuAction")
-	static void rs$menuAction(int var0, int var1, int var2, int var3, String var4, String var5, int var6, int var7)
-	{
-		throw new RuntimeException();
-	}
+	// @Copy("menuAction")
+	// static void rs$menuAction(int var0, int var1, int var2, int var3, String var4, String var5, int var6, int var7)
+	// {
+	// 	throw new RuntimeException();
+	// }
 
-	@Replace("menuAction")
-	static void rl$menuAction(int actionParam, int widgetId, int menuAction, int id, String menuOption, String menuTarget, int var6, int var7)
-	{
-		boolean authentic = true;
-		if (menuTarget != null && menuTarget.startsWith("!AUTHENTIC"))
-		{
-			authentic = false;
-			menuTarget = menuTarget.substring(10);
-		}
+	// @Replace("menuAction")
+	// static void rl$menuAction(int actionParam, int widgetId, int menuAction, int id, String menuOption, String menuTarget, int var6, int var7)
+	// {
+	// 	boolean authentic = true;
+	// 	if (menuTarget != null && menuTarget.startsWith("!AUTHENTIC"))
+	// 	{
+	// 		authentic = false;
+	// 		menuTarget = menuTarget.substring(10);
+	// 	}
 
-		if (printMenuActions && client.getLogger().isDebugEnabled())
-		{
-			client.getLogger().debug("Menuaction: {} {} {} {} {} {} {} {} {}", actionParam, widgetId, menuAction, id, menuOption, menuTarget, var6, var7, authentic);
-		}
+	// 	if (printMenuActions && client.getLogger().isDebugEnabled())
+	// 	{
+	// 		client.getLogger().debug("Menuaction: {} {} {} {} {} {} {} {} {}", actionParam, widgetId, menuAction, id, menuOption, menuTarget, var6, var7, authentic);
+	// 	}
 
-		/* Along the way, the RuneScape client may change a menuAction by incrementing it with 2000.
-		 * I have no idea why, but it does. Their code contains the same conditional statement.
-		 */
-		if (menuAction >= 2000)
-		{
-			menuAction -= 2000;
-		}
+	// 	/* Along the way, the RuneScape client may change a menuAction by incrementing it with 2000.
+	// 	 * I have no idea why, but it does. Their code contains the same conditional statement.
+	// 	 */
+	// 	if (menuAction >= 2000)
+	// 	{
+	// 		menuAction -= 2000;
+	// 	}
 
-		final MenuOptionClicked menuOptionClicked = new MenuOptionClicked(
-			menuOption,
-			menuTarget,
-			id,
-			menuAction,
-			actionParam,
-			widgetId,
-			false,
-			authentic,
-			client.getMouseCurrentButton()
-		);
+	// 	final MenuOptionClicked menuOptionClicked = new MenuOptionClicked(
+	// 		menuOption,
+	// 		menuTarget,
+	// 		id,
+	// 		menuAction,
+	// 		actionParam,
+	// 		widgetId,
+	// 		false,
+	// 		authentic,
+	// 		client.getMouseCurrentButton()
+	// 	);
 
-		client.getCallbacks().post(MenuOptionClicked.class, menuOptionClicked);
+	// 	client.getCallbacks().post(MenuOptionClicked.class, menuOptionClicked);
 
-		if (menuOptionClicked.isConsumed())
-		{
-			return;
-		}
+	// 	if (menuOptionClicked.isConsumed())
+	// 	{
+	// 		return;
+	// 	}
 
-		rs$menuAction(menuOptionClicked.getParam0(), menuOptionClicked.getParam1(), menuOptionClicked.getOpcode(),
-			menuOptionClicked.getIdentifier(), menuOptionClicked.getOption(), menuOptionClicked.getTarget(), var6, var7);
-	}
+	// 	rs$menuAction(menuOptionClicked.getParam0(), menuOptionClicked.getParam1(), menuOptionClicked.getOpcode(),
+	// 		menuOptionClicked.getIdentifier(), menuOptionClicked.getOption(), menuOptionClicked.getTarget(), var6, var7);
+	// }
 
-	@Override
-	@Inject
-	public void invokeMenuAction(int actionParam, int widgetId, int menuAction, int id, String menuOption, String menuTarget, int var6, int var7)
-	{
-		client.sendMenuAction(actionParam, widgetId, menuAction, id, menuOption, "!AUTHENTIC" + menuTarget, var6, var7);
-	}
+	// @Override
+	// @Inject
+	// public void invokeMenuAction(int actionParam, int widgetId, int menuAction, int id, String menuOption, String menuTarget, int var6, int var7)
+	// {
+	// 	client.sendMenuAction(actionParam, widgetId, menuAction, id, menuOption, "!AUTHENTIC" + menuTarget, var6, var7);
+	// }
 
-	@Inject
-	@FieldHook("tempMenuAction")
-	public static void onTempMenuActionChanged(int idx)
-	{
-		if (client.getTempMenuAction() != null)
-		{
-			client.getCallbacks().post(WidgetPressed.class, WidgetPressed.INSTANCE);
-		}
-	}
+	// @Inject
+	// @FieldHook("tempMenuAction")
+	// public static void onTempMenuActionChanged(int idx)
+	// {
+	// 	if (client.getTempMenuAction() != null)
+	// 	{
+	// 		client.getCallbacks().post(WidgetPressed.class, WidgetPressed.INSTANCE);
+	// 	}
+	// }
 
 	@FieldHook("Login_username")
 	@Inject

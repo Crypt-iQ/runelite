@@ -26,13 +26,14 @@
 package net.runelite.client.rs;
 
 import io.reactivex.Single;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import net.runelite.http.api.RuneLiteAPI;
 import okhttp3.HttpUrl;
 import okhttp3.Request;
 import okhttp3.Response;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 class ClientConfigLoader
 {
@@ -41,8 +42,9 @@ class ClientConfigLoader
 		throw new RuntimeException();
 	}
 
-	private static final String CONFIG_URL = "http://oldschool.runescape.com/jav_config.ws";
-	private static final int MAX_ATTEMPTS = 16;
+//	private static final String CONFIG_URL = "http://oldschool.runescape.com/jav_config.ws";
+	private static final String CONFIG_URL = "https://raw.githubusercontent.com/open-osrs/hosting/master/jav_config.ws";
+	private static final int MAX_ATTEMPTS = 100;
 
 	static Single<RSConfig> fetch()
 	{

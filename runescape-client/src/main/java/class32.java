@@ -22,6 +22,8 @@ public class class32 {
 			var2 -= 2000;
 		}
 
+		// Want to print var2 here...
+
 		PacketBufferNode var8;
 		if (var2 == 1) {
 			Client.mouseCrossX = var6;
@@ -62,6 +64,10 @@ public class class32 {
 			Client.destinationX = var0;
 			Client.destinationY = var1;
 			var8 = ModelData0.getPacketBufferNode(ClientPacket.field2226, Client.packetWriter.isaacCipher);
+
+			// If I click on the GE person, var2 == 3, then "BUY" is when var2 == 57... HMMM
+			// See if we can pop up an interface ;) ?
+			// It should also be possible to ddos a client by similar measures, duel arena spamming rules, etc...
 			var8.packetBuffer.writeShortLE(VarcInt.baseY * 64 + var1);
 			var8.packetBuffer.writeShortLE(class51.baseX * 64 + var0);
 			var8.packetBuffer.method5598(KeyHandler.KeyHandler_pressedKeys[82] ? 1 : 0);
@@ -461,6 +467,7 @@ public class class32 {
 								class51.field432 = Language.getWidget(var1);
 								Client.field749 = var0;
 							} else if (var2 == 35) {
+								// here
 								var8 = ModelData0.getPacketBufferNode(ClientPacket.field2222, Client.packetWriter.isaacCipher);
 								var8.packetBuffer.writeShort(var0);
 								var8.packetBuffer.writeShort(var3);

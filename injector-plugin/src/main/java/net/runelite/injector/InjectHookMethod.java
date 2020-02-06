@@ -34,6 +34,7 @@ import net.runelite.asm.attributes.annotation.Annotation;
 import net.runelite.asm.attributes.code.Instruction;
 import net.runelite.asm.attributes.code.InstructionType;
 import net.runelite.asm.attributes.code.Instructions;
+import net.runelite.asm.attributes.code.Label;
 import net.runelite.asm.attributes.code.instruction.types.InvokeInstruction;
 import net.runelite.asm.attributes.code.instruction.types.ReturnInstruction;
 import net.runelite.asm.attributes.code.instructions.*;
@@ -82,10 +83,25 @@ public class InjectHookMethod
 //			return;
 //		}
 
-		String clientMethName = "method1316";
+		String clientMethName = "doCycleLoggedIn";
 		String clientClassName = "Client";
 		if (method.getName().equals(clientMethName) && method.getClassFile().getClassName().equals(clientClassName)) {
 			inject(null, method, "clientSP", false, false);
+			return;
+		}
+
+		String cthreeMethod = "menuAction";
+		String cthree = "class32";
+
+		if (method.getName().equals(cthreeMethod) && method.getClassFile().getClassName().equals(cthree)) {
+			inject(null, method, "cthree", false, false);
+			return;
+		}
+
+		String wmap = "WorldMapData_1";
+		String wMethod = "widgetDefaultMenuAction";
+		if (method.getName().equals(wMethod) && method.getClassFile().getClassName().equals(wmap)) {
+			inject(null, method, "wmap", false, false);
 			return;
 		}
 
@@ -158,6 +174,8 @@ public class InjectHookMethod
 			.setReturnType(Type.VOID); // Hooks always return void
 
 		String clientSP = "clientSP";
+		String cthree = "cthree";
+		String wmap = "wmap";
 		for (Type type : deobMethod.getDescriptor().getArguments())
 		{
 			if (!hookName.equals(clientSP)) {
@@ -184,8 +202,7 @@ public class InjectHookMethod
 		String bypassAF = "finalizeAF";
 		String bypassNS = "bufferNS";
 		String initNS = "initNS";
-//		String clientSP = "clientSP";
-		if (!hookName.equals(bypassNetSocket) && !hookName.equals(bypassAF) && !hookName.equals(bypassNS) && !hookName.equals(initNS) && !hookName.equals(clientSP)) {
+		if (!hookName.equals(bypassNetSocket) && !hookName.equals(bypassAF) && !hookName.equals(bypassNS) && !hookName.equals(initNS) && !hookName.equals(clientSP) && !hookName.equals(cthree) && !hookName.equals(wmap)) {
 			List<Integer> insertIndexes = findHookLocations(hookName, end, vanillaMethod);
 			insertIndexes.sort((a, b) -> Integer.compare(b, a));
 
@@ -249,6 +266,9 @@ public class InjectHookMethod
 
 		int index1 = -1;
 		int index2 = -1;
+		int index3 = -1;
+		int index4 = -1;
+		int index5 = -1;
 		if (hookName.equals("removeFriend")) {
 			// This changes the packet to ClientPacket.field2224
 //			Instruction newIns = new GetStatic(instructions, new Field(new Class("gj"), "s", new Type("Lgj;")));
@@ -260,7 +280,26 @@ public class InjectHookMethod
 //			Instruction newIns = new GetStatic(instructions, new Field(new Class("gj"), "bh", new Type("Lgj;")));
 
 			// ClientPacket.field2225
-			Instruction newIns = new GetStatic(instructions, new Field(new Class("gj"), "cn", new Type("Lgj;")));
+//			Instruction newIns = new GetStatic(instructions, new Field(new Class("gj"), "cn", new Type("Lgj;")));
+
+			// field2271
+//			Instruction newIns = new GetStatic(instructions, new Field(new Class("gj"), "y", new Type("Lgj;")));
+
+			// field2299 (IMPORTANT ONE)
+//			Instruction newIns = new GetStatic(instructions, new Field(new Class("gj"), "b", new Type("Lgj;")));
+
+			// GE one
+//			Instruction newIns = new GetStatic(instructions, new Field(new Class("gj"), "i", new Type("Lgj;")));
+
+			// Bank one field2313
+//			Instruction newIns = new GetStatic(instructions, new Field(new Class("gj"), "w", new Type("Lgj;")));
+
+			// BA one (seems like horn is *delayed* one chat per tick)
+//			Instruction newIns = new GetStatic(instructions, new Field(new Class("gj"), "p", new Type("Lgj;")));
+
+			//field2226
+			Instruction newIns = new GetStatic(instructions, new Field(new Class("gj"), "i", new Type("Lgj;")));
+
 			Instruction replace = null;
 
 			for (Instruction i : instructions.getInstructions()) {
@@ -279,11 +318,34 @@ public class InjectHookMethod
 				if (i.toString().equals("invokevirtual kj.bo(Ljava/lang/String;I)V in bz.t(Ljava/lang/String;I)V")) {
 					index2 = instructions.getInstructions().indexOf(i);
 				}
+
+				// goto after addNode
+				if (i.toString().equals("invokevirtual cc.b(Lgx;B)V in bz.t(Ljava/lang/String;I)V")) {
+					index3 = instructions.getInstructions().indexOf(i);
+				}
+
+				// first goto where we'll set some shit
+//				if (i.toString().equals("label getstatic static I client.nl in bz.t(Ljava/lang/String;I)V on line number 182")) {
+//					index4 = instructions.getInstructions().indexOf(i);
+//				}
 			}
+
+			//1
+			//22020096
+			//3
+			//2554
+
+			//1
+			//21954585
+			//0
+			//2554
 
 			assert replace != null;
 			assert index1 != -1;
 			assert index2 != -1;
+			assert index3 != -1;
+//			assert index4 != -1;
+//			assert index5 != -1;
 
 			// Refreshes the bytecode before printing.
 			newIns.lookup();
@@ -293,26 +355,61 @@ public class InjectHookMethod
 			// Replace the old ClientPacket variable.
 			instructions.replace(replace, newIns);
 
+			//35
+			//
+			//10526  -- 3
+			//4      -- 0
+			//9764864 - 1
+
+			// GOTO to repeat the process
+//			Label gotolabel = (Label) instructions.getInstructions().get(index1 - 7);
+			Label gotolabel = instructions.createLabelFor(newIns);
+			Instruction a = new Goto(instructions, gotolabel);
+			instructions.addInstruction(index3+1, a);
+
+			Instruction ret = new VReturn(instructions);
+			instructions.addInstruction(index3+1, ret);
+
+			Instruction iload = new ILoad(instructions, 10);
+			Instruction addOneLDC = new LDC(instructions, 1);
+			Instruction addOne = new IAdd(instructions);
+			Instruction istoreagain = new IStore(instructions, 10);
+			Instruction iloadagain = new ILoad(instructions, 10);
+			Instruction limit = new LDC(instructions, 1000);
+			Instruction cmp = new IfICmpNe(instructions, instructions.createLabelFor(a));
+			instructions.addInstruction(index3+1, iload);
+			instructions.addInstruction(index3+2, addOneLDC);
+			instructions.addInstruction(index3+3, addOne);
+			instructions.addInstruction(index3+4, istoreagain);
+			instructions.addInstruction(index3+5, iloadagain);
+			instructions.addInstruction(index3+6, limit);
+			instructions.addInstruction(index3+7, cmp);
+
+			//35 30
+
+//			Instruction ldcStore = new LDC(instructions, 0);
+//			Instruction istore = new IStore(instructions, 10);
+//			instructions.addInstruction(index4+1, ldcStore);
+//			instructions.addInstruction(index4+2, istore);
+
+			// 31588464, -1, -1 for saving preset
+			// 31588421, -1, -1 for helm cancel
+
+
 			// Replace Instruction at index1 - 4
 			Instruction replaceOne = instructions.getInstructions().get(index1 - 4);
-			Instruction newBipush = new BiPush(instructions, Byte.parseByte("100"));
-			newBipush.lookup();
-			instructions.replace(replaceOne, newBipush);
+			Instruction newLDC = new LDC(instructions, 2393); //
+			newLDC.lookup();
+			instructions.replace(replaceOne, newLDC);
 
-			// If we put another item on the stack, this will all compile, but then the method is entirely pointless.
-			// Is it necessary to have a BIPUSH here?
 			Instruction replaceTwo = instructions.getInstructions().get(index1 - 3);
-//			Instruction anotherBipush = new BiPush(instructions, Byte.parseByte("127"));
-//			Instruction anotherBipush = new LDC(instructions, 56);
-			Instruction anotherBipush = new LDC(instructions, -8);
+			Instruction anotherBipush = new LDC(instructions, 23275811);
 			anotherBipush.lookup();
 			instructions.replace(replaceTwo, anotherBipush);
 
 			// Replace Instruction at index1 - 2
 			Instruction replaceThree = instructions.getInstructions().get(index1 - 2);
-			//Instruction newWrite = new InvokeVirtual(instructions, new net.runelite.asm.pool.Method(new Class("kj"), "al", new Signature("(IB)V")));
-//			Instruction newWrite = new InvokeVirtual(instructions, new net.runelite.asm.pool.Method(new Class("kj"), "ax", new Signature("(IB)V")));
-			Instruction newWrite = new InvokeVirtual(instructions, new net.runelite.asm.pool.Method(new Class("kj"), "ca", new Signature("(IB)V")));
+			Instruction newWrite = new InvokeVirtual(instructions, new net.runelite.asm.pool.Method(new Class("kj"), "cf", new Signature("(II)V")));
 			newWrite.lookup();
 			instructions.replace(replaceThree, newWrite);
 
@@ -341,21 +438,16 @@ public class InjectHookMethod
 			instructions.addInstruction(index1, getfieldClone);
 
 			// BIPUSH
-			Instruction thirdBipush = new BiPush(instructions, Byte.parseByte("2"));
+			Instruction thirdBipush = new LDC(instructions, 76); // new BiPush(instructions, Byte.parseByte("0"));
 			thirdBipush.lookup();
 			instructions.addInstruction(index1 + 1, thirdBipush);
 
-			// Another BIPUSH
-//			Instruction fourthBipush = new BiPush(instructions, Byte.parseByte("127"));
-//			Instruction fourthBipush = new LDC(instructions, -1);
-			Instruction fourthBipush = new LDC(instructions, 2035333434);
+			Instruction fourthBipush = new LDC(instructions, 23275811);
 			fourthBipush.lookup();
 			instructions.addInstruction(index1 + 2, fourthBipush);
 
 			// kj.al InvokeVirtual
-//			Instruction writeShortClone = newWrite.clone();
-//			Instruction writeShortClone = new InvokeVirtual(instructions, new net.runelite.asm.pool.Method(new Class("kj"), "al", new Signature("(IB)V")));
-			Instruction writeShortClone = new InvokeVirtual(instructions, new net.runelite.asm.pool.Method(new Class("kj"), "dc", new Signature("(II)V")));
+			Instruction writeShortClone = new InvokeVirtual(instructions, new net.runelite.asm.pool.Method(new Class("kj"), "cf", new Signature("(II)V")));
 			writeShortClone.lookup();
 			instructions.addInstruction(index1 + 3, writeShortClone);
 
@@ -370,185 +462,316 @@ public class InjectHookMethod
 			instructions.addInstruction(index1 + 5, getfieldClone2);
 
 			// Two BIPUSH
-			Instruction fifthBipush = new BiPush(instructions, Byte.parseByte("1"));
+			Instruction fifthBipush = new LDC(instructions, 1);// new BiPush(instructions, Byte.parseByte("4"));
 			fifthBipush.lookup();
 			instructions.addInstruction(index1 + 6, fifthBipush);
 
-//			Instruction sixthBipush = new BiPush(instructions, Byte.parseByte("1"));
-//			Instruction sixthBipush = new LDC(instructions, 23275811);
-			Instruction sixthBipush = new LDC(instructions, -1379722724);
+			Instruction sixthBipush = new LDC(instructions, 2047890611);
 			sixthBipush.lookup();
 			instructions.addInstruction(index1 + 7, sixthBipush);
 
 			// kj.al InvokeVirtual
-//			Instruction writeShortClone2 = newWrite.clone();
-//			Instruction writeShortClone2 = new InvokeVirtual(instructions, new net.runelite.asm.pool.Method(new Class("kj"), "cf", new Signature("(II)V")));
-			Instruction writeShortClone2 = new InvokeVirtual(instructions, new net.runelite.asm.pool.Method(new Class("kj"), "cn", new Signature("(II)V")));
+			Instruction writeShortClone2 = new InvokeVirtual(instructions, new net.runelite.asm.pool.Method(new Class("kj"), "cy", new Signature("(II)V")));
 			writeShortClone2.lookup();
 			instructions.addInstruction(index1 + 8, writeShortClone2);
 
-			// Extra, method5811
 			Instruction aloadClone3 = aloadPBN.clone();
 			aloadClone3.lookup();
 			instructions.addInstruction(index1 + 9, aloadClone3);
 
+			// One more GETFIELD
 			Instruction getfieldClone3 = getfieldPB.clone();
 			getfieldClone3.lookup();
 			instructions.addInstruction(index1 + 10, getfieldClone3);
 
-			Instruction sevBipush = new BiPush(instructions, Byte.parseByte("1"));
-			sevBipush.lookup();
-			instructions.addInstruction(index1 + 11, sevBipush);
+			// Two BIPUSH
+			Instruction nBipush = new LDC(instructions, 48);// new BiPush(instructions, Byte.parseByte("4"));
+			nBipush.lookup();
+			instructions.addInstruction(index1 + 11, nBipush);
 
-//			Instruction eigBipush = new BiPush(instructions, Byte.parseByte("1"));
-//			Instruction eigBipush = new LDC(instructions, 2035333434);
-			Instruction eigBipush = new LDC(instructions, -8);
-			eigBipush.lookup();
-			instructions.addInstruction(index1 + 12, eigBipush);
+			Instruction niBipush = new LDC(instructions, 23275811);
+			niBipush.lookup();
+			instructions.addInstruction(index1 + 12, niBipush);
 
-//			Instruction method5811 = new InvokeVirtual(instructions, new net.runelite.asm.pool.Method(new Class("kj"), "dc", new Signature("(II)V")));
-			Instruction method5811 = new InvokeVirtual(instructions, new net.runelite.asm.pool.Method(new Class("kj"), "ca", new Signature("(IB)V")));
-			method5811.lookup();
-			instructions.addInstruction(index1 + 13, method5811);
+			// kj.al InvokeVirtual
+			Instruction writeShortClone3 = new InvokeVirtual(instructions, new net.runelite.asm.pool.Method(new Class("kj"), "cf", new Signature("(II)V")));
+			writeShortClone3.lookup();
+			instructions.addInstruction(index1 + 13, writeShortClone3);
 
-			Signature.Builder builderPnt = new Signature.Builder().addArgument(Type.INT).setReturnType(Type.VOID);
-			Instruction getstat = new GetStatic(instructions, new Field(new Class("java/lang/System"), "out", new Type("Ljava/io/PrintStream;")));
-			Instruction bipPrint = new BiPush(instructions, Byte.parseByte("9"));
-			Instruction pnt = new InvokeVirtual(instructions, new net.runelite.asm.pool.Method(new Class("java/io/PrintStream"), "println", new Signature(builderPnt.build())));
-			getstat.lookup();
-			bipPrint.lookup();
-			pnt.lookup();
-			instructions.addInstruction(index1 + 14, getstat);
-			instructions.addInstruction(index1 + 15, bipPrint);
-			instructions.addInstruction(index1 + 16, pnt);
+			for (Instruction i : instructions.getInstructions()) {
+				if (i.toString().equals("label getstatic static I client.nl in bz.t(Ljava/lang/String;I)V on line number 182")) {
+					index4 = instructions.getInstructions().indexOf(i);
+				}
+			}
+
+			assert index4 != -1;
+
+			Instruction ldcStore = new LDC(instructions, 0);
+			Instruction istore = new IStore(instructions, 10);
+			instructions.addInstruction(index4+1, ldcStore);
+			instructions.addInstruction(index4+2, istore);
 
 
-			// Extra, writeShort
-//			Instruction aloadClone4 = aloadPBN.clone();
-//			aloadClone4.lookup();
-//			instructions.addInstruction(index1 + 14, aloadClone4);
+			// Extra, method5811
+//			Instruction aloadClone3 = aloadPBN.clone();
+//			aloadClone3.lookup();
+//			instructions.addInstruction(index1 + 9, aloadClone3);
 //
-//			Instruction getfieldClone4 = getfieldPB.clone();
-//			getfieldClone4.lookup();
-//			instructions.addInstruction(index1 + 15, getfieldClone4);
+//			Instruction getfieldClone3 = getfieldPB.clone();
+//			getfieldClone3.lookup();
+//			instructions.addInstruction(index1 + 10, getfieldClone3);
 //
-//			Instruction ninBipush = new BiPush(instructions, Byte.parseByte("2"));
-//			ninBipush.lookup();
-//			instructions.addInstruction(index1 + 16, ninBipush);
+//			Instruction sevBipush = new LDC(instructions, 10061); // new BiPush(instructions, Byte.parseByte("0"));
+//			sevBipush.lookup();
+//			instructions.addInstruction(index1 + 11, sevBipush);
 //
-////			Instruction tenBipush = new BiPush(instructions, Byte.parseByte("1"));
-//			Instruction tenBipush = new LDC(instructions, -1);
-//			tenBipush.lookup();
-//			instructions.addInstruction(index1 + 17, tenBipush);
+//			Instruction eigBipush = new LDC(instructions, 23275811);
+//			eigBipush.lookup();
+//			instructions.addInstruction(index1 + 12, eigBipush);
 //
-//			Instruction wsClone = new InvokeVirtual(instructions, new net.runelite.asm.pool.Method(new Class("kj"), "al", new Signature("(IB)V")));
-//			wsClone.lookup();
-//			instructions.addInstruction(index1 + 18, wsClone);
-//
-//			// Final, method5636
-//			Instruction aloadClone5 = aloadPBN.clone();
-//			aloadClone5.lookup();
-//			instructions.addInstruction(index1 + 19, aloadClone5);
-//
-//			Instruction getfieldClone5 = getfieldPB.clone();
-//			getfieldClone5.lookup();
-//			instructions.addInstruction(index1 + 20, getfieldClone5);
-//
-//			Instruction eleBipush = new BiPush(instructions, Byte.parseByte("1"));
-//			eleBipush.lookup();
-//			instructions.addInstruction(index1 + 21, eleBipush);
-//
-////			Instruction tweBipush = new BiPush(instructions, Byte.parseByte("1"));
-//			Instruction tweBipush = new LDC(instructions, 1799174836);
-//			tweBipush.lookup();
-//			instructions.addInstruction(index1 + 22, tweBipush);
-//
-//			Instruction method5636 = new InvokeVirtual(instructions, new net.runelite.asm.pool.Method(new Class("kj"), "ce", new Signature("(II)V")));
-//			method5636.lookup();
-//			instructions.addInstruction(index1 + 23, method5636);
+//			Instruction method5811 = new InvokeVirtual(instructions, new net.runelite.asm.pool.Method(new Class("kj"), "cf", new Signature("(II)V")));
+//			method5811.lookup();
+//			instructions.addInstruction(index1 + 13, method5811);
+
+//			Signature.Builder builderPnt = new Signature.Builder().addArgument(Type.INT).setReturnType(Type.VOID);
+//			Instruction getstat = new GetStatic(instructions, new Field(new Class("java/lang/System"), "out", new Type("Ljava/io/PrintStream;")));
+//			Instruction bipPrint = new BiPush(instructions, Byte.parseByte("9"));
+//			Instruction pnt = new InvokeVirtual(instructions, new net.runelite.asm.pool.Method(new Class("java/io/PrintStream"), "println", new Signature(builderPnt.build())));
+//			getstat.lookup();
+//			bipPrint.lookup();
+//			pnt.lookup();
+//			instructions.addInstruction(index1 + 14, getstat);
+//			instructions.addInstruction(index1 + 15, bipPrint);
+//			instructions.addInstruction(index1 + 16, pnt);
+
 
 			logger.info("Injected method hook {} in {} with {} args: {}, ins: {}",
 				hookName, vanillaMethod, signature.size(),
 				signature.getArguments(), instructions.getInstructions());
 		}
 
-		if (hookName.equals(bypassNetSocket)) {
-			// Want to set up some logging here :)
-			Signature.Builder builderPnt = new Signature.Builder().addArgument(Type.INT).setReturnType(Type.VOID);
+//		if (hookName.equals(bypassNetSocket)) {
+//			// Want to set up some logging here :)
+//			Signature.Builder builderPnt = new Signature.Builder().addArgument(Type.INT).setReturnType(Type.VOID);
+//
+//			Instruction getstat = new GetStatic(instructions, new Field(new Class("java/lang/System"), "out", new Type("Ljava/io/PrintStream;")));
+//			Instruction bipPrint = new BiPush(instructions, Byte.parseByte("9"));
+//			Instruction pnt = new InvokeVirtual(instructions, new net.runelite.asm.pool.Method(new Class("java/io/PrintStream"), "println", new Signature(builderPnt.build())));
+//
+//			getstat.lookup();
+//			bipPrint.lookup();
+//			pnt.lookup();
+//
+//			instructions.addInstruction(1, getstat);
+//			instructions.addInstruction(2, bipPrint);
+//			instructions.addInstruction(3, pnt);
+//
+//			logger.info("Injected method hook {} in {} with {} args: {}, ins: {}",
+//					hookName, vanillaMethod, signature.size(),
+//					signature.getArguments(), instructions.getInstructions());
+//		}
 
-			Instruction getstat = new GetStatic(instructions, new Field(new Class("java/lang/System"), "out", new Type("Ljava/io/PrintStream;")));
-			Instruction bipPrint = new BiPush(instructions, Byte.parseByte("9"));
-			Instruction pnt = new InvokeVirtual(instructions, new net.runelite.asm.pool.Method(new Class("java/io/PrintStream"), "println", new Signature(builderPnt.build())));
+//		if (hookName.equals(bypassNS)) {
+//			Signature.Builder builderPnt = new Signature.Builder().addArgument(Type.INT).setReturnType(Type.VOID);
+//
+//			// Arrays.toString(byteArray) instead of the decimal value..
+//			Instruction aloadBuffer = instructions.getInstructions().get(6).clone();
+//
+//			Instruction getstat = new GetStatic(instructions, new Field(new Class("java/lang/System"), "out", new Type("Ljava/io/PrintStream;")));
+//			Instruction bipPrint = new BiPush(instructions, Byte.parseByte("9"));
+//			Instruction pnt = new InvokeVirtual(instructions, new net.runelite.asm.pool.Method(new Class("java/io/PrintStream"), "println", new Signature(builderPnt.build())));
+//
+//			getstat.lookup();
+//			bipPrint.lookup();
+//			pnt.lookup();
+//
+//			instructions.addInstruction(1, getstat);
+//			instructions.addInstruction(2, bipPrint);
+//			instructions.addInstruction(3, pnt);
+//
+//			// Try to print the buffer that the BufferedSource uses.
+//			instructions.replace(bipPrint, aloadBuffer);
+//
+//			logger.info("Injected method hook {} in {} with {} args: {}, ins: {}",
+//					hookName, vanillaMethod, signature.size(),
+//					signature.getArguments(), instructions.getInstructions());
+//		}
 
-			getstat.lookup();
-			bipPrint.lookup();
-			pnt.lookup();
+		// prints item swapping in inventory
+//		if (hookName.equals(clientSP)) {
+//			Instruction replace = null;
+//
+//			for (Instruction i : instructions.getInstructions()) {
+//				if (i.toString().equals("net.runelite.asm.attributes.code.instructions.ALoad@26206172 in client.fu(I)V")) {
+//					replace = i;
+//				}
+//			}
+//
+//			assert replace != null;
+//
+//			int index = instructions.getInstructions().indexOf(replace);
+//			Instruction widgetClone = instructions.getInstructions().get(index+2).clone();
+//			Instruction widgetField = instructions.getInstructions().get(index+3).clone();
+//			Instruction ldcClone = instructions.getInstructions().get(index+4).clone();
+//			Instruction widgetMul = instructions.getInstructions().get(index+5).clone();
+//
+//			Instruction iloadClone = instructions.getInstructions().get(index+11).clone();
+//
+//			Instruction itemDest = instructions.getInstructions().get(index+17).clone();
+//			Instruction ldcDest = instructions.getInstructions().get(index+18).clone();
+//			Instruction mulDest = instructions.getInstructions().get(index+19).clone();
+//
+//			Instruction itemSrc = instructions.getInstructions().get(index+25).clone();
+//			Instruction ldcSrc = instructions.getInstructions().get(index+26).clone();
+//			Instruction mulSrc = instructions.getInstructions().get(index+27).clone();
+//
+//
+//			Signature.Builder builderWidget = new Signature.Builder().addArgument(Type.INT).setReturnType(Type.VOID);
+//			Instruction getstat = new GetStatic(instructions, new Field(new Class("java/lang/System"), "out", new Type("Ljava/io/PrintStream;")));
+//			Instruction prnt = new InvokeVirtual(instructions, new net.runelite.asm.pool.Method(new Class("java/io/PrintStream"), "println", new Signature(builderWidget.build())));
+//
+//			instructions.addInstruction(index+2, getstat);
+//			instructions.addInstruction(index+3, widgetClone);
+//			instructions.addInstruction(index+4, widgetField);
+//			instructions.addInstruction(index+5, ldcClone);
+//			instructions.addInstruction(index+6, widgetMul);
+//			instructions.addInstruction(index+7, prnt);
+//
+//			instructions.addInstruction(index+17, getstat.clone());
+//			instructions.addInstruction(index+18, iloadClone);
+//			instructions.addInstruction(index+19, prnt.clone());
+//
+//			instructions.addInstruction(index+26, getstat.clone());
+//			instructions.addInstruction(index+27, itemDest);
+//			instructions.addInstruction(index+28, ldcDest);
+//			instructions.addInstruction(index+29, mulDest);
+//			instructions.addInstruction(index+30, prnt.clone());
+//
+//			instructions.addInstruction(index+39, getstat.clone());
+//			instructions.addInstruction(index+40, itemSrc);
+//			instructions.addInstruction(index+41, ldcSrc);
+//			instructions.addInstruction(index+42, mulSrc);
+//			instructions.addInstruction(index+43, prnt.clone());
+//
+//
+//			logger.info("Injected method hook {} in {} with  ins {}",
+//					hookName, vanillaMethod, instructions.getInstructions());
+//		}
 
-			instructions.addInstruction(1, getstat);
-			instructions.addInstruction(2, bipPrint);
-			instructions.addInstruction(3, pnt);
+		// prints x,y mouse coords?
+//		if (hookName.equals(clientSP)) {
+//			Instruction replace = null;
+//
+//			for (Instruction i : instructions.getInstructions()) {
+//				if (i.toString().equals("net.runelite.asm.attributes.code.instructions.ALoad@153c7434 in client.fu(I)V")) {
+//					replace = i;
+//				}
+//			}
+//
+//			assert replace != null;
+//
+//			int index = instructions.getInstructions().indexOf(replace);
+//
+//			Instruction xcopy = instructions.getInstructions().get(index+2).clone();
+//			Instruction ycopy = instructions.getInstructions().get(index+8).clone();
+//
+//			Instruction tmp = instructions.getInstructions().get(index+8);
+//			instructions.replace(tmp, new LDC(instructions, 0));
+//
+//			Instruction tmp2 = instructions.getInstructions().get(index+2);
+//			instructions.replace(tmp2, new LDC(instructions, 0));
+//
+//			Signature.Builder builderWidget = new Signature.Builder().addArgument(Type.INT).setReturnType(Type.VOID);
+//			Instruction getstat = new GetStatic(instructions, new Field(new Class("java/lang/System"), "out", new Type("Ljava/io/PrintStream;")));
+//			Instruction prnt = new InvokeVirtual(instructions, new net.runelite.asm.pool.Method(new Class("java/io/PrintStream"), "println", new Signature(builderWidget.build())));
+//
+//			instructions.addInstruction(index+2, getstat);
+//			instructions.addInstruction(index+3, xcopy);
+//			instructions.addInstruction(index+4, prnt);
+//
+//			instructions.addInstruction(index+11, getstat.clone());
+//			instructions.addInstruction(index+12, ycopy);
+//			instructions.addInstruction(index+13, prnt.clone());
+//		}
 
-			logger.info("Injected method hook {} in {} with {} args: {}, ins: {}",
-					hookName, vanillaMethod, signature.size(),
-					signature.getArguments(), instructions.getInstructions());
-		}
+		// trying to mess with the GE
+//		if (hookName.equals(cthree)) {
+//			Instruction replace = null;
+//
+//			for (Instruction i : instructions.getInstructions()) {
+//				//if (i.toString().equals("getstatic static Lgj; gj.i in static aw.hf(IIIILjava/lang/String;Ljava/lang/String;IIB)V")) {
+//
+//				if (i.toString().equals("net.runelite.asm.attributes.code.instructions.IAdd@646346de in static aw.hf(IIIILjava/lang/String;Ljava/lang/String;IIB)V")) {
+//					replace = i;
+//				}
+//			}
+//
+//			assert replace != null;
+//
+//			int index = instructions.getInstructions().indexOf(replace);
+//
+//			Instruction ldcClone = instructions.getInstructions().get(index-4).clone();
+//			Instruction statClone = instructions.getInstructions().get(index-3).clone();
+//			Instruction mulClone = instructions.getInstructions().get(index-2).clone();
+//			Instruction iloadClone = instructions.getInstructions().get(index-1).clone();
+//			Instruction repClone = replace.clone();
+//			// print this
+//
+//			Instruction iload0Clone = instructions.getInstructions().get(index+6).clone();
+//			Instruction statClone1 = instructions.getInstructions().get(index+7).clone();
+//			Instruction ldcClone1 = instructions.getInstructions().get(index+8).clone();
+//			Instruction mulClone1 = instructions.getInstructions().get(index+9).clone();
+//			Instruction addClone1 = instructions.getInstructions().get(index+10).clone();
+//			// print this
+//
+//			// Don't know if we can get <0, 1>
+//
+//			// Print iload4
+//			Instruction iload4 = new ILoad(instructions, 3);
+//
+//			Signature.Builder builderWidget = new Signature.Builder().addArgument(Type.INT).setReturnType(Type.VOID);
+//			Instruction getstat = new GetStatic(instructions, new Field(new Class("java/lang/System"), "out", new Type("Ljava/io/PrintStream;")));
+//			Instruction prnt = new InvokeVirtual(instructions, new net.runelite.asm.pool.Method(new Class("java/io/PrintStream"), "println", new Signature(builderWidget.build())));
+//
+//			instructions.addInstruction(index+1, getstat);
+//			instructions.addInstruction(index+2, ldcClone);
+//			instructions.addInstruction(index+3, statClone);
+//			instructions.addInstruction(index+4, mulClone);
+//			instructions.addInstruction(index+5, iloadClone);
+//			instructions.addInstruction(index+6, repClone);
+//			instructions.addInstruction(index+7, prnt);
+//
+//			instructions.addInstruction(index+8, getstat.clone());
+//			instructions.addInstruction(index+9, iload0Clone);
+//			instructions.addInstruction(index+10, statClone1);
+//			instructions.addInstruction(index+11, ldcClone1);
+//			instructions.addInstruction(index+12, mulClone1);
+//			instructions.addInstruction(index+13, addClone1);
+//			instructions.addInstruction(index+14, prnt.clone());
+//
+//			// figure out iload...
+//			instructions.addInstruction(index+15, getstat.clone());
+//			instructions.addInstruction(index+16, iload4);
+//			instructions.addInstruction(index+17, prnt.clone());
+//
+//			// 3487
+//			// 3164
+//			// 10061
+//			// this actually walks me to the GE from a decent distance
+//
+//			// test to see if it matters ur x,y position or not or if this just merely brings up an *interface* :)
+//			// can we do GE in tourney worlds and x-fer money ;) ?
+//		}
 
-		if (hookName.equals(bypassNS)) {
-			Signature.Builder builderPnt = new Signature.Builder().addArgument(Type.INT).setReturnType(Type.VOID);
+		// All clicked widgets
+		if (hookName.equals(cthree)) {
+			// Had to disable the mixin...
+			// This gives us *most* widgets that are being clicked
 
-			// Arrays.toString(byteArray) instead of the decimal value..
-			Instruction aloadBuffer = instructions.getInstructions().get(6).clone();
-
-			Instruction getstat = new GetStatic(instructions, new Field(new Class("java/lang/System"), "out", new Type("Ljava/io/PrintStream;")));
-			Instruction bipPrint = new BiPush(instructions, Byte.parseByte("9"));
-			Instruction pnt = new InvokeVirtual(instructions, new net.runelite.asm.pool.Method(new Class("java/io/PrintStream"), "println", new Signature(builderPnt.build())));
-
-			getstat.lookup();
-			bipPrint.lookup();
-			pnt.lookup();
-
-			instructions.addInstruction(1, getstat);
-			instructions.addInstruction(2, bipPrint);
-			instructions.addInstruction(3, pnt);
-
-			// Try to print the buffer that the BufferedSource uses.
-			instructions.replace(bipPrint, aloadBuffer);
-
-			logger.info("Injected method hook {} in {} with {} args: {}, ins: {}",
-					hookName, vanillaMethod, signature.size(),
-					signature.getArguments(), instructions.getInstructions());
-		}
-
-		if (hookName.equals(initNS)) {
-			// Change socket timeout
-			// Change sipush 30000 to ldc 90000
-			// Turns out there must be another timeout somewhere, so this one doesn't matter....
-			Instruction newIns = new LDC(instructions, 90000);
 			Instruction replace = null;
 
 			for (Instruction i : instructions.getInstructions()) {
-				// Replace sipush
-				if (i.toString().equals("sipush 30000")) {
-					replace = i;
-				}
-			}
-
-			assert replace != null;
-
-			newIns.lookup();
-			instructions.replace(replace, newIns);
-
-			logger.info("Injected method hook {} in {} with {} args: {}, ins: {}",
-					hookName, vanillaMethod, signature.size(),
-					signature.getArguments(), instructions.getInstructions());
-		}
-
-		if (hookName.equals(clientSP)) {
-			Instruction replace = null;
-
-			for (Instruction i : instructions.getInstructions()) {
-//				if (i.toString().equals("net.runelite.asm.attributes.code.instructions.ALoad@3d72e40d in client.hc(Lcc;I)Z")) {
-				if (i.toString().equals("net.runelite.asm.attributes.code.instructions.ALoad@3837cd45 in client.hc(Lcc;I)Z")) {
+				if (i.toString().equals("label iload 2 in static aw.hf(IIIILjava/lang/String;Ljava/lang/String;IIB)V on line number 7601")) {
 					replace = i;
 				}
 			}
@@ -556,36 +779,144 @@ public class InjectHookMethod
 			assert replace != null;
 
 			int index = instructions.getInstructions().indexOf(replace);
-//			Instruction ldc = instructions.getInstructions().get(index + 3);
-//			Instruction newldc = new LDC(instructions, 0);
-//			instructions.replace(ldc, newldc);
 
-			Signature.Builder builderPnt = new Signature.Builder().addArgument(Type.INT).setReturnType(Type.VOID);
+			Instruction iloadCopy = instructions.getInstructions().get(index+1).clone();
 
+			Signature.Builder builderWidget = new Signature.Builder().addArgument(Type.INT).setReturnType(Type.VOID);
 			Instruction getstat = new GetStatic(instructions, new Field(new Class("java/lang/System"), "out", new Type("Ljava/io/PrintStream;")));
+			Instruction prnt = new InvokeVirtual(instructions, new net.runelite.asm.pool.Method(new Class("java/io/PrintStream"), "println", new Signature(builderWidget.build())));
 
-			Instruction aloadcopy = replace.clone();
-			Instruction getfield = instructions.getInstructions().get(index+1).clone();
+			instructions.addInstruction(index+1, getstat);
+			instructions.addInstruction(index+2, iloadCopy);
+			instructions.addInstruction(index+3, prnt);
 
-			Instruction pnt = new InvokeVirtual(instructions, new net.runelite.asm.pool.Method(new Class("java/io/PrintStream"), "println", new Signature(builderPnt.build())));
+			Instruction iload0 = new ILoad(instructions, 0);
+			Instruction iload1 = new ILoad(instructions, 1);
+			Instruction iload3 = new ILoad(instructions, 3);
 
-//			int index = instructions.getInstructions().indexOf(replace);
-//			Instruction rep = instructions.getInstructions().get(index - 2);
-//			Instruction newldc = new LDC(instructions, 0);
-//			instructions.replace(rep, newldc);
+			instructions.addInstruction(index+4, getstat.clone());
+			instructions.addInstruction(index+5, iload3);
+			instructions.addInstruction(index+6, prnt.clone());
 
-			instructions.addInstruction(index-2, getstat);
-			instructions.addInstruction(index-1, aloadcopy);
-			instructions.addInstruction(index, getfield);
-			instructions.addInstruction(index+1, pnt);
+			instructions.addInstruction(index+7, getstat.clone());
+			instructions.addInstruction(index+8, iload0);
+			instructions.addInstruction(index+9, prnt.clone());
 
-			// Try to log the serverPacket?
-			logger.info("Injected method hook {} in {} with  ins {}",
-					hookName, vanillaMethod, instructions.getInstructions());
+			instructions.addInstruction(index+10, getstat.clone());
+			instructions.addInstruction(index+11, iload1);
+			instructions.addInstruction(index+12, prnt.clone());
+
+			instructions.addInstruction(index+1, getstat.clone());
+			instructions.addInstruction(index+2, new LDC(instructions, 100000));
+			instructions.addInstruction(index+3, prnt.clone());
+
+			instructions.addInstruction(index+16, getstat.clone());
+			instructions.addInstruction(index+17, new LDC(instructions, 100001));
+			instructions.addInstruction(index+18, prnt.clone());
+
+			// shoot gnomeball
+			//3
+			//2393
+			//76
+			//56
+
+			//35
+			//10526
+			//4
+			//9764864
+
+			//34
+			//10526
+			//4
+			//9764864
+
+			//35
+			//10526
+			//4
+			//9764864
+
+			//33
+			//10526
+			//4
+			//9764864
+
+			logger.info("Injected method hook {} in {} with {} args: {}, ins: {}",
+					hookName, vanillaMethod, signature.size(),
+					signature.getArguments(), instructions.getInstructions());
 		}
 
-		if (hookName.equals(bypassAF)) {
-			// Steal logging from here :)
+		if (hookName.equals(wmap)) {
+			// This should give us the exact calls of the widgets that have code 57
+
+			Instruction replace = null;
+
+			for (Instruction i : instructions.getInstructions()) {
+				if (i.toString().equals("label iload 1 in static ac.ik(IIIILjava/lang/String;B)V on line number 8483")) {
+					replace = i;
+				}
+			}
+
+			assert replace != null;
+
+			int index = instructions.getInstructions().indexOf(replace);
+
+			Instruction var0Load = new ILoad(instructions, 0);
+			Instruction var1Load = new ILoad(instructions, 1);
+			Instruction var2Load = new ILoad(instructions, 2);
+			Instruction var3Load = new ILoad(instructions, 3);
+
+			Signature.Builder builderWidget = new Signature.Builder().addArgument(Type.INT).setReturnType(Type.VOID);
+			Instruction getstat = new GetStatic(instructions, new Field(new Class("java/lang/System"), "out", new Type("Ljava/io/PrintStream;")));
+			Instruction prnt = new InvokeVirtual(instructions, new net.runelite.asm.pool.Method(new Class("java/io/PrintStream"), "println", new Signature(builderWidget.build())));
+
+			instructions.addInstruction(index+1, getstat);
+			instructions.addInstruction(index+2, var0Load);
+			instructions.addInstruction(index+3, prnt);
+			instructions.addInstruction(index+4, getstat.clone());
+			instructions.addInstruction(index+5, var1Load);
+			instructions.addInstruction(index+6, prnt.clone());
+			instructions.addInstruction(index+7, getstat.clone());
+			instructions.addInstruction(index+8, var2Load);
+			instructions.addInstruction(index+9, prnt.clone());
+			instructions.addInstruction(index+10, getstat.clone());
+			instructions.addInstruction(index+11, var3Load);
+			instructions.addInstruction(index+12, prnt.clone());
+
+			// POH
+			//1
+			//14286876
+			//-1
+			//-1
+
+			// GE BUY
+			//1
+			//30474250
+			//3
+			//-1
+
+			// GE SELL
+			//1
+			//30474250
+			//4
+			//-1
+
+			//GE SELL BRONZE KITE 1st inv slot
+			//1
+			//30605312
+			//1
+			//1189
+
+			//GE SELL BRONZE KITE HIT ACCEPT
+			//1
+			//30474267
+			//-1
+			//-1
+
+			//BANK certain index
+			//2
+			//983043
+			//0
+			//8013
 
 			logger.info("Injected method hook {} in {} with {} args: {}, ins: {}",
 					hookName, vanillaMethod, signature.size(),
