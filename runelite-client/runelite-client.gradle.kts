@@ -24,8 +24,8 @@
  */
 
 import org.apache.tools.ant.filters.ReplaceTokens
-import java.util.Date
 import java.text.SimpleDateFormat
+import java.util.*
 
 plugins {
     id(Plugins.shadow.first) version Plugins.shadow.second
@@ -68,7 +68,7 @@ dependencies {
     implementation(Libraries.sentry)
     implementation(Libraries.slf4jApi)
     implementation(project(":http-api"))
-    implementation(project(":runelite-api"))
+    api(project(":runelite-api"))
     implementation(Libraries.naturalMouse)
 
     runtimeOnly(Libraries.trident)

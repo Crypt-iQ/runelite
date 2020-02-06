@@ -40,6 +40,7 @@ import java.lang.management.RuntimeMXBean;
 import java.net.Authenticator;
 import java.net.PasswordAuthentication;
 import java.util.Locale;
+import java.util.Optional;
 import javax.annotation.Nullable;
 import javax.inject.Provider;
 import javax.inject.Singleton;
@@ -63,6 +64,7 @@ import net.runelite.client.game.ClanManager;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.game.LootManager;
 import net.runelite.client.game.PlayerManager;
+import net.runelite.client.game.WorldService;
 import net.runelite.client.game.XpDropManager;
 import net.runelite.client.game.chatbox.ChatboxPanelManager;
 import net.runelite.client.graphics.ModelOutlineRenderer;
@@ -81,6 +83,10 @@ import net.runelite.client.ui.overlay.arrow.ArrowWorldOverlay;
 import net.runelite.client.ui.overlay.infobox.InfoBoxOverlay;
 import net.runelite.client.ui.overlay.tooltip.TooltipOverlay;
 import net.runelite.client.ui.overlay.worldmap.WorldMapOverlay;
+import net.runelite.client.util.WorldUtil;
+import net.runelite.client.ws.PartyService;
+import net.runelite.http.api.worlds.World;
+import net.runelite.http.api.worlds.WorldResult;
 import org.slf4j.LoggerFactory;
 
 @Singleton
@@ -93,24 +99,22 @@ public class RuneLite
 	public static final File PLUGIN_DIR = new File(RUNELITE_DIR, "plugins");
 	public static final File SCREENSHOT_DIR = new File(RUNELITE_DIR, "screenshots");
 	public static final File LOGS_DIR = new File(RUNELITE_DIR, "logs");
+	public static final File PLUGINS_DIR = new File(RUNELITE_DIR, "plugins");
 	public static final Locale SYSTEM_LOCALE = Locale.getDefault();
 	public static boolean allowPrivateServer = false;
 
 	@Getter
 	private static Injector injector;
-
-	@Inject
-	private PluginManager pluginManager;
-
-	@Inject
-	private ConfigManager configManager;
-
-	@Inject
-	private SessionManager sessionManager;
-
 	@Inject
 	public DiscordService discordService;
-
+	@Inject
+	private WorldService worldService;
+	@Inject
+	private PluginManager pluginManager;
+	@Inject
+	private ConfigManager configManager;
+	@Inject
+	private SessionManager sessionManager;
 	@Inject
 	private ClientSessionManager clientSessionManager;
 
@@ -166,6 +170,9 @@ public class RuneLite
 	private Provider<ChatboxPanelManager> chatboxPanelManager;
 
 	@Inject
+	private Provider<PartyService> partyService;
+
+	@Inject
 	private Hooks hooks;
 
 	@Inject
@@ -192,7 +199,9 @@ public class RuneLite
 		final ArgumentAcceptingOptionSpec<String> proxyInfo = parser
 			.accepts("proxy")
 			.withRequiredArg().ofType(String.class);
-
+		final ArgumentAcceptingOptionSpec<Integer> worldInfo = parser
+			.accepts("world")
+			.withRequiredArg().ofType(Integer.class);
 		final ArgumentAcceptingOptionSpec<ClientUpdateCheckMode> updateMode = parser
 			.accepts("rs", "Select client type")
 			.withRequiredArg()
@@ -252,13 +261,18 @@ public class RuneLite
 			}
 		}
 
+		if (options.has("world"))
+		{
+			int world = options.valueOf(worldInfo);
+			System.setProperty("cli.world", String.valueOf(world));
+		}
 
 		SentryClient client = Sentry.init("https://fa31d674e44247fa93966c69a903770f@sentry.io/1811856");
 		client.setRelease(RuneLiteProperties.getPlusVersion());
 
 		final ClientLoader clientLoader = new ClientLoader(options.valueOf(updateMode));
 		Completable.fromAction(clientLoader::get)
-			.subscribeOn(Schedulers.single())
+			.subscribeOn(Schedulers.computation())
 			.subscribe();
 
 		Completable.fromAction(ClassPreloader::preload)
@@ -303,11 +317,16 @@ public class RuneLite
 			true));
 
 		injector.getInstance(RuneLite.class).start();
-
 		final long end = System.currentTimeMillis();
 		final RuntimeMXBean rb = ManagementFactory.getRuntimeMXBean();
 		final long uptime = rb.getUptime();
 		log.info("Client initialization took {}ms. Uptime: {}ms", end - start, uptime);
+	}
+
+	@VisibleForTesting
+	public static void setInjector(Injector injector)
+	{
+		RuneLite.injector = injector;
 	}
 
 	private void start() throws Exception
@@ -352,6 +371,10 @@ public class RuneLite
 		RuneLiteSplashScreen.stage(.80, "Initialize UI");
 		clientUI.init(this);
 
+		//Set the world if specified via CLI args - will not work until clientUI.init is called
+		Optional<Integer> worldArg = Optional.ofNullable(System.getProperty("cli.world")).map(Integer::parseInt);
+		worldArg.ifPresent(this::setWorld);
+
 		// Initialize Discord service
 		discordService.init();
 
@@ -370,6 +393,7 @@ public class RuneLite
 			xpDropManager.get();
 			playerManager.get();
 			chatboxPanelManager.get();
+			partyService.get();
 
 			eventBus.subscribe(GameStateChanged.class, this, hooks::onGameStateChanged);
 			eventBus.subscribe(ScriptCallbackEvent.class, this, hooks::onScriptCallbackEvent);
@@ -399,16 +423,48 @@ public class RuneLite
 		clientUI.show();
 	}
 
+	private void setWorld(int cliWorld)
+	{
+		int correctedWorld = cliWorld < 300 ? cliWorld + 300 : cliWorld;
+
+		if (correctedWorld <= 300 || client.getWorld() == correctedWorld)
+		{
+			return;
+		}
+
+		final WorldResult worldResult = worldService.getWorlds();
+
+		if (worldResult == null)
+		{
+			log.warn("Failed to lookup worlds.");
+			return;
+		}
+
+		final World world = worldResult.findWorld(correctedWorld);
+
+		if (world != null)
+		{
+			final net.runelite.api.World rsWorld = client.createWorld();
+			rsWorld.setActivity(world.getActivity());
+			rsWorld.setAddress(world.getAddress());
+			rsWorld.setId(world.getId());
+			rsWorld.setPlayerCount(world.getPlayers());
+			rsWorld.setLocation(world.getLocation());
+			rsWorld.setTypes(WorldUtil.toWorldTypes(world.getTypes()));
+
+			client.changeWorld(rsWorld);
+			log.debug("Applied new world {}", correctedWorld);
+		}
+		else
+		{
+			log.warn("World {} not found.", correctedWorld);
+		}
+	}
+
 	public void shutdown()
 	{
 		configManager.sendConfig();
 		clientSessionManager.shutdown();
 		discordService.close();
-	}
-
-	@VisibleForTesting
-	public static void setInjector(Injector injector)
-	{
-		RuneLite.injector = injector;
 	}
 }

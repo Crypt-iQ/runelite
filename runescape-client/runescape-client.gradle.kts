@@ -27,7 +27,7 @@ group = "com.openosrs.rs"
 description = "RuneScape Client"
 
 dependencies {
-    implementation(project(":runescape-api"))
+    implementation(project(":injection-annotations"))
 
     testImplementation(Libraries.junit)
     testImplementation(Libraries.slf4jApi)
@@ -35,6 +35,12 @@ dependencies {
 }
 
 tasks {
+    java {
+        // Needs 1.8 because of lambdas in reflection
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+        disableAutoTargetJvm()
+    }
     withType<JavaCompile> {
         options.compilerArgs.addAll(arrayOf("-g:source,vars,lines", "-Xlint:-unchecked"))
     }

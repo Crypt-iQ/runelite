@@ -1,54 +1,66 @@
-import net.runelite.mapping.Export;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("bq")
+@ObfuscatedName("by")
 public class class60 {
-	@ObfuscatedName("qc")
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
-		signature = "Lde;"
+		signature = "(IIIB)Llt;",
+		garbageValue = "-75"
 	)
-	@Export("pcmPlayer1")
-	static PcmPlayer pcmPlayer1;
-	@ObfuscatedName("eg")
-	@ObfuscatedSignature(
-		signature = "Lij;"
-	)
-	@Export("archive20")
-	static Archive archive20;
-
-	@ObfuscatedName("g")
-	@ObfuscatedSignature(
-		signature = "(Lhf;Lhf;III)Lky;",
-		garbageValue = "-2011149056"
-	)
-	public static Font method1195(AbstractArchive var0, AbstractArchive var1, int var2, int var3) {
-		return !GraphicsObject.method2030(var0, var2, var3) ? null : FloorOverlayDefinition.method4853(var1.takeFile(var2, var3));
+	static Sprite method1187(int var0, int var1, int var2) {
+		DemotingHashTable var3 = WorldMapRegion.WorldMapRegion_cachedSprites;
+		long var4 = (long)(var2 << 16 | var0 << 8 | var1);
+		return (Sprite)var3.get(var4);
 	}
 
-	@ObfuscatedName("l")
+	@ObfuscatedName("j")
+	@ObfuscatedSignature(
+		signature = "(Ljava/lang/String;I)V",
+		garbageValue = "399191905"
+	)
+	static final void method1188(String var0) {
+		ClientPreferences.addGameMessage(30, "", var0);
+	}
+
+	@ObfuscatedName("in")
 	@ObfuscatedSignature(
 		signature = "(B)V",
-		garbageValue = "-30"
+		garbageValue = "-42"
 	)
-	public static void method1194() {
-		ItemDefinition.ItemDefinition_cachedSprites.clear();
-	}
+	static final void method1186() {
+		boolean var0 = false;
 
-	@ObfuscatedName("ho")
-	@ObfuscatedSignature(
-		signature = "(II)V",
-		garbageValue = "-1426936698"
-	)
-	static final void method1193(int var0) {
-		if (var0 >= 0) {
-			int var1 = Client.menuArguments1[var0];
-			int var2 = Client.menuArguments2[var0];
-			int var3 = Client.menuOpcodes[var0];
-			int var4 = Client.menuIdentifiers[var0];
-			String var5 = Client.menuActions[var0];
-			String var6 = Client.menuTargets[var0];
-			class32.menuAction(var1, var2, var3, var4, var5, var6, MouseHandler.MouseHandler_lastPressedX, MouseHandler.MouseHandler_lastPressedY);
+		while (!var0) {
+			var0 = true;
+
+			for (int var1 = 0; var1 < Client.menuOptionsCount - 1; ++var1) {
+				if (Client.menuOpcodes[var1] < 1000 && Client.menuOpcodes[var1 + 1] > 1000) {
+					String var2 = Client.menuTargets[var1];
+					Client.menuTargets[var1] = Client.menuTargets[var1 + 1];
+					Client.menuTargets[var1 + 1] = var2;
+					String var3 = Client.menuActions[var1];
+					Client.menuActions[var1] = Client.menuActions[var1 + 1];
+					Client.menuActions[var1 + 1] = var3;
+					int var4 = Client.menuOpcodes[var1];
+					Client.menuOpcodes[var1] = Client.menuOpcodes[var1 + 1];
+					Client.menuOpcodes[var1 + 1] = var4;
+					var4 = Client.menuArguments1[var1];
+					Client.menuArguments1[var1] = Client.menuArguments1[var1 + 1];
+					Client.menuArguments1[var1 + 1] = var4;
+					var4 = Client.menuArguments2[var1];
+					Client.menuArguments2[var1] = Client.menuArguments2[var1 + 1];
+					Client.menuArguments2[var1 + 1] = var4;
+					var4 = Client.menuIdentifiers[var1];
+					Client.menuIdentifiers[var1] = Client.menuIdentifiers[var1 + 1];
+					Client.menuIdentifiers[var1 + 1] = var4;
+					boolean var5 = Client.menuShiftClick[var1];
+					Client.menuShiftClick[var1] = Client.menuShiftClick[var1 + 1];
+					Client.menuShiftClick[var1 + 1] = var5;
+					var0 = false;
+				}
+			}
 		}
+
 	}
 }

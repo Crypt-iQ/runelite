@@ -36,6 +36,7 @@ import java.awt.image.BufferedImage;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.inject.Inject;
@@ -48,6 +49,7 @@ import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.input.MouseManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.plugins.PluginType;
 import net.runelite.client.plugins.screenmarkers.ui.ScreenMarkerPluginPanel;
 import net.runelite.client.ui.ClientToolbar;
 import net.runelite.client.ui.NavigationButton;
@@ -58,7 +60,8 @@ import net.runelite.client.util.ImageUtil;
 @PluginDescriptor(
 	name = "Screen Markers",
 	description = "Enable drawing of screen markers on top of the client",
-	tags = {"boxes", "overlay", "panel"}
+	tags = {"boxes", "overlay", "panel"},
+	type = PluginType.UTILITY
 )
 @Singleton
 public class ScreenMarkerPlugin extends Plugin
@@ -186,9 +189,10 @@ public class ScreenMarkerPlugin extends Plugin
 
 	public void finishCreation(boolean aborted)
 	{
-		if (!aborted && currentMarker != null)
+		ScreenMarker marker = currentMarker;
+		if (!aborted && marker != null)
 		{
-			final ScreenMarkerOverlay screenMarkerOverlay = new ScreenMarkerOverlay(currentMarker);
+			final ScreenMarkerOverlay screenMarkerOverlay = new ScreenMarkerOverlay(marker);
 			screenMarkerOverlay.setPreferredLocation(overlay.getBounds().getLocation());
 			screenMarkerOverlay.setPreferredSize(overlay.getBounds().getSize());
 
@@ -256,6 +260,6 @@ public class ScreenMarkerPlugin extends Plugin
 		{
 		}.getType());
 
-		return screenMarkerData.stream().map(ScreenMarkerOverlay::new);
+		return screenMarkerData.stream().filter(Objects::nonNull).map(ScreenMarkerOverlay::new);
 	}
 }

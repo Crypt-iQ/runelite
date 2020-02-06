@@ -68,6 +68,7 @@ import net.runelite.client.game.ItemManager;
 import net.runelite.client.input.KeyManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.plugins.PluginType;
 import net.runelite.client.util.QuantityFormatter;
 import net.runelite.http.api.chat.ChatClient;
 import net.runelite.http.api.chat.Duels;
@@ -84,7 +85,8 @@ import org.apache.commons.text.WordUtils;
 @PluginDescriptor(
 	name = "Chat Commands",
 	description = "Enable chat commands",
-	tags = {"grand", "exchange", "level", "prices"}
+	tags = {"grand", "exchange", "level", "prices"},
+	type = PluginType.UTILITY
 )
 @Singleton
 @Slf4j
@@ -92,6 +94,7 @@ public class ChatCommandsPlugin extends Plugin
 {
 	private static final Pattern KILLCOUNT_PATTERN = Pattern.compile("Your (.+) (?:kill|harvest|lap|completion) count is: <col=ff0000>(\\d+)</col>");
 	private static final Pattern RAIDS_PATTERN = Pattern.compile("Your completed (.+) count is: <col=ff0000>(\\d+)</col>");
+	private static final Pattern RAIDS_DURATION_PATTERN = Pattern.compile("<col=ef20ff>Congratulations - your raid is complete! Duration:</col> <col=ff0000>([0-9:]+)</col>");
 	private static final Pattern WINTERTODT_PATTERN = Pattern.compile("Your subdued Wintertodt count is: <col=ff0000>(\\d+)</col>");
 	private static final Pattern BARROWS_PATTERN = Pattern.compile("Your Barrows chest count is: <col=ff0000>(\\d+)</col>");
 	private static final Pattern KILL_DURATION_PATTERN = Pattern.compile("(?i)^(?:Fight |Lap |Challenge |Corrupted challenge )?duration: <col=ff0000>[0-9:]+</col>\\. Personal best: ([0-9:]+)");
@@ -408,7 +411,8 @@ public class ChatCommandsPlugin extends Plugin
 	{
 		if (chatMessage.getType() != ChatMessageType.TRADE
 			&& chatMessage.getType() != ChatMessageType.GAMEMESSAGE
-			&& chatMessage.getType() != ChatMessageType.SPAM)
+			&& chatMessage.getType() != ChatMessageType.SPAM
+			&& chatMessage.getType() != ChatMessageType.FRIENDSCHATNOTIFICATION)
 		{
 			return;
 		}
@@ -450,6 +454,17 @@ public class ChatCommandsPlugin extends Plugin
 			int kc = Integer.parseInt(matcher.group(2));
 
 			setKc(boss, kc);
+			if (lastPb > -1)
+			{
+				// lastPb contains the last raid duration and not the personal best, because the raid
+				// complete message does not include the pb. We have to check if it is a new pb:
+				int currentPb = getPb(boss);
+				if (currentPb <= 0 || lastPb < currentPb)
+				{
+					setPb(boss, lastPb);
+				}
+				lastPb = -1;
+			}
 			lastBossKill = boss;
 			return;
 		}
@@ -511,29 +526,44 @@ public class ChatCommandsPlugin extends Plugin
 			matchPb(matcher);
 		}
 
+		matcher = RAIDS_DURATION_PATTERN.matcher(message);
+		if (matcher.find())
+		{
+			matchPb(matcher);
+		}
+
 		lastBossKill = null;
+	}
+
+	private static int timeStringToSeconds(String timeString)
+	{
+		String[] s = timeString.split(":");
+		if (s.length == 2) // mm:ss
+		{
+			return Integer.parseInt(s[0]) * 60 + Integer.parseInt(s[1]);
+		}
+		else if (s.length == 3) // h:mm:ss
+		{
+			return Integer.parseInt(s[0]) * 60 * 60 + Integer.parseInt(s[1]) * 60 + Integer.parseInt(s[2]);
+		}
+		return Integer.parseInt(timeString);
 	}
 
 	private void matchPb(Matcher matcher)
 	{
-		String personalBest = matcher.group(1);
-		String[] s = personalBest.split(":");
-		if (s.length == 2)
+		int seconds = timeStringToSeconds(matcher.group(1));
+		if (lastBossKill != null)
 		{
-			int seconds = Integer.parseInt(s[0]) * 60 + Integer.parseInt(s[1]);
-			if (lastBossKill != null)
-			{
-				// Most bosses sent boss kill message, and then pb message, so we
-				// use the remembered lastBossKill
-				log.debug("Got personal best for {}: {}", lastBossKill, seconds);
-				setPb(lastBossKill, seconds);
-				lastPb = -1;
-			}
-			else
-			{
-				// Some bosses send the pb message, and then the kill message!
-				lastPb = seconds;
-			}
+			// Most bosses sent boss kill message, and then pb message, so we
+			// use the remembered lastBossKill
+			log.debug("Got personal best for {}: {}", lastBossKill, seconds);
+			setPb(lastBossKill, seconds);
+			lastPb = -1;
+		}
+		else
+		{
+			// Some bosses send the pb message, and then the kill message!
+			lastPb = seconds;
 		}
 	}
 
@@ -1025,7 +1055,7 @@ public class ChatCommandsPlugin extends Plugin
 			ItemPrice item = retrieveFromList(results, search);
 			CLIENT.lookupItem(item.getId())
 				.subscribeOn(Schedulers.io())
-				.observeOn(Schedulers.from(clientThread))
+				.observeOn(Schedulers.single())
 				.subscribe(
 					(osbresult) ->
 					{

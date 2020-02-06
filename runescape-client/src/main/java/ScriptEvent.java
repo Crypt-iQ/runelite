@@ -1,71 +1,75 @@
+import java.security.SecureRandom;
 import net.runelite.mapping.Export;
 import net.runelite.mapping.Implements;
 import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("by")
+@ObfuscatedName("bw")
 @Implements("ScriptEvent")
 public class ScriptEvent extends Node {
-	@ObfuscatedName("u")
+	@ObfuscatedName("ef")
+	@Export("secureRandom")
+	static SecureRandom secureRandom;
+	@ObfuscatedName("c")
 	@Export("args")
 	Object[] args;
-	@ObfuscatedName("f")
+	@ObfuscatedName("t")
 	@Export("isMouseInputEvent")
 	boolean isMouseInputEvent;
-	@ObfuscatedName("b")
+	@ObfuscatedName("o")
 	@ObfuscatedSignature(
-		signature = "Lhl;"
+		signature = "Lhn;"
 	)
 	@Export("widget")
 	Widget widget;
-	@ObfuscatedName("g")
+	@ObfuscatedName("e")
 	@ObfuscatedGetter(
-		intValue = -1134113153
+		intValue = -1331050905
 	)
 	@Export("mouseX")
 	int mouseX;
-	@ObfuscatedName("z")
+	@ObfuscatedName("i")
 	@ObfuscatedGetter(
-		intValue = 1207275519
+		intValue = 1279210295
 	)
 	@Export("mouseY")
 	int mouseY;
-	@ObfuscatedName("p")
+	@ObfuscatedName("g")
 	@ObfuscatedGetter(
-		intValue = -1547508789
+		intValue = -1465065173
 	)
 	@Export("opIndex")
 	int opIndex;
-	@ObfuscatedName("h")
+	@ObfuscatedName("d")
 	@ObfuscatedSignature(
-		signature = "Lhl;"
+		signature = "Lhn;"
 	)
 	@Export("dragTarget")
 	Widget dragTarget;
-	@ObfuscatedName("y")
+	@ObfuscatedName("l")
 	@ObfuscatedGetter(
-		intValue = 74638955
+		intValue = -268491807
 	)
 	@Export("keyTyped")
 	int keyTyped;
-	@ObfuscatedName("w")
+	@ObfuscatedName("j")
 	@ObfuscatedGetter(
-		intValue = 1612924995
+		intValue = 1412457419
 	)
 	@Export("keyPressed")
 	int keyPressed;
-	@ObfuscatedName("i")
+	@ObfuscatedName("m")
 	@Export("targetName")
 	String targetName;
-	@ObfuscatedName("k")
+	@ObfuscatedName("p")
 	@ObfuscatedGetter(
-		intValue = -618805579
+		intValue = 1385894557
 	)
-	int field577;
-	@ObfuscatedName("x")
+	int field582;
+	@ObfuscatedName("h")
 	@ObfuscatedGetter(
-		intValue = 684866193
+		intValue = -891059655
 	)
 	@Export("type")
 	int type;
@@ -74,76 +78,79 @@ public class ScriptEvent extends Node {
 		this.type = 76;
 	}
 
-	@ObfuscatedName("u")
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
 		signature = "([Ljava/lang/Object;I)V",
-		garbageValue = "1989616138"
+		garbageValue = "-2105798075"
 	)
 	@Export("setArgs")
 	public void setArgs(Object[] var1) {
 		this.args = var1;
 	}
 
-	@ObfuscatedName("f")
+	@ObfuscatedName("t")
 	@ObfuscatedSignature(
 		signature = "(II)V",
-		garbageValue = "-1172076159"
+		garbageValue = "350345560"
 	)
 	@Export("setType")
 	public void setType(int var1) {
 		this.type = var1;
 	}
 
-	@ObfuscatedName("y")
+	@ObfuscatedName("i")
 	@ObfuscatedSignature(
-		signature = "(I)V",
-		garbageValue = "1502841158"
+		signature = "(Ljava/lang/CharSequence;II)I",
+		garbageValue = "2038755818"
 	)
-	public static void method1198() {
-		try {
-			if (class197.field2411 == 1) {
-				int var0 = FaceNormal.midiPcmStream.method3769();
-				if (var0 > 0 && FaceNormal.midiPcmStream.isReady()) {
-					var0 -= class335.field4014;
-					if (var0 < 0) {
-						var0 = 0;
-					}
-
-					FaceNormal.midiPcmStream.setPcmStreamVolume(var0);
-					return;
-				}
-
-				FaceNormal.midiPcmStream.clear();
-				FaceNormal.midiPcmStream.removeAll();
-				if (class197.musicTrackArchive != null) {
-					class197.field2411 = 2;
-				} else {
-					class197.field2411 = 0;
-				}
-
-				WorldMapSprite.musicTrack = null;
-				NPC.soundCache = null;
-			}
-		} catch (Exception var2) {
-			var2.printStackTrace();
-			FaceNormal.midiPcmStream.clear();
-			class197.field2411 = 0;
-			WorldMapSprite.musicTrack = null;
-			NPC.soundCache = null;
-			class197.musicTrackArchive = null;
-		}
-
+	public static int method1202(CharSequence var0, int var1) {
+		return KitDefinition.parseIntCustomRadix(var0, var1, true);
 	}
 
-	@ObfuscatedName("ji")
+	@ObfuscatedName("he")
 	@ObfuscatedSignature(
-		signature = "(Lhl;B)V",
-		garbageValue = "-95"
+		signature = "(ILjava/lang/String;I)V",
+		garbageValue = "43843350"
 	)
-	@Export("invalidateWidget")
-	static void invalidateWidget(Widget var0) {
-		if (var0.cycle == Client.field690) {
-			Client.field847[var0.rootIndex] = true;
+	static void method1203(int var0, String var1) {
+		int var2 = Players.Players_count;
+		int[] var3 = Players.Players_indices;
+		boolean var4 = false;
+		Username var5 = new Username(var1, class192.loginType);
+
+		for (int var6 = 0; var6 < var2; ++var6) {
+			Player var7 = Client.players[var3[var6]];
+			if (var7 != null && var7 != class192.localPlayer && var7.username != null && var7.username.equals(var5)) {
+				PacketBufferNode var8;
+				if (var0 == 1) {
+					var8 = TilePaint.getPacketBufferNode(ClientPacket.field2282, Client.packetWriter.isaacCipher);
+					var8.packetBuffer.writeByte(0);
+					var8.packetBuffer.writeShort(var3[var6]);
+					Client.packetWriter.addNode(var8);
+				} else if (var0 == 4) {
+					var8 = TilePaint.getPacketBufferNode(ClientPacket.field2216, Client.packetWriter.isaacCipher);
+					var8.packetBuffer.writeByte(0);
+					var8.packetBuffer.writeShortLE(var3[var6]);
+					Client.packetWriter.addNode(var8);
+				} else if (var0 == 6) {
+					var8 = TilePaint.getPacketBufferNode(ClientPacket.field2221, Client.packetWriter.isaacCipher);
+					var8.packetBuffer.method5787(var3[var6]);
+					var8.packetBuffer.writeByte(0);
+					Client.packetWriter.addNode(var8);
+				} else if (var0 == 7) {
+					var8 = TilePaint.getPacketBufferNode(ClientPacket.field2266, Client.packetWriter.isaacCipher);
+					var8.packetBuffer.method5787(var3[var6]);
+					var8.packetBuffer.method5602(0);
+					Client.packetWriter.addNode(var8);
+				}
+
+				var4 = true;
+				break;
+			}
+		}
+
+		if (!var4) {
+			ClientPreferences.addGameMessage(4, "", "Unable to find " + var1);
 		}
 
 	}

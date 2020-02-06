@@ -1,18 +1,15 @@
+import java.io.File;
+import java.io.RandomAccessFile;
+import java.util.LinkedHashMap;
 import net.runelite.mapping.Export;
 import net.runelite.mapping.Implements;
-import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("fl")
+@ObfuscatedName("fp")
 @Implements("UserComparator3")
 public class UserComparator3 extends AbstractUserComparator {
-	@ObfuscatedName("qg")
-	@ObfuscatedGetter(
-		intValue = -1789609461
-	)
-	static int field1990;
-	@ObfuscatedName("u")
+	@ObfuscatedName("c")
 	@Export("reversed")
 	final boolean reversed;
 
@@ -20,10 +17,10 @@ public class UserComparator3 extends AbstractUserComparator {
 		this.reversed = var1;
 	}
 
-	@ObfuscatedName("u")
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
-		signature = "(Ljt;Ljt;I)I",
-		garbageValue = "81177431"
+		signature = "(Lje;Lje;I)I",
+		garbageValue = "-1179985017"
 	)
 	@Export("compareBuddy")
 	int compareBuddy(Buddy var1, Buddy var2) {
@@ -38,185 +35,113 @@ public class UserComparator3 extends AbstractUserComparator {
 		return this.compareBuddy((Buddy)var1, (Buddy)var2);
 	}
 
-	@ObfuscatedName("f")
+	@ObfuscatedName("t")
 	@ObfuscatedSignature(
-		signature = "(III)Lhl;",
-		garbageValue = "2096565459"
+		signature = "(Ljava/lang/String;I)Ljava/io/File;",
+		garbageValue = "1177059768"
 	)
-	@Export("getWidgetChild")
-	public static Widget getWidgetChild(int var0, int var1) {
-		Widget var2 = Language.getWidget(var0);
-		if (var1 == -1) {
-			return var2;
+	@Export("getFile")
+	public static File getFile(String var0) {
+		if (!FileSystem.FileSystem_hasPermissions) {
+			throw new RuntimeException("");
 		} else {
-			return var2 != null && var2.children != null && var1 < var2.children.length ? var2.children[var1] : null;
-		}
-	}
-
-	@ObfuscatedName("b")
-	@ObfuscatedSignature(
-		signature = "(II)Z",
-		garbageValue = "438202516"
-	)
-	@Export("loadInterface")
-	public static boolean loadInterface(int var0) {
-		if (Widget.Widget_loadedInterfaces[var0]) {
-			return true;
-		} else if (!InvDefinition.Widget_archive.tryLoadGroup(var0)) {
-			return false;
-		} else {
-			int var1 = InvDefinition.Widget_archive.getGroupFileCount(var0);
-			if (var1 == 0) {
-				Widget.Widget_loadedInterfaces[var0] = true;
-				return true;
+			File var1 = (File)FileSystem.FileSystem_cacheFiles.get(var0);
+			if (var1 != null) {
+				return var1;
 			} else {
-				if (FloorDecoration.Widget_interfaceComponents[var0] == null) {
-					FloorDecoration.Widget_interfaceComponents[var0] = new Widget[var1];
-				}
+				File var2 = new File(FileSystem.FileSystem_cacheDir, var0);
+				RandomAccessFile var3 = null;
 
-				for (int var2 = 0; var2 < var1; ++var2) {
-					if (FloorDecoration.Widget_interfaceComponents[var0][var2] == null) {
-						byte[] var3 = InvDefinition.Widget_archive.takeFile(var0, var2);
-						if (var3 != null) {
-							FloorDecoration.Widget_interfaceComponents[var0][var2] = new Widget();
-							FloorDecoration.Widget_interfaceComponents[var0][var2].id = var2 + (var0 << 16);
-							if (var3[0] == -1) {
-								FloorDecoration.Widget_interfaceComponents[var0][var2].decode(new Buffer(var3));
-							} else {
-								FloorDecoration.Widget_interfaceComponents[var0][var2].decodeLegacy(new Buffer(var3));
-							}
-						}
-					}
-				}
-
-				Widget.Widget_loadedInterfaces[var0] = true;
-				return true;
-			}
-		}
-	}
-
-	@ObfuscatedName("jl")
-	@ObfuscatedSignature(
-		signature = "(II)Z",
-		garbageValue = "-1508425976"
-	)
-	static boolean method3476(int var0) {
-		for (int var1 = 0; var1 < Client.field889; ++var1) {
-			if (Client.field865[var1] == var0) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	@ObfuscatedName("jq")
-	@ObfuscatedSignature(
-		signature = "(Lhl;IIB)V",
-		garbageValue = "13"
-	)
-	@Export("clickWidget")
-	static final void clickWidget(Widget var0, int var1, int var2) {
-		if (Client.clickedWidget == null && !Client.isMenuOpen) {
-			if (var0 != null) {
-				Widget var5 = var0;
-				int var7 = MenuAction.getWidgetClickMask(var0);
-				int var6 = var7 >> 17 & 7;
-				int var8 = var6;
-				Widget var4;
-				int var9;
-				if (var6 == 0) {
-					var4 = null;
-				} else {
-					var9 = 0;
-
-					while (true) {
-						if (var9 >= var8) {
-							var4 = var5;
-							break;
-						}
-
-						var5 = Language.getWidget(var5.parentId);
-						if (var5 == null) {
-							var4 = null;
-							break;
-						}
-
-						++var9;
-					}
-				}
-
-				Widget var10 = var4;
-				if (var4 == null) {
-					var10 = var0.parent;
-				}
-
-				if (var10 != null) {
-					Client.clickedWidget = var0;
-					var5 = var0;
-					var7 = MenuAction.getWidgetClickMask(var0);
-					var6 = var7 >> 17 & 7;
-					var8 = var6;
-					if (var6 == 0) {
-						var4 = null;
+				try {
+					File var4 = new File(var2.getParent());
+					if (!var4.exists()) {
+						throw new RuntimeException("");
 					} else {
-						var9 = 0;
-
-						while (true) {
-							if (var9 >= var8) {
-								var4 = var5;
-								break;
-							}
-
-							var5 = Language.getWidget(var5.parentId);
-							if (var5 == null) {
-								var4 = null;
-								break;
-							}
-
-							++var9;
+						var3 = new RandomAccessFile(var2, "rw");
+						int var5 = var3.read();
+						var3.seek(0L);
+						var3.write(var5);
+						var3.seek(0L);
+						var3.close();
+						FileSystem.FileSystem_cacheFiles.put(var0, var2);
+						return var2;
+					}
+				} catch (Exception var8) {
+					try {
+						if (var3 != null) {
+							var3.close();
+							var3 = null;
 						}
+					} catch (Exception var7) {
 					}
 
-					var10 = var4;
-					if (var4 == null) {
-						var10 = var0.parent;
-					}
-
-					Client.clickedWidgetParent = var10;
-					Client.widgetClickX = var1;
-					Client.widgetClickY = var2;
-					class3.widgetDragDuration = 0;
-					Client.isDraggingWidget = false;
-					int var11 = Client.menuOptionsCount - 1;
-					if (var11 != -1) {
-						Tiles.tempMenuAction = new MenuAction();
-						Tiles.tempMenuAction.param0 = Client.menuArguments1[var11];
-						Tiles.tempMenuAction.param1 = Client.menuArguments2[var11];
-						Tiles.tempMenuAction.opcode = Client.menuOpcodes[var11];
-						Tiles.tempMenuAction.identifier = Client.menuIdentifiers[var11];
-						Tiles.tempMenuAction.action = Client.menuActions[var11];
-					}
-
-					return;
+					throw new RuntimeException();
 				}
 			}
-
 		}
 	}
 
-	@ObfuscatedName("kr")
+	@ObfuscatedName("t")
 	@ObfuscatedSignature(
-		signature = "(Ljava/lang/String;I)V",
-		garbageValue = "65535"
+		signature = "(III)I",
+		garbageValue = "184774945"
 	)
-	@Export("clanKickUser")
-	static final void clanKickUser(String var0) {
-		if (InterfaceParent.clanChat != null) {
-			PacketBufferNode var1 = ModelData0.getPacketBufferNode(ClientPacket.field2296, Client.packetWriter.isaacCipher);
-			var1.packetBuffer.writeByte(class173.stringCp1252NullTerminatedByteSize(var0));
-			var1.packetBuffer.writeStringCp1252NullTerminated(var0);
-			Client.packetWriter.addNode(var1);
+	@Export("ItemContainer_getCount")
+	static int ItemContainer_getCount(int var0, int var1) {
+		ItemContainer var2 = (ItemContainer)ItemContainer.itemContainers.get((long)var0);
+		if (var2 == null) {
+			return 0;
+		} else {
+			return var1 >= 0 && var1 < var2.quantities.length ? var2.quantities[var1] : 0;
 		}
+	}
+
+	@ObfuscatedName("ar")
+	@ObfuscatedSignature(
+		signature = "(IB)I",
+		garbageValue = "-49"
+	)
+	static int method3499(int var0) {
+		return (int)((Math.log((double)var0) / Interpreter.field1097 - 7.0D) * 256.0D);
+	}
+
+	@ObfuscatedName("fu")
+	@ObfuscatedSignature(
+		signature = "(ZB)V",
+		garbageValue = "-62"
+	)
+	static final void method3497(boolean var0) {
+		if (var0) {
+			Client.field682 = Login.field1185 ? class160.field1996 : class160.field1995;
+		} else {
+			LinkedHashMap var1 = WorldMapSection2.clientPreferences.parameters;
+			String var3 = Login.Login_username;
+			int var4 = var3.length();
+			int var5 = 0;
+
+			for (int var6 = 0; var6 < var4; ++var6) {
+				var5 = (var5 << 5) - var5 + var3.charAt(var6);
+			}
+
+			Client.field682 = var1.containsKey(var5) ? class160.field1994 : class160.field1993;
+		}
+
+	}
+
+	@ObfuscatedName("fv")
+	@ObfuscatedSignature(
+		signature = "(I)V",
+		garbageValue = "762095007"
+	)
+	@Export("playPcmPlayers")
+	static final void playPcmPlayers() {
+		if (class43.pcmPlayer1 != null) {
+			class43.pcmPlayer1.run();
+		}
+
+		if (WorldMapLabelSize.pcmPlayer0 != null) {
+			WorldMapLabelSize.pcmPlayer0.run();
+		}
+
 	}
 }

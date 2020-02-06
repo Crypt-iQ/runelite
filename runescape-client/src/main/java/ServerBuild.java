@@ -4,41 +4,52 @@ import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("hz")
+@ObfuscatedName("hq")
 @Implements("ServerBuild")
 public class ServerBuild {
-	@ObfuscatedName("u")
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
-		signature = "Lhz;"
+		signature = "Lhq;"
 	)
 	@Export("LIVE")
 	static final ServerBuild LIVE;
-	@ObfuscatedName("f")
+	@ObfuscatedName("t")
 	@ObfuscatedSignature(
-		signature = "Lhz;"
+		signature = "Lhq;"
 	)
 	@Export("BUILDLIVE")
 	static final ServerBuild BUILDLIVE;
-	@ObfuscatedName("b")
+	@ObfuscatedName("o")
 	@ObfuscatedSignature(
-		signature = "Lhz;"
+		signature = "Lhq;"
 	)
 	@Export("RC")
 	static final ServerBuild RC;
-	@ObfuscatedName("g")
+	@ObfuscatedName("e")
 	@ObfuscatedSignature(
-		signature = "Lhz;"
+		signature = "Lhq;"
 	)
 	@Export("WIP")
 	static final ServerBuild WIP;
-	@ObfuscatedName("z")
+	@ObfuscatedName("dc")
+	@ObfuscatedGetter(
+		longValue = 1863736648599346965L
+	)
+	static long field3111;
+	@ObfuscatedName("gl")
+	@ObfuscatedSignature(
+		signature = "Lem;"
+	)
+	@Export("scene")
+	static Scene scene;
+	@ObfuscatedName("i")
 	@Export("name")
 	public final String name;
-	@ObfuscatedName("p")
+	@ObfuscatedName("g")
 	@ObfuscatedGetter(
-		intValue = -832726311
+		intValue = 1460040921
 	)
-	public final int field3109;
+	final int field3108;
 
 	static {
 		LIVE = new ServerBuild("LIVE", 0);
@@ -49,20 +60,29 @@ public class ServerBuild {
 
 	ServerBuild(String var1, int var2) {
 		this.name = var1;
-		this.field3109 = var2;
+		this.field3108 = var2;
 	}
 
-	@ObfuscatedName("f")
+	@ObfuscatedName("o")
 	@ObfuscatedSignature(
-		signature = "(Llb;ILjava/lang/String;I)Ljava/lang/String;",
-		garbageValue = "-88537768"
+		signature = "(BI)C",
+		garbageValue = "798764142"
 	)
-	static String method4214(IterableNodeHashTable var0, int var1, String var2) {
-		if (var0 == null) {
-			return var2;
+	public static char method4209(byte var0) {
+		int var1 = var0 & 255;
+		if (var1 == 0) {
+			throw new IllegalArgumentException("" + Integer.toString(var1, 16));
 		} else {
-			ObjectNode var3 = (ObjectNode)var0.get((long)var1);
-			return var3 == null ? var2 : (String)var3.obj;
+			if (var1 >= 128 && var1 < 160) {
+				char var2 = class288.cp1252AsciiExtension[var1 - 128];
+				if (var2 == 0) {
+					var2 = '?';
+				}
+
+				var1 = var2;
+			}
+
+			return (char)var1;
 		}
 	}
 }

@@ -171,7 +171,7 @@ public class WidgetID
 		static final int SEARCH = 24;
 		static final int SURFACE_SELECTOR = 32;
 		static final int TOOLTIP = 38;
-		static final int OPTION = 43;
+		static final int OPTION = 46;
 	}
 
 	static class SlayerRewards
@@ -263,15 +263,15 @@ public class WidgetID
 	{
 		static final int BANK_CONTAINER = 1;
 		static final int INVENTORY_ITEM_CONTAINER = 3;
-		static final int BANK_TITLE_BAR = 4;
-		static final int CONTENT_CONTAINER = 10;
-		static final int TAB_CONTAINER = 11;
-		static final int ITEM_CONTAINER = 13;
-		static final int SEARCH_BUTTON_BACKGROUND = 40;
-		static final int DEPOSIT_INVENTORY = 42;
-		static final int DEPOSIT_EQUIPMENT = 44;
-		static final int INCINERATOR = 46;
-		static final int INCINERATOR_CONFIRM = 47;
+		static final int BANK_TITLE_BAR = 3;
+		static final int CONTENT_CONTAINER = 8;
+		static final int TAB_CONTAINER = 9;
+		static final int ITEM_CONTAINER = 11;
+		static final int SEARCH_BUTTON_BACKGROUND = 38;
+		static final int DEPOSIT_INVENTORY = 40;
+		static final int DEPOSIT_EQUIPMENT = 42;
+		static final int INCINERATOR = 44;
+		static final int INCINERATOR_CONFIRM = 45;
 	}
 
 	static class GrandExchange
@@ -315,17 +315,17 @@ public class WidgetID
 
 	static class Equipment
 	{
-		static final int HELMET = 6;
-		static final int CAPE = 7;
-		static final int AMULET = 8;
-		static final int WEAPON = 9;
-		static final int BODY = 10;
-		static final int SHIELD = 11;
-		static final int LEGS = 12;
-		static final int GLOVES = 13;
-		static final int BOOTS = 14;
-		static final int RING = 15;
-		static final int AMMO = 16;
+		static final int HELMET = 14;
+		static final int CAPE = 15;
+		static final int AMULET = 16;
+		static final int WEAPON = 17;
+		static final int BODY = 18;
+		static final int SHIELD = 19;
+		static final int LEGS = 20;
+		static final int GLOVES = 21;
+		static final int BOOTS = 22;
+		static final int RING = 23;
+		static final int AMMO = 24;
 		static final int INVENTORY_ITEM_CONTAINER = 0;
 	}
 
@@ -353,6 +353,7 @@ public class WidgetID
 		static final int RUN_ORB_TEXT = 23;
 		static final int SPEC_ORB = 28;
 		static final int WORLDMAP_ORB = 41;
+		static final int WIKI_BANNER = 43;
 	}
 
 	static class LoginClickToPlayScreen
@@ -1179,8 +1180,9 @@ public class WidgetID
 
 	static class Lms
 	{
-		static final int INFO = 2;
+		static final int INFO = 3;
 	}
+
 	static class LmsKDA
 	{
 		static final int INFO = 4;
@@ -1198,9 +1200,9 @@ public class WidgetID
 
 	static class Options
 	{
-		static final int MUSIC_SLIDER = 44;
-		static final int SOUND_EFFECT_SLIDER = 50;
-		static final int AREA_SOUND_SLIDER = 56;
+		static final int MUSIC_SLIDER = 38;
+		static final int SOUND_EFFECT_SLIDER = 44;
+		static final int AREA_SOUND_SLIDER = 50;
 	}
 
 	static class AchievementDiary

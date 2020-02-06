@@ -28,6 +28,7 @@ package net.runelite.client.plugins.clanchat;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
+import com.google.common.util.concurrent.Runnables;
 import com.google.inject.Provides;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -74,8 +75,10 @@ import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.game.ClanManager;
 import net.runelite.client.game.SpriteManager;
+import net.runelite.client.game.chatbox.ChatboxPanelManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.plugins.PluginType;
 import static net.runelite.client.ui.JagexColors.CHAT_CLAN_NAME_OPAQUE_BACKGROUND;
 import static net.runelite.client.ui.JagexColors.CHAT_CLAN_NAME_TRANSPARENT_BACKGROUND;
 import static net.runelite.client.ui.JagexColors.CHAT_CLAN_TEXT_OPAQUE_BACKGROUND;
@@ -85,7 +88,8 @@ import net.runelite.client.ui.overlay.infobox.InfoBoxManager;
 @PluginDescriptor(
 	name = "Clan Chat",
 	description = "Add rank icons to users talking in clan chat",
-	tags = {"icons", "rank", "recent"}
+	tags = {"icons", "rank", "recent"},
+	type = PluginType.UTILITY
 )
 @Singleton
 public class ClanChatPlugin extends Plugin
@@ -120,6 +124,9 @@ public class ClanChatPlugin extends Plugin
 	@Inject
 	private ClientThread clientThread;
 
+	@Inject
+	private ChatboxPanelManager chatboxPanelManager;
+
 	private List<String> chats = new ArrayList<>();
 	private ClanChatIndicator clanMemberCounter;
 	private int clanJoinedTick;
@@ -133,6 +140,8 @@ public class ClanChatPlugin extends Plugin
 	private boolean publicChatIcons;
 	private boolean clanTabChat;
 	private String clanname;
+
+	private boolean kickConfirmed = false;
 
 	@SuppressWarnings("unchecked")
 	public static CopyOnWriteArrayList<Player> getClanMembers()
@@ -521,14 +530,39 @@ public class ClanChatPlugin extends Plugin
 	@Subscribe
 	private void onScriptCallbackEvent(ScriptCallbackEvent scriptCallbackEvent)
 	{
-		if (!scriptCallbackEvent.getEventName().equalsIgnoreCase("clanchatInput"))
+		switch (scriptCallbackEvent.getEventName())
 		{
-			return;
-		}
+			case "clanchatInput":
+			{
+				final int[] intStack = client.getIntStack();
+				final int size = client.getIntStackSize();
+				// If the user accidentally adds a / when the config and the clan chat tab is active, handle it like a normal message
+				boolean alterClanChatDispatch = config.clanTabChat() && !client.getVar(VarClientStr.CHATBOX_TYPED_TEXT).startsWith("/");
+				intStack[size - 1] = alterClanChatDispatch ? 1 : 0;
+				break;
+			}
+			case "confirmClanKick":
+			{
+				if (!config.confirmKicks() || kickConfirmed)
+				{
+					break;
+				}
 
-		final int[] intStack = client.getIntStack();
-		final int size = client.getIntStackSize();
-		intStack[size - 1] = this.clanTabChat ? 1 : 0;
+				// Set a flag so the script doesn't instantly kick them
+				final int[] intStack = client.getIntStack();
+				final int size = client.getIntStackSize();
+				intStack[size - 1] = 1;
+
+				// Get name of player we are trying to kick
+				final String[] stringStack = client.getStringStack();
+				final int stringSize = client.getStringStackSize();
+				final String kickPlayerName = stringStack[stringSize - 1];
+
+				// Show a chatbox panel confirming the kick
+				clientThread.invokeLater(() -> confirmKickPlayer(kickPlayerName));
+				break;
+			}
+		}
 	}
 
 	int getClanAmount()
@@ -640,6 +674,21 @@ public class ClanChatPlugin extends Plugin
 	{
 		infoBoxManager.removeInfoBox(clanMemberCounter);
 		clanMemberCounter = null;
+	}
+
+	private void confirmKickPlayer(final String kickPlayerName)
+	{
+		chatboxPanelManager.openTextMenuInput("Attempting to kick: " + kickPlayerName)
+			.option("1. Confirm kick", () ->
+				clientThread.invoke(() ->
+				{
+					kickConfirmed = true;
+					client.runScript(ScriptID.CLAN_SEND_KICK, kickPlayerName);
+					kickConfirmed = false;
+				})
+			)
+			.option("2. Cancel", Runnables::doNothing)
+			.build();
 	}
 
 	private void addClanCounter()

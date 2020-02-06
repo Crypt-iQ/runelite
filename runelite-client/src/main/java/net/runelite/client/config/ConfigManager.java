@@ -350,7 +350,8 @@ public class ConfigManager
 				m.getDeclaredAnnotation(ConfigItem.class),
 				m.getReturnType(),
 				m.getDeclaredAnnotation(Range.class),
-				m.getDeclaredAnnotation(Alpha.class)
+				m.getDeclaredAnnotation(Alpha.class),
+				m.getDeclaredAnnotation(Units.class)
 			))
 			.sorted((a, b) -> ComparisonChain.start()
 				.compare(a.getItem().position(), b.getItem().position())
@@ -449,6 +450,10 @@ public class ConfigManager
 		{
 			return Integer.parseInt(str);
 		}
+		if (type == long.class)
+		{
+			return Long.parseLong(str);
+		}
 		if (type == Color.class)
 		{
 			return ColorUtil.fromString(str);
@@ -530,7 +535,14 @@ public class ConfigManager
 				EnumSet enumSet = EnumSet.noneOf(enumClass);
 				for (String s : splitStr)
 				{
-					enumSet.add(Enum.valueOf(enumClass, s.replace("[", "").replace("]", "")));
+					try
+					{
+						enumSet.add(Enum.valueOf(enumClass, s.replace("[", "").replace("]", "")));
+					}
+					catch (IllegalArgumentException ignore)
+					{
+						return EnumSet.noneOf(enumClass);
+					}
 				}
 				return enumSet;
 			}
@@ -613,9 +625,27 @@ public class ConfigManager
 		}
 		if (object instanceof EnumSet)
 		{
+			if (((EnumSet) object).size() == 0)
+			{
+				return getElementType((EnumSet) object).getCanonicalName() + "{}";
+			}
+
 			return ((EnumSet) object).toArray()[0].getClass().getCanonicalName() + "{" + object.toString() + "}";
 		}
+		if (object instanceof Number)
+		{
+			return String.valueOf(object);
+		}
 		return object.toString();
+	}
+
+	public static <T extends Enum<T>> Class<T> getElementType(EnumSet<T> enumSet)
+	{
+		if (enumSet.isEmpty())
+		{
+			enumSet = EnumSet.complementOf(enumSet);
+		}
+		return enumSet.iterator().next().getDeclaringClass();
 	}
 
 	public void sendConfig()

@@ -7,34 +7,19 @@ import java.util.LinkedList;
 import java.util.Queue;
 import net.runelite.mapping.Export;
 import net.runelite.mapping.Implements;
-import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("ew")
+@ObfuscatedName("ei")
 @Implements("UrlRequester")
 public class UrlRequester implements Runnable {
-	@ObfuscatedName("g")
-	@Export("SpriteBuffer_xOffsets")
-	static int[] SpriteBuffer_xOffsets;
-	@ObfuscatedName("h")
-	@ObfuscatedGetter(
-		intValue = 1446688081
-	)
-	@Export("musicTrackGroupId")
-	public static int musicTrackGroupId;
-	@ObfuscatedName("ez")
-	@ObfuscatedGetter(
-		intValue = 2240241
-	)
-	static int field1940;
-	@ObfuscatedName("u")
+	@ObfuscatedName("c")
 	@Export("thread")
 	final Thread thread;
-	@ObfuscatedName("f")
+	@ObfuscatedName("t")
 	@Export("isClosed")
 	volatile boolean isClosed;
-	@ObfuscatedName("b")
+	@ObfuscatedName("o")
 	@Export("requests")
 	Queue requests;
 
@@ -45,10 +30,10 @@ public class UrlRequester implements Runnable {
 		this.thread.start();
 	}
 
-	@ObfuscatedName("u")
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
-		signature = "(Ljava/net/URL;I)Lez;",
-		garbageValue = "-1482865280"
+		signature = "(Ljava/net/URL;I)Leg;",
+		garbageValue = "-838754437"
 	)
 	@Export("request")
 	public UrlRequest request(URL var1) {
@@ -60,10 +45,10 @@ public class UrlRequester implements Runnable {
 		}
 	}
 
-	@ObfuscatedName("f")
+	@ObfuscatedName("t")
 	@ObfuscatedSignature(
 		signature = "(I)V",
-		garbageValue = "-1184631073"
+		garbageValue = "1550899791"
 	)
 	@Export("close")
 	public void close() {
@@ -126,59 +111,70 @@ public class UrlRequester implements Runnable {
 
 				}
 			} catch (Exception var17) {
-				Calendar.RunException_sendStackTrace((String)null, var17);
+				class225.RunException_sendStackTrace((String)null, var17);
 			}
 		}
 
 	}
 
-	@ObfuscatedName("fn")
+	@ObfuscatedName("ih")
 	@ObfuscatedSignature(
-		signature = "(Lhl;III)V",
-		garbageValue = "-311109271"
+		signature = "(Lhn;IIZI)V",
+		garbageValue = "1992355059"
 	)
-	@Export("checkIfMinimapClicked")
-	static final void checkIfMinimapClicked(Widget var0, int var1, int var2) {
-		if (Client.minimapState == 0 || Client.minimapState == 3) {
-			if (!Client.isMenuOpen && (MouseHandler.MouseHandler_lastButton == 1 || !JagexCache.mouseCam && MouseHandler.MouseHandler_lastButton == 4)) {
-				SpriteMask var3 = var0.getSpriteMask(true);
-				if (var3 == null) {
-					return;
-				}
-
-				int var4 = MouseHandler.MouseHandler_lastPressedX - var1;
-				int var5 = MouseHandler.MouseHandler_lastPressedY - var2;
-				if (var3.contains(var4, var5)) {
-					var4 -= var3.width / 2;
-					var5 -= var3.height / 2;
-					int var6 = Client.camAngleY & 2047;
-					int var7 = Rasterizer3D.Rasterizer3D_sine[var6];
-					int var8 = Rasterizer3D.Rasterizer3D_cosine[var6];
-					int var9 = var7 * var5 + var8 * var4 >> 11;
-					int var10 = var5 * var8 - var4 * var7 >> 11;
-					int var11 = var9 + class215.localPlayer.x >> 7;
-					int var12 = class215.localPlayer.y - var10 >> 7;
-					PacketBufferNode var13 = ModelData0.getPacketBufferNode(ClientPacket.field2282, Client.packetWriter.isaacCipher);
-					var13.packetBuffer.writeByte(18);
-					var13.packetBuffer.method5636(class51.baseX * 64 + var11);
-					var13.packetBuffer.method5628(KeyHandler.KeyHandler_pressedKeys[82] ? (KeyHandler.KeyHandler_pressedKeys[81] ? 2 : 1) : 0);
-					var13.packetBuffer.method5636(VarcInt.baseY * 64 + var12);
-					var13.packetBuffer.writeByte(var4);
-					var13.packetBuffer.writeByte(var5);
-					var13.packetBuffer.writeShort(Client.camAngleY);
-					var13.packetBuffer.writeByte(57);
-					var13.packetBuffer.writeByte(0);
-					var13.packetBuffer.writeByte(0);
-					var13.packetBuffer.writeByte(89);
-					var13.packetBuffer.writeShort(class215.localPlayer.x);
-					var13.packetBuffer.writeShort(class215.localPlayer.y);
-					var13.packetBuffer.writeByte(63);
-					Client.packetWriter.addNode(var13);
-					Client.destinationX = var11;
-					Client.destinationY = var12;
-				}
-			}
-
+	@Export("alignWidgetSize")
+	static void alignWidgetSize(Widget var0, int var1, int var2, boolean var3) {
+		int var4 = var0.width;
+		int var5 = var0.height;
+		if (var0.widthAlignment == 0) {
+			var0.width = var0.rawWidth;
+		} else if (var0.widthAlignment == 1) {
+			var0.width = var1 - var0.rawWidth;
+		} else if (var0.widthAlignment == 2) {
+			var0.width = var0.rawWidth * var1 >> 14;
 		}
+
+		if (var0.heightAlignment == 0) {
+			var0.height = var0.rawHeight;
+		} else if (var0.heightAlignment == 1) {
+			var0.height = var2 - var0.rawHeight;
+		} else if (var0.heightAlignment == 2) {
+			var0.height = var2 * var0.rawHeight >> 14;
+		}
+
+		if (var0.widthAlignment == 4) {
+			var0.width = var0.field2589 * var0.height / var0.field2590;
+		}
+
+		if (var0.heightAlignment == 4) {
+			var0.height = var0.field2590 * var0.width / var0.field2589;
+		}
+
+		if (var0.contentType == 1337) {
+			Client.viewportWidget = var0;
+		}
+
+		if (var3 && var0.onResize != null && (var4 != var0.width || var5 != var0.height)) {
+			ScriptEvent var6 = new ScriptEvent();
+			var6.widget = var0;
+			var6.args = var0.onResize;
+			Client.scriptEvents.addFirst(var6);
+		}
+
+	}
+
+	@ObfuscatedName("kv")
+	@ObfuscatedSignature(
+		signature = "(Lkp;II)V",
+		garbageValue = "372064004"
+	)
+	static void method3373(Buffer var0, int var1) {
+		byte[] var2 = var0.array;
+		if (Client.randomDatData == null) {
+			Client.randomDatData = new byte[24];
+		}
+
+		class301.writeRandomDat(var2, var1, Client.randomDatData, 0, 24);
+		WorldMapSprite.method427(var0, var1);
 	}
 }

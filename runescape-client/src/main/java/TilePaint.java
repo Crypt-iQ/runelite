@@ -4,50 +4,45 @@ import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("ey")
+@ObfuscatedName("ee")
 @Implements("TilePaint")
 public final class TilePaint {
-	@ObfuscatedName("ns")
+	@ObfuscatedName("c")
 	@ObfuscatedGetter(
-		intValue = -1788868487
-	)
-	static int field1782;
-	@ObfuscatedName("u")
-	@ObfuscatedGetter(
-		intValue = -94402457
+		intValue = 1255983765
 	)
 	@Export("swColor")
 	int swColor;
-	@ObfuscatedName("f")
+	@ObfuscatedName("t")
 	@ObfuscatedGetter(
-		intValue = 1565892331
+		intValue = -1109558685
 	)
 	@Export("seColor")
 	int seColor;
-	@ObfuscatedName("b")
+	@ObfuscatedName("o")
 	@ObfuscatedGetter(
-		intValue = 813293965
+		intValue = -1229444571
 	)
 	@Export("neColor")
 	int neColor;
-	@ObfuscatedName("g")
+	@ObfuscatedName("e")
 	@ObfuscatedGetter(
-		intValue = -1163969349
+		intValue = -906668191
 	)
 	@Export("nwColor")
 	int nwColor;
-	@ObfuscatedName("z")
+	@ObfuscatedName("i")
 	@ObfuscatedGetter(
-		intValue = 1857222665
+		intValue = -2043941121
 	)
 	@Export("texture")
 	int texture;
-	@ObfuscatedName("p")
+	@ObfuscatedName("g")
 	@Export("isFlat")
 	boolean isFlat;
-	@ObfuscatedName("h")
+	@ObfuscatedName("d")
 	@ObfuscatedGetter(
-		intValue = -1506842685
+		intValue = -860591445
 	)
 	@Export("rgb")
 	int rgb;
@@ -63,81 +58,51 @@ public final class TilePaint {
 		this.isFlat = var7;
 	}
 
-	@ObfuscatedName("f")
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
-		signature = "(IIB)I",
-		garbageValue = "82"
+		signature = "(Lhc;I)V",
+		garbageValue = "-1948306061"
 	)
-	static int method3104(int var0, int var1) {
-		if (var0 == -2) {
-			return 12345678;
-		} else if (var0 == -1) {
-			if (var1 < 0) {
-				var1 = 0;
-			} else if (var1 > 127) {
-				var1 = 127;
-			}
-
-			var1 = 127 - var1;
-			return var1;
-		} else {
-			var1 = (var0 & 127) * var1 / 128;
-			if (var1 < 2) {
-				var1 = 2;
-			} else if (var1 > 126) {
-				var1 = 126;
-			}
-
-			return (var0 & 65408) + var1;
-		}
+	public static void method3150(Huffman var0) {
+		class210.huffman = var0;
 	}
 
-	@ObfuscatedName("b")
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
-		signature = "(IIII)V",
-		garbageValue = "606674318"
+		signature = "(Lii;Lii;Lii;I)V",
+		garbageValue = "811407537"
 	)
-	static final void method3105(int var0, int var1, int var2) {
-		int var3;
-		for (var3 = 0; var3 < 8; ++var3) {
-			for (int var4 = 0; var4 < 8; ++var4) {
-				Tiles.Tiles_heights[var0][var3 + var1][var4 + var2] = 0;
-			}
-		}
-
-		if (var1 > 0) {
-			for (var3 = 1; var3 < 8; ++var3) {
-				Tiles.Tiles_heights[var0][var1][var3 + var2] = Tiles.Tiles_heights[var0][var1 - 1][var3 + var2];
-			}
-		}
-
-		if (var2 > 0) {
-			for (var3 = 1; var3 < 8; ++var3) {
-				Tiles.Tiles_heights[var0][var3 + var1][var2] = Tiles.Tiles_heights[var0][var3 + var1][var2 - 1];
-			}
-		}
-
-		if (var1 > 0 && Tiles.Tiles_heights[var0][var1 - 1][var2] != 0) {
-			Tiles.Tiles_heights[var0][var1][var2] = Tiles.Tiles_heights[var0][var1 - 1][var2];
-		} else if (var2 > 0 && Tiles.Tiles_heights[var0][var1][var2 - 1] != 0) {
-			Tiles.Tiles_heights[var0][var1][var2] = Tiles.Tiles_heights[var0][var1][var2 - 1];
-		} else if (var1 > 0 && var2 > 0 && Tiles.Tiles_heights[var0][var1 - 1][var2 - 1] != 0) {
-			Tiles.Tiles_heights[var0][var1][var2] = Tiles.Tiles_heights[var0][var1 - 1][var2 - 1];
-		}
-
+	public static void method3149(AbstractArchive var0, AbstractArchive var1, AbstractArchive var2) {
+		SequenceDefinition.SequenceDefinition_archive = var0;
+		Canvas.SequenceDefinition_animationsArchive = var1;
+		SequenceDefinition.SequenceDefinition_skeletonsArchive = var2;
 	}
 
-	@ObfuscatedName("g")
+	@ObfuscatedName("t")
 	@ObfuscatedSignature(
-		signature = "(II)V",
-		garbageValue = "-770375157"
+		signature = "(Lgi;Llw;I)Lgs;",
+		garbageValue = "-1858964465"
 	)
-	public static void method3103(int var0) {
-		if (class197.field2411 != 0) {
-			class197.musicTrackVolume = var0;
+	@Export("getPacketBufferNode")
+	public static PacketBufferNode getPacketBufferNode(ClientPacket var0, IsaacCipher var1) {
+		PacketBufferNode var2 = UserComparator5.method3488();
+		var2.clientPacket = var0;
+		var2.clientPacketLength = var0.length;
+		if (var2.clientPacketLength == -1) {
+			var2.packetBuffer = new PacketBuffer(260);
+		} else if (var2.clientPacketLength == -2) {
+			var2.packetBuffer = new PacketBuffer(10000);
+		} else if (var2.clientPacketLength <= 18) {
+			var2.packetBuffer = new PacketBuffer(20);
+		} else if (var2.clientPacketLength <= 98) {
+			var2.packetBuffer = new PacketBuffer(100);
 		} else {
-			FaceNormal.midiPcmStream.setPcmStreamVolume(var0);
+			var2.packetBuffer = new PacketBuffer(260);
 		}
 
+		var2.packetBuffer.setIsaacCipher(var1);
+		var2.packetBuffer.writeByteIsaac(var2.clientPacket.id);
+		var2.index = 0;
+		return var2;
 	}
 }

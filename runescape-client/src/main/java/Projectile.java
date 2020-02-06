@@ -1,135 +1,132 @@
-import java.lang.management.GarbageCollectorMXBean;
-import java.lang.management.ManagementFactory;
-import java.util.Iterator;
 import net.runelite.mapping.Export;
 import net.runelite.mapping.Implements;
 import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("ck")
+@ObfuscatedName("cb")
 @Implements("Projectile")
 public final class Projectile extends Entity {
-	@ObfuscatedName("u")
+	@ObfuscatedName("c")
 	@ObfuscatedGetter(
-		intValue = -305289079
+		intValue = 915213611
 	)
 	@Export("id")
 	int id;
-	@ObfuscatedName("f")
+	@ObfuscatedName("t")
 	@ObfuscatedGetter(
-		intValue = 1537056881
+		intValue = 378032649
 	)
 	@Export("plane")
 	int plane;
-	@ObfuscatedName("b")
+	@ObfuscatedName("o")
 	@ObfuscatedGetter(
-		intValue = -337393941
+		intValue = -1585922035
 	)
 	@Export("sourceX")
 	int sourceX;
-	@ObfuscatedName("g")
+	@ObfuscatedName("e")
 	@ObfuscatedGetter(
-		intValue = 2147267957
+		intValue = -1462535825
 	)
 	@Export("sourceY")
 	int sourceY;
-	@ObfuscatedName("z")
+	@ObfuscatedName("i")
 	@ObfuscatedGetter(
-		intValue = -428397397
+		intValue = 1681715111
 	)
 	@Export("sourceZ")
 	int sourceZ;
-	@ObfuscatedName("p")
+	@ObfuscatedName("g")
 	@ObfuscatedGetter(
-		intValue = -590668105
+		intValue = 903870771
 	)
 	@Export("endHeight")
 	int endHeight;
-	@ObfuscatedName("h")
+	@ObfuscatedName("d")
 	@ObfuscatedGetter(
-		intValue = -849991729
+		intValue = -1250439791
 	)
 	@Export("cycleStart")
 	int cycleStart;
-	@ObfuscatedName("y")
+	@ObfuscatedName("l")
 	@ObfuscatedGetter(
-		intValue = -2024894323
+		intValue = -1640896565
 	)
 	@Export("cycleEnd")
 	int cycleEnd;
-	@ObfuscatedName("w")
+	@ObfuscatedName("j")
 	@ObfuscatedGetter(
-		intValue = 565117017
+		intValue = 2117578399
 	)
 	@Export("slope")
 	int slope;
-	@ObfuscatedName("i")
+	@ObfuscatedName("m")
 	@ObfuscatedGetter(
-		intValue = 1041468425
+		intValue = -544986491
 	)
 	@Export("startHeight")
 	int startHeight;
-	@ObfuscatedName("k")
+	@ObfuscatedName("p")
 	@ObfuscatedGetter(
-		intValue = -2008070407
+		intValue = -1226806671
 	)
 	@Export("targetIndex")
 	int targetIndex;
-	@ObfuscatedName("x")
+	@ObfuscatedName("h")
 	@Export("isMoving")
 	boolean isMoving;
-	@ObfuscatedName("o")
+	@ObfuscatedName("v")
 	@Export("x")
 	double x;
-	@ObfuscatedName("e")
+	@ObfuscatedName("n")
 	@Export("y")
 	double y;
-	@ObfuscatedName("n")
+	@ObfuscatedName("x")
 	@Export("z")
 	double z;
-	@ObfuscatedName("r")
+	@ObfuscatedName("w")
 	@Export("speedX")
 	double speedX;
-	@ObfuscatedName("c")
+	@ObfuscatedName("k")
 	@Export("speedY")
 	double speedY;
-	@ObfuscatedName("a")
+	@ObfuscatedName("q")
 	@Export("speed")
 	double speed;
-	@ObfuscatedName("d")
+	@ObfuscatedName("z")
 	@Export("speedZ")
 	double speedZ;
-	@ObfuscatedName("s")
+	@ObfuscatedName("y")
 	@Export("accelerationZ")
 	double accelerationZ;
-	@ObfuscatedName("t")
+	@ObfuscatedName("f")
 	@ObfuscatedGetter(
-		intValue = 1946189475
+		intValue = -347740869
 	)
 	@Export("yaw")
 	int yaw;
-	@ObfuscatedName("m")
+	@ObfuscatedName("b")
 	@ObfuscatedGetter(
-		intValue = -2107591311
+		intValue = -1566997977
 	)
 	@Export("pitch")
 	int pitch;
-	@ObfuscatedName("v")
+	@ObfuscatedName("r")
 	@ObfuscatedSignature(
-		signature = "Liy;"
+		signature = "Lip;"
 	)
 	@Export("sequenceDefinition")
 	SequenceDefinition sequenceDefinition;
-	@ObfuscatedName("q")
+	@ObfuscatedName("s")
 	@ObfuscatedGetter(
-		intValue = 1753493809
+		intValue = -1565551535
 	)
 	@Export("frame")
 	int frame;
-	@ObfuscatedName("l")
+	@ObfuscatedName("a")
 	@ObfuscatedGetter(
-		intValue = 339364237
+		intValue = -449479451
 	)
 	@Export("frameCycle")
 	int frameCycle;
@@ -150,19 +147,19 @@ public final class Projectile extends Entity {
 		this.targetIndex = var10;
 		this.endHeight = var11;
 		this.isMoving = false;
-		int var12 = WorldMapRegion.SpotAnimationDefinition_get(this.id).sequence;
+		int var12 = class65.SpotAnimationDefinition_get(this.id).sequence;
 		if (var12 != -1) {
-			this.sequenceDefinition = GrandExchangeOfferAgeComparator.SequenceDefinition_get(var12);
+			this.sequenceDefinition = GraphicsDefaults.SequenceDefinition_get(var12);
 		} else {
 			this.sequenceDefinition = null;
 		}
 
 	}
 
-	@ObfuscatedName("u")
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
 		signature = "(IIIII)V",
-		garbageValue = "1065266514"
+		garbageValue = "-8439776"
 	)
 	@Export("setDestination")
 	final void setDestination(int var1, int var2, int var3, int var4) {
@@ -171,8 +168,8 @@ public final class Projectile extends Entity {
 			var5 = (double)(var1 - this.sourceX);
 			double var7 = (double)(var2 - this.sourceY);
 			double var9 = Math.sqrt(var5 * var5 + var7 * var7);
-			this.x = var5 * (double)this.startHeight / var9 + (double)this.sourceX;
-			this.y = (double)this.sourceY + var7 * (double)this.startHeight / var9;
+			this.x = (double)this.startHeight * var5 / var9 + (double)this.sourceX;
+			this.y = (double)this.startHeight * var7 / var9 + (double)this.sourceY;
 			this.z = (double)this.sourceZ;
 		}
 
@@ -184,20 +181,20 @@ public final class Projectile extends Entity {
 			this.speedZ = -this.speed * Math.tan(0.02454369D * (double)this.slope);
 		}
 
-		this.accelerationZ = ((double)var3 - this.z - var5 * this.speedZ) * 2.0D / (var5 * var5);
+		this.accelerationZ = ((double)var3 - this.z - this.speedZ * var5) * 2.0D / (var5 * var5);
 	}
 
-	@ObfuscatedName("f")
+	@ObfuscatedName("t")
 	@ObfuscatedSignature(
-		signature = "(IB)V",
-		garbageValue = "-67"
+		signature = "(II)V",
+		garbageValue = "-1466465553"
 	)
 	@Export("advance")
 	final void advance(int var1) {
 		this.isMoving = true;
 		this.x += (double)var1 * this.speedX;
-		this.y += this.speedY * (double)var1;
-		this.z += (double)var1 * this.accelerationZ * 0.5D * (double)var1 + (double)var1 * this.speedZ;
+		this.y += (double)var1 * this.speedY;
+		this.z += (double)var1 * this.speedZ + (double)var1 * (double)var1 * this.accelerationZ * 0.5D;
 		this.speedZ += (double)var1 * this.accelerationZ;
 		this.yaw = (int)(Math.atan2(this.speedX, this.speedY) * 325.949D) + 1024 & 2047;
 		this.pitch = (int)(Math.atan2(this.speedZ, this.speed) * 325.949D) & 2047;
@@ -223,14 +220,14 @@ public final class Projectile extends Entity {
 		}
 	}
 
-	@ObfuscatedName("w")
+	@ObfuscatedName("j")
 	@ObfuscatedSignature(
-		signature = "(I)Ldf;",
-		garbageValue = "-174129419"
+		signature = "(I)Ldx;",
+		garbageValue = "-2133076860"
 	)
 	@Export("getModel")
 	protected final Model getModel() {
-		SpotAnimationDefinition var1 = WorldMapRegion.SpotAnimationDefinition_get(this.id);
+		SpotAnimationDefinition var1 = class65.SpotAnimationDefinition_get(this.id);
 		Model var2 = var1.getModel(this.frame);
 		if (var2 == null) {
 			return null;
@@ -240,61 +237,112 @@ public final class Projectile extends Entity {
 		}
 	}
 
-	@ObfuscatedName("ap")
+	@ObfuscatedName("t")
 	@ObfuscatedSignature(
-		signature = "(I)I",
-		garbageValue = "-118702125"
+		signature = "(CI)Z",
+		garbageValue = "1588389252"
 	)
-	@Export("getGcDuration")
-	protected static int getGcDuration() {
-		int var0 = 0;
-		if (UserComparator9.garbageCollector == null || !UserComparator9.garbageCollector.isValid()) {
-			try {
-				Iterator var1 = ManagementFactory.getGarbageCollectorMXBeans().iterator();
+	public static final boolean method2160(char var0) {
+		if (Character.isISOControl(var0)) {
+			return false;
+		} else if (ArchiveDiskAction.isAlphaNumeric(var0)) {
+			return true;
+		} else {
+			char[] var1 = class339.field4042;
 
-				while (var1.hasNext()) {
-					GarbageCollectorMXBean var2 = (GarbageCollectorMXBean)var1.next();
-					if (var2.isValid()) {
-						UserComparator9.garbageCollector = var2;
-						GameShell.garbageCollectorLastCheckTimeMs = -1L;
-						GameShell.garbageCollectorLastCollectionTime = -1L;
-					}
-				}
-			} catch (Throwable var11) {
-			}
-		}
-
-		if (UserComparator9.garbageCollector != null) {
-			long var9 = TaskHandler.currentTimeMillis();
-			long var3 = UserComparator9.garbageCollector.getCollectionTime();
-			if (GameShell.garbageCollectorLastCollectionTime != -1L) {
-				long var5 = var3 - GameShell.garbageCollectorLastCollectionTime;
-				long var7 = var9 - GameShell.garbageCollectorLastCheckTimeMs;
-				if (var7 != 0L) {
-					var0 = (int)(100L * var5 / var7);
+			int var2;
+			char var3;
+			for (var2 = 0; var2 < var1.length; ++var2) {
+				var3 = var1[var2];
+				if (var0 == var3) {
+					return true;
 				}
 			}
 
-			GameShell.garbageCollectorLastCollectionTime = var3;
-			GameShell.garbageCollectorLastCheckTimeMs = var9;
-		}
+			var1 = class339.field4041;
 
-		return var0;
+			for (var2 = 0; var2 < var1.length; ++var2) {
+				var3 = var1[var2];
+				if (var0 == var3) {
+					return true;
+				}
+			}
+
+			return false;
+		}
 	}
 
-	@ObfuscatedName("fi")
+	@ObfuscatedName("ex")
 	@ObfuscatedSignature(
-		signature = "(I)V",
-		garbageValue = "1897306098"
+		signature = "(II)V",
+		garbageValue = "-2129018303"
 	)
-	static final void method2137() {
-		if (Client.logoutTimer > 0) {
-			class40.logOut();
-		} else {
-			Client.timer.method5072();
-			class81.updateGameState(40);
-			PcmPlayer.field1413 = Client.packetWriter.getSocket();
-			Client.packetWriter.removeSocket();
+	@Export("updateGameState")
+	static void updateGameState(int var0) {
+		if (var0 != Client.gameState) {
+			if (Client.gameState == 0) {
+				Username.client.method952();
+			}
+
+			if (var0 == 20 || var0 == 40 || var0 == 45) {
+				Client.loginState = 0;
+				Client.field679 = 0;
+				Client.field680 = 0;
+				Client.timer.method5062(var0);
+				if (var0 != 20) {
+					UserComparator3.method3497(false);
+				}
+			}
+
+			if (var0 != 20 && var0 != 40 && ClientPreferences.field1052 != null) {
+				ClientPreferences.field1052.close();
+				ClientPreferences.field1052 = null;
+			}
+
+			if (Client.gameState == 25) {
+				Client.field695 = 0;
+				Client.field791 = 0;
+				Client.field884 = 1;
+				Client.field700 = 0;
+				Client.field733 = 1;
+			}
+
+			if (var0 != 5 && var0 != 10) {
+				if (var0 == 20) {
+					ClientPacket.method3683(HealthBar.archive10, UserComparator8.archive8, true, Client.gameState == 11 ? 4 : 0);
+				} else if (var0 == 11) {
+					ClientPacket.method3683(HealthBar.archive10, UserComparator8.archive8, false, 4);
+				} else if (Login.field1163) {
+					ScriptFrame.titleboxSprite = null;
+					Login.titlebuttonSprite = null;
+					class16.runesSprite = null;
+					Login.leftTitleSprite = null;
+					class32.rightTitleSprite = null;
+					FloorDecoration.logoSprite = null;
+					Login.title_muteSprite = null;
+					WorldMapSprite.options_buttons_0Sprite = null;
+					DirectByteArrayCopier.options_buttons_2Sprite = null;
+					UserComparator6.worldSelectBackSprites = null;
+					ReflectionCheck.worldSelectFlagSprites = null;
+					ItemContainer.worldSelectArrows = null;
+					DynamicObject.worldSelectStars = null;
+					WorldMapDecorationType.field2739 = null;
+					WorldMapLabelSize.loginScreenRunesAnimation.method1834();
+					class197.field2414 = 1;
+					UserComparator5.musicTrackArchive = null;
+					class197.musicTrackGroupId = -1;
+					class83.musicTrackFileId = -1;
+					AttackOption.musicTrackVolume = 0;
+					KeyHandler.musicTrackBoolean = false;
+					class197.field2412 = 2;
+					TextureProvider.method2833(true);
+					Login.field1163 = false;
+				}
+			} else {
+				ClientPacket.method3683(HealthBar.archive10, UserComparator8.archive8, true, 0);
+			}
+
+			Client.gameState = var0;
 		}
 	}
 }

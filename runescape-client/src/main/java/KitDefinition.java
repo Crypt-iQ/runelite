@@ -4,58 +4,52 @@ import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("ie")
+@ObfuscatedName("io")
 @Implements("KitDefinition")
 public class KitDefinition extends DualNode {
-	@ObfuscatedName("f")
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
-		signature = "Lhf;"
+		signature = "Lii;"
+	)
+	@Export("KitDefinition_archive")
+	public static AbstractArchive KitDefinition_archive;
+	@ObfuscatedName("t")
+	@ObfuscatedSignature(
+		signature = "Lii;"
 	)
 	@Export("KitDefinition_modelsArchive")
-	static AbstractArchive KitDefinition_modelsArchive;
-	@ObfuscatedName("b")
-	@ObfuscatedGetter(
-		intValue = 469619503
-	)
-	@Export("KitDefinition_fileCount")
-	public static int KitDefinition_fileCount;
-	@ObfuscatedName("g")
+	public static AbstractArchive KitDefinition_modelsArchive;
+	@ObfuscatedName("e")
 	@ObfuscatedSignature(
-		signature = "Lef;"
+		signature = "Leh;"
 	)
 	@Export("KitDefinition_cached")
 	static EvictingDualNodeHashTable KitDefinition_cached;
-	@ObfuscatedName("bb")
-	@ObfuscatedSignature(
-		signature = "Llm;"
-	)
-	@Export("worldSelectRightSprite")
-	static IndexedSprite worldSelectRightSprite;
-	@ObfuscatedName("z")
+	@ObfuscatedName("i")
 	@ObfuscatedGetter(
-		intValue = 404247585
+		intValue = -1923547411
 	)
 	@Export("bodypartID")
 	public int bodypartID;
-	@ObfuscatedName("p")
+	@ObfuscatedName("g")
 	@Export("models2")
 	int[] models2;
-	@ObfuscatedName("h")
+	@ObfuscatedName("d")
 	@Export("recolorFrom")
 	short[] recolorFrom;
-	@ObfuscatedName("y")
+	@ObfuscatedName("l")
 	@Export("recolorTo")
 	short[] recolorTo;
-	@ObfuscatedName("w")
+	@ObfuscatedName("j")
 	@Export("retextureFrom")
 	short[] retextureFrom;
-	@ObfuscatedName("i")
+	@ObfuscatedName("m")
 	@Export("retextureTo")
 	short[] retextureTo;
-	@ObfuscatedName("k")
+	@ObfuscatedName("p")
 	@Export("models")
 	int[] models;
-	@ObfuscatedName("x")
+	@ObfuscatedName("h")
 	@Export("nonSelectable")
 	public boolean nonSelectable;
 
@@ -69,10 +63,10 @@ public class KitDefinition extends DualNode {
 		this.nonSelectable = false;
 	}
 
-	@ObfuscatedName("b")
+	@ObfuscatedName("t")
 	@ObfuscatedSignature(
-		signature = "(Lkg;I)V",
-		garbageValue = "-888948213"
+		signature = "(Lkp;B)V",
+		garbageValue = "1"
 	)
 	@Export("decode")
 	void decode(Buffer var1) {
@@ -86,10 +80,10 @@ public class KitDefinition extends DualNode {
 		}
 	}
 
-	@ObfuscatedName("g")
+	@ObfuscatedName("o")
 	@ObfuscatedSignature(
-		signature = "(Lkg;II)V",
-		garbageValue = "-1758313973"
+		signature = "(Lkp;II)V",
+		garbageValue = "1396664482"
 	)
 	@Export("decodeNext")
 	void decodeNext(Buffer var1, int var2) {
@@ -132,10 +126,10 @@ public class KitDefinition extends DualNode {
 
 	}
 
-	@ObfuscatedName("z")
+	@ObfuscatedName("e")
 	@ObfuscatedSignature(
 		signature = "(I)Z",
-		garbageValue = "-1861944698"
+		garbageValue = "16777215"
 	)
 	@Export("ready")
 	public boolean ready() {
@@ -154,10 +148,10 @@ public class KitDefinition extends DualNode {
 		}
 	}
 
-	@ObfuscatedName("p")
+	@ObfuscatedName("i")
 	@ObfuscatedSignature(
-		signature = "(B)Ldq;",
-		garbageValue = "20"
+		signature = "(I)Ldg;",
+		garbageValue = "847526652"
 	)
 	@Export("getModelData")
 	public ModelData getModelData() {
@@ -194,12 +188,12 @@ public class KitDefinition extends DualNode {
 		}
 	}
 
-	@ObfuscatedName("h")
+	@ObfuscatedName("g")
 	@ObfuscatedSignature(
-		signature = "(B)Z",
-		garbageValue = "1"
+		signature = "(I)Z",
+		garbageValue = "-464506453"
 	)
-	public boolean method4535() {
+	public boolean method4533() {
 		boolean var1 = true;
 
 		for (int var2 = 0; var2 < 5; ++var2) {
@@ -211,10 +205,10 @@ public class KitDefinition extends DualNode {
 		return var1;
 	}
 
-	@ObfuscatedName("y")
+	@ObfuscatedName("d")
 	@ObfuscatedSignature(
-		signature = "(B)Ldq;",
-		garbageValue = "-19"
+		signature = "(I)Ldg;",
+		garbageValue = "-2095950315"
 	)
 	@Export("getKitDefinitionModels")
 	public ModelData getKitDefinitionModels() {
@@ -242,5 +236,102 @@ public class KitDefinition extends DualNode {
 		}
 
 		return var5;
+	}
+
+	@ObfuscatedName("t")
+	@ObfuscatedSignature(
+		signature = "(IIIIB)V",
+		garbageValue = "116"
+	)
+	static final void method4532(int var0, int var1, int var2, int var3) {
+		for (int var4 = var1; var4 <= var3 + var1; ++var4) {
+			for (int var5 = var0; var5 <= var0 + var2; ++var5) {
+				if (var5 >= 0 && var5 < 104 && var4 >= 0 && var4 < 104) {
+					InterfaceParent.field565[0][var5][var4] = 127;
+					if (var0 == var5 && var5 > 0) {
+						Tiles.Tiles_heights[0][var5][var4] = Tiles.Tiles_heights[0][var5 - 1][var4];
+					}
+
+					if (var0 + var2 == var5 && var5 < 103) {
+						Tiles.Tiles_heights[0][var5][var4] = Tiles.Tiles_heights[0][var5 + 1][var4];
+					}
+
+					if (var4 == var1 && var4 > 0) {
+						Tiles.Tiles_heights[0][var5][var4] = Tiles.Tiles_heights[0][var5][var4 - 1];
+					}
+
+					if (var4 == var3 + var1 && var4 < 103) {
+						Tiles.Tiles_heights[0][var5][var4] = Tiles.Tiles_heights[0][var5][var4 + 1];
+					}
+				}
+			}
+		}
+
+	}
+
+	@ObfuscatedName("g")
+	@ObfuscatedSignature(
+		signature = "(Ljava/lang/CharSequence;IZB)I",
+		garbageValue = "93"
+	)
+	@Export("parseIntCustomRadix")
+	static int parseIntCustomRadix(CharSequence var0, int var1, boolean var2) {
+		if (var1 >= 2 && var1 <= 36) {
+			boolean var3 = false;
+			boolean var4 = false;
+			int var5 = 0;
+			int var6 = var0.length();
+
+			for (int var7 = 0; var7 < var6; ++var7) {
+				char var8 = var0.charAt(var7);
+				if (var7 == 0) {
+					if (var8 == '-') {
+						var3 = true;
+						continue;
+					}
+
+					if (var8 == '+') {
+						continue;
+					}
+				}
+
+				int var10;
+				if (var8 >= '0' && var8 <= '9') {
+					var10 = var8 - '0';
+				} else if (var8 >= 'A' && var8 <= 'Z') {
+					var10 = var8 - '7';
+				} else {
+					if (var8 < 'a' || var8 > 'z') {
+						throw new NumberFormatException();
+					}
+
+					var10 = var8 - 'W';
+				}
+
+				if (var10 >= var1) {
+					throw new NumberFormatException();
+				}
+
+				if (var3) {
+					var10 = -var10;
+				}
+
+				int var9 = var10 + var5 * var1;
+				if (var9 / var1 != var5) {
+					throw new NumberFormatException();
+				}
+
+				var5 = var9;
+				var4 = true;
+			}
+
+			if (!var4) {
+				throw new NumberFormatException();
+			} else {
+				return var5;
+			}
+		} else {
+			throw new IllegalArgumentException("" + var1);
+		}
 	}
 }

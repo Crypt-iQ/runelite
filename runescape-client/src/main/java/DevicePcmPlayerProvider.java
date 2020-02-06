@@ -3,45 +3,39 @@ import net.runelite.mapping.Implements;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("al")
+@ObfuscatedName("an")
 @Implements("DevicePcmPlayerProvider")
 public class DevicePcmPlayerProvider implements class99 {
-	@ObfuscatedName("jx")
+	@ObfuscatedName("av")
 	@ObfuscatedSignature(
-		signature = "Lhl;"
+		signature = "Llc;"
 	)
-	@Export("dragInventoryWidget")
-	static Widget dragInventoryWidget;
+	@Export("rasterProvider")
+	public static AbstractRasterProvider rasterProvider;
 
 	DevicePcmPlayerProvider() {
 	}
 
-	@ObfuscatedName("u")
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
-		signature = "(I)Lde;",
-		garbageValue = "2104968763"
+		signature = "(I)Ldw;",
+		garbageValue = "-1842325799"
 	)
 	@Export("player")
 	public PcmPlayer player() {
 		return new DevicePcmPlayer();
 	}
 
-	@ObfuscatedName("fz")
+	@ObfuscatedName("t")
 	@ObfuscatedSignature(
-		signature = "(II)V",
-		garbageValue = "2048125775"
+		signature = "(I)V",
+		garbageValue = "-1589308129"
 	)
-	@Export("forceDisconnect")
-	static final void forceDisconnect(int var0) {
-		class40.logOut();
-		switch(var0) {
-		case 1:
-			Login.loginIndex = 24;
-			PacketWriter.setLoginResponseString("", "You were disconnected from the server.", "");
-			break;
-		case 2:
-			Login.loginIndex = 24;
-			PacketWriter.setLoginResponseString("The game servers are currently being updated.", "Please wait a few minutes and try again.", "");
+	public static void method855() {
+		if (KeyHandler.KeyHandler_instance != null) {
+			synchronized(KeyHandler.KeyHandler_instance) {
+				KeyHandler.KeyHandler_instance = null;
+			}
 		}
 
 	}

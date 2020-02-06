@@ -2,76 +2,76 @@ import net.runelite.mapping.Export;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("gd")
+@ObfuscatedName("gy")
 public class class185 {
-	@ObfuscatedName("u")
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
-		signature = "Lgd;"
+		signature = "Lgy;"
 	)
-	public static final class185 field2334;
-	@ObfuscatedName("f")
+	public static final class185 field2327;
+	@ObfuscatedName("t")
 	@ObfuscatedSignature(
-		signature = "Lgd;"
+		signature = "Lgy;"
 	)
-	public static final class185 field2332;
-	@ObfuscatedName("b")
+	public static final class185 field2315;
+	@ObfuscatedName("o")
 	@ObfuscatedSignature(
-		signature = "Lgd;"
+		signature = "Lgy;"
 	)
-	public static final class185 field2333;
-	@ObfuscatedName("g")
+	public static final class185 field2322;
+	@ObfuscatedName("e")
 	@ObfuscatedSignature(
-		signature = "Lgd;"
+		signature = "Lgy;"
 	)
-	public static final class185 field2339;
-	@ObfuscatedName("z")
-	@ObfuscatedSignature(
-		signature = "Lgd;"
-	)
-	public static final class185 field2336;
-	@ObfuscatedName("p")
-	@ObfuscatedSignature(
-		signature = "Lgd;"
-	)
-	public static final class185 field2341;
-	@ObfuscatedName("h")
-	@ObfuscatedSignature(
-		signature = "Lgd;"
-	)
-	public static final class185 field2337;
-	@ObfuscatedName("y")
-	@ObfuscatedSignature(
-		signature = "Lgd;"
-	)
-	public static final class185 field2331;
-	@ObfuscatedName("w")
-	@ObfuscatedSignature(
-		signature = "Lgd;"
-	)
-	public static final class185 field2335;
+	public static final class185 field2317;
 	@ObfuscatedName("i")
 	@ObfuscatedSignature(
-		signature = "Lgd;"
+		signature = "Lgy;"
 	)
-	public static final class185 field2340;
-	@ObfuscatedName("lh")
+	public static final class185 field2318;
+	@ObfuscatedName("g")
 	@ObfuscatedSignature(
-		signature = "Lhl;"
+		signature = "Lgy;"
 	)
-	@Export("mousedOverWidgetIf1")
-	static Widget mousedOverWidgetIf1;
+	public static final class185 field2320;
+	@ObfuscatedName("d")
+	@ObfuscatedSignature(
+		signature = "Lgy;"
+	)
+	public static final class185 field2319;
+	@ObfuscatedName("l")
+	@ObfuscatedSignature(
+		signature = "Lgy;"
+	)
+	public static final class185 field2314;
+	@ObfuscatedName("j")
+	@ObfuscatedSignature(
+		signature = "Lgy;"
+	)
+	public static final class185 field2316;
+	@ObfuscatedName("m")
+	@ObfuscatedSignature(
+		signature = "Lgy;"
+	)
+	public static final class185 field2323;
+	@ObfuscatedName("js")
+	@ObfuscatedSignature(
+		signature = "Lhn;"
+	)
+	@Export("dragInventoryWidget")
+	static Widget dragInventoryWidget;
 
 	static {
-		field2334 = new class185(5);
-		field2332 = new class185(4);
-		field2333 = new class185(14);
-		field2339 = new class185(3);
-		field2336 = new class185(15);
-		field2341 = new class185(6);
-		field2337 = new class185(4);
-		field2331 = new class185(7);
-		field2335 = new class185(5);
-		field2340 = new class185(2);
+		field2327 = new class185(5);
+		field2315 = new class185(7);
+		field2322 = new class185(3);
+		field2317 = new class185(5);
+		field2318 = new class185(15);
+		field2320 = new class185(14);
+		field2319 = new class185(6);
+		field2314 = new class185(2);
+		field2316 = new class185(4);
+		field2323 = new class185(4);
 	}
 
 	@ObfuscatedSignature(
@@ -81,55 +81,59 @@ public class class185 {
 	class185(int var1) {
 	}
 
-	@ObfuscatedName("u")
+	@ObfuscatedName("t")
 	@ObfuscatedSignature(
-		signature = "(Lhf;B)V",
-		garbageValue = "3"
+		signature = "(Llp;IIB)I",
+		garbageValue = "-67"
 	)
-	public static void method3665(AbstractArchive var0) {
-		VarbitDefinition.VarbitDefinition_archive = var0;
-	}
-
-	@ObfuscatedName("h")
-	@ObfuscatedSignature(
-		signature = "(Lhf;IB)Llm;",
-		garbageValue = "-1"
-	)
-	public static IndexedSprite method3669(AbstractArchive var0, int var1) {
-		byte[] var3 = var0.takeFileFlat(var1);
-		boolean var2;
-		if (var3 == null) {
-			var2 = false;
+	static int method3686(IterableNodeHashTable var0, int var1, int var2) {
+		if (var0 == null) {
+			return var2;
 		} else {
-			Buffer.SpriteBuffer_decode(var3);
-			var2 = true;
+			IntegerNode var3 = (IntegerNode)var0.get((long)var1);
+			return var3 == null ? var2 : var3.integer;
 		}
-
-		return !var2 ? null : GrandExchangeOfferAgeComparator.method172();
 	}
 
-	@ObfuscatedName("ka")
+	@ObfuscatedName("ge")
 	@ObfuscatedSignature(
-		signature = "(IIIILln;Lhn;I)V",
-		garbageValue = "1250322878"
+		signature = "(Lbx;I)V",
+		garbageValue = "-46568974"
 	)
-	@Export("drawSpriteOnMinimap")
-	static final void drawSpriteOnMinimap(int var0, int var1, int var2, int var3, Sprite var4, SpriteMask var5) {
-		if (var4 != null) {
-			int var6 = Client.camAngleY & 2047;
-			int var7 = var3 * var3 + var2 * var2;
-			if (var7 <= 6400) {
-				int var8 = Rasterizer3D.Rasterizer3D_sine[var6];
-				int var9 = Rasterizer3D.Rasterizer3D_cosine[var6];
-				int var10 = var3 * var8 + var9 * var2 >> 16;
-				int var11 = var3 * var9 - var8 * var2 >> 16;
-				if (var7 > 2500) {
-					var4.method6223(var10 + var5.width / 2 - var4.width / 2, var5.height / 2 - var11 - var4.height / 2, var0, var1, var5.width, var5.height, var5.xStarts, var5.xWidths);
-				} else {
-					var4.drawTransBgAt(var0 + var10 + var5.width / 2 - var4.width / 2, var5.height / 2 + var1 - var11 - var4.height / 2);
-				}
+	static final void method3685(Actor var0) {
+		int var1 = Math.max(1, var0.field985 - Client.cycle);
+		int var2 = var0.field981 * 128 + var0.field942 * 2013925376;
+		int var3 = var0.field957 * 128 + var0.field942 * 2013925376;
+		var0.x += (var2 - var0.x) / var1;
+		var0.y += (var3 - var0.y) / var1;
+		var0.field997 = 0;
+		var0.orientation = var0.field987;
+	}
 
-			}
+	@ObfuscatedName("jl")
+	@ObfuscatedSignature(
+		signature = "(Lbe;ZI)V",
+		garbageValue = "1102320238"
+	)
+	@Export("closeInterface")
+	static final void closeInterface(InterfaceParent var0, boolean var1) {
+		int var2 = var0.group;
+		int var3 = (int)var0.key;
+		var0.remove();
+		if (var1) {
+			ObjectSound.method1933(var2);
 		}
+
+		AbstractWorldMapIcon.method628(var2);
+		Widget var4 = Varps.getWidget(var3);
+		if (var4 != null) {
+			NPCDefinition.invalidateWidget(var4);
+		}
+
+		GameObject.method3360();
+		if (Client.rootInterface != -1) {
+			class226.runIntfCloseListeners(Client.rootInterface, 1);
+		}
+
 	}
 }

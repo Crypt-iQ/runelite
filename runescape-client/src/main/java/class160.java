@@ -3,100 +3,127 @@ import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("fx")
+@ObfuscatedName("fn")
 public enum class160 implements Enumerated {
-	@ObfuscatedName("u")
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
-		signature = "Lfx;"
+		signature = "Lfn;"
 	)
-	field2009(1, 0),
-	@ObfuscatedName("f")
+	field1994(1, 0),
+	@ObfuscatedName("t")
 	@ObfuscatedSignature(
-		signature = "Lfx;"
+		signature = "Lfn;"
 	)
-	field2008(0, 1),
-	@ObfuscatedName("b")
+	field1996(0, 1),
+	@ObfuscatedName("o")
 	@ObfuscatedSignature(
-		signature = "Lfx;"
+		signature = "Lfn;"
 	)
-	field2006(3, 2),
-	@ObfuscatedName("g")
+	field1993(2, 2),
+	@ObfuscatedName("e")
 	@ObfuscatedSignature(
-		signature = "Lfx;"
+		signature = "Lfn;"
 	)
-	field2005(2, 3);
+	field1995(3, 3);
 
-	@ObfuscatedName("z")
+	@ObfuscatedName("f")
+	public static String field1998;
+	@ObfuscatedName("i")
 	@ObfuscatedGetter(
-		intValue = -406777895
+		intValue = 1846550889
 	)
-	public final int field2007;
-	@ObfuscatedName("p")
+	public final int field1992;
+	@ObfuscatedName("g")
 	@ObfuscatedGetter(
-		intValue = -141760123
+		intValue = -699786639
 	)
 	@Export("id")
 	final int id;
 
 	class160(int var3, int var4) {
-		this.field2007 = var3;
+		this.field1992 = var3;
 		this.id = var4;
 	}
 
-	@ObfuscatedName("g")
+	@ObfuscatedName("e")
 	@ObfuscatedSignature(
 		signature = "(B)I",
-		garbageValue = "7"
+		garbageValue = "1"
 	)
 	@Export("rsOrdinal")
 	public int rsOrdinal() {
 		return this.id;
 	}
 
-	@ObfuscatedName("b")
+	@ObfuscatedName("g")
 	@ObfuscatedSignature(
-		signature = "(II)I",
-		garbageValue = "684662102"
+		signature = "([BIILem;[Lfv;I)V",
+		garbageValue = "1777636596"
 	)
-	@Export("iLog")
-	public static int iLog(int var0) {
-		int var1 = 0;
-		if (var0 < 0 || var0 >= 65536) {
-			var0 >>>= 16;
-			var1 += 16;
-		}
+	static final void method3518(byte[] var0, int var1, int var2, Scene var3, CollisionMap[] var4) {
+		Buffer var5 = new Buffer(var0);
+		int var6 = -1;
 
-		if (var0 >= 256) {
-			var0 >>>= 8;
-			var1 += 8;
-		}
+		while (true) {
+			int var7 = var5.method5589();
+			if (var7 == 0) {
+				return;
+			}
 
-		if (var0 >= 16) {
-			var0 >>>= 4;
-			var1 += 4;
-		}
+			var6 += var7;
+			int var8 = 0;
 
-		if (var0 >= 4) {
-			var0 >>>= 2;
-			var1 += 2;
-		}
+			while (true) {
+				int var9 = var5.readUShortSmart();
+				if (var9 == 0) {
+					break;
+				}
 
-		if (var0 >= 1) {
-			var0 >>>= 1;
-			++var1;
-		}
+				var8 += var9 - 1;
+				int var10 = var8 & 63;
+				int var11 = var8 >> 6 & 63;
+				int var12 = var8 >> 12;
+				int var13 = var5.readUnsignedByte();
+				int var14 = var13 >> 2;
+				int var15 = var13 & 3;
+				int var16 = var11 + var1;
+				int var17 = var10 + var2;
+				if (var16 > 0 && var17 > 0 && var16 < 103 && var17 < 103) {
+					int var18 = var12;
+					if ((Tiles.Tiles_renderFlags[1][var16][var17] & 2) == 2) {
+						var18 = var12 - 1;
+					}
 
-		return var0 + var1;
+					CollisionMap var19 = null;
+					if (var18 >= 0) {
+						var19 = var4[var18];
+					}
+
+					ArchiveDiskActionHandler.method4336(var12, var16, var17, var6, var15, var14, var3, var19);
+				}
+			}
+		}
 	}
 
-	@ObfuscatedName("ja")
+	@ObfuscatedName("id")
 	@ObfuscatedSignature(
-		signature = "(IB)V",
-		garbageValue = "7"
+		signature = "(Ljava/lang/String;Ljava/lang/String;IIIIZI)V",
+		garbageValue = "-115001383"
 	)
-	static final void method3494(int var0) {
-		if (UserComparator3.loadInterface(var0)) {
-			MusicPatchPcmStream.drawModelComponents(FloorDecoration.Widget_interfaceComponents[var0], -1);
+	@Export("insertMenuItem")
+	static final void insertMenuItem(String var0, String var1, int var2, int var3, int var4, int var5, boolean var6) {
+		if (!Client.isMenuOpen) {
+			if (Client.menuOptionsCount < 500) {
+				Client.menuActions[Client.menuOptionsCount] = var0;
+				Client.menuTargets[Client.menuOptionsCount] = var1;
+				Client.menuOpcodes[Client.menuOptionsCount] = var2;
+				Client.menuIdentifiers[Client.menuOptionsCount] = var3;
+				Client.menuArguments1[Client.menuOptionsCount] = var4;
+				Client.menuArguments2[Client.menuOptionsCount] = var5;
+				Client.menuShiftClick[Client.menuOptionsCount] = var6;
+				++Client.menuOptionsCount;
+			}
+
 		}
 	}
 }

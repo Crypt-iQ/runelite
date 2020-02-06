@@ -1,11 +1,11 @@
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("gs")
+@ObfuscatedName("ga")
 public class class186 {
-	@ObfuscatedName("ab")
+	@ObfuscatedName("n")
 	@ObfuscatedSignature(
-		signature = "Llw;"
+		signature = "Lhn;"
 	)
-	static Bounds field2342;
+	static Widget field2331;
 }

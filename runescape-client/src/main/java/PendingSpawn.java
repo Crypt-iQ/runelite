@@ -4,86 +4,87 @@ import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("be")
+@ObfuscatedName("bs")
 @Implements("PendingSpawn")
 public final class PendingSpawn extends Node {
-	@ObfuscatedName("qu")
-	@ObfuscatedGetter(
-		intValue = 756269056
+	@ObfuscatedName("sx")
+	@ObfuscatedSignature(
+		signature = "Ld;"
 	)
-	static int field925;
-	@ObfuscatedName("r")
+	@Export("grandExchangeEvents")
+	static GrandExchangeEvents grandExchangeEvents;
+	@ObfuscatedName("hu")
 	@ObfuscatedGetter(
-		intValue = 2040420297
+		intValue = -1923954935
 	)
-	@Export("cacheGamebuild")
-	public static int cacheGamebuild;
-	@ObfuscatedName("u")
+	@Export("oculusOrbFocalPointX")
+	static int oculusOrbFocalPointX;
+	@ObfuscatedName("c")
 	@ObfuscatedGetter(
-		intValue = 842281271
+		intValue = -1349370787
 	)
 	@Export("plane")
 	int plane;
-	@ObfuscatedName("f")
+	@ObfuscatedName("t")
 	@ObfuscatedGetter(
-		intValue = -1195330125
+		intValue = 304063961
 	)
 	@Export("type")
 	int type;
-	@ObfuscatedName("b")
+	@ObfuscatedName("o")
 	@ObfuscatedGetter(
-		intValue = -521000553
+		intValue = -340804777
 	)
 	@Export("x")
 	int x;
-	@ObfuscatedName("g")
+	@ObfuscatedName("e")
 	@ObfuscatedGetter(
-		intValue = -156944661
+		intValue = 1612075495
 	)
 	@Export("y")
 	int y;
-	@ObfuscatedName("z")
+	@ObfuscatedName("i")
 	@ObfuscatedGetter(
-		intValue = 2076612057
+		intValue = 1762819513
 	)
 	@Export("objectId")
 	int objectId;
-	@ObfuscatedName("p")
+	@ObfuscatedName("g")
 	@ObfuscatedGetter(
-		intValue = 1798753117
+		intValue = 51558137
 	)
-	int field929;
-	@ObfuscatedName("h")
+	int field935;
+	@ObfuscatedName("d")
 	@ObfuscatedGetter(
-		intValue = 1153270233
+		intValue = 1078181875
 	)
 	int field924;
-	@ObfuscatedName("y")
+	@ObfuscatedName("l")
 	@ObfuscatedGetter(
-		intValue = 37593595
+		intValue = 869281397
 	)
 	@Export("id")
 	int id;
-	@ObfuscatedName("w")
+	@ObfuscatedName("j")
 	@ObfuscatedGetter(
-		intValue = -87951589
+		intValue = -186510347
 	)
 	@Export("orientation")
 	int orientation;
-	@ObfuscatedName("i")
+	@ObfuscatedName("m")
 	@ObfuscatedGetter(
-		intValue = 894134175
+		intValue = 1858623199
 	)
-	int field927;
-	@ObfuscatedName("k")
+	int field933;
+	@ObfuscatedName("p")
 	@ObfuscatedGetter(
-		intValue = 1990017955
+		intValue = -260343907
 	)
 	@Export("delay")
 	int delay;
-	@ObfuscatedName("x")
+	@ObfuscatedName("h")
 	@ObfuscatedGetter(
-		intValue = 458330281
+		intValue = 1816335395
 	)
 	@Export("hitpoints")
 	int hitpoints;
@@ -93,58 +94,28 @@ public final class PendingSpawn extends Node {
 		this.hitpoints = -1;
 	}
 
-	@ObfuscatedName("f")
+	@ObfuscatedName("d")
 	@ObfuscatedSignature(
-		signature = "(ZZB)Llm;",
-		garbageValue = "0"
+		signature = "(I)Llt;",
+		garbageValue = "-728987489"
 	)
-	static IndexedSprite method1753(boolean var0, boolean var1) {
-		return var0 ? (var1 ? StructDefinition.field3315 : Varps.options_buttons_2Sprite) : (var1 ? Login.field1179 : InterfaceParent.options_buttons_0Sprite);
-	}
+	static Sprite method1738() {
+		Sprite var0 = new Sprite();
+		var0.width = GZipDecompressor.SpriteBuffer_spriteWidth;
+		var0.height = class326.SpriteBuffer_spriteHeight;
+		var0.xOffset = Huffman.SpriteBuffer_xOffsets[0];
+		var0.yOffset = NPC.SpriteBuffer_yOffsets[0];
+		var0.subWidth = class326.SpriteBuffer_spriteWidths[0];
+		var0.subHeight = class326.SpriteBuffer_spriteHeights[0];
+		int var1 = var0.subWidth * var0.subHeight;
+		byte[] var2 = class326.SpriteBuffer_pixels[0];
+		var0.pixels = new int[var1];
 
-	@ObfuscatedName("iw")
-	@ObfuscatedSignature(
-		signature = "(Lhl;III)V",
-		garbageValue = "648761441"
-	)
-	@Export("alignWidgetPosition")
-	static void alignWidgetPosition(Widget var0, int var1, int var2) {
-		if (var0.xAlignment == 0) {
-			var0.x = var0.rawX;
-		} else if (var0.xAlignment == 1) {
-			var0.x = var0.rawX + (var1 - var0.width) / 2;
-		} else if (var0.xAlignment == 2) {
-			var0.x = var1 - var0.width - var0.rawX;
-		} else if (var0.xAlignment == 3) {
-			var0.x = var0.rawX * var1 >> 14;
-		} else if (var0.xAlignment == 4) {
-			var0.x = (var1 - var0.width) / 2 + (var0.rawX * var1 >> 14);
-		} else {
-			var0.x = var1 - var0.width - (var0.rawX * var1 >> 14);
+		for (int var3 = 0; var3 < var1; ++var3) {
+			var0.pixels[var3] = class326.SpriteBuffer_spritePalette[var2[var3] & 255];
 		}
 
-		if (var0.yAlignment == 0) {
-			var0.y = var0.rawY;
-		} else if (var0.yAlignment == 1) {
-			var0.y = (var2 - var0.height) / 2 + var0.rawY;
-		} else if (var0.yAlignment == 2) {
-			var0.y = var2 - var0.height - var0.rawY;
-		} else if (var0.yAlignment == 3) {
-			var0.y = var2 * var0.rawY >> 14;
-		} else if (var0.yAlignment == 4) {
-			var0.y = (var2 * var0.rawY >> 14) + (var2 - var0.height) / 2;
-		} else {
-			var0.y = var2 - var0.height - (var2 * var0.rawY >> 14);
-		}
-
-	}
-
-	@ObfuscatedName("jx")
-	@ObfuscatedSignature(
-		signature = "(I)Z",
-		garbageValue = "-547734374"
-	)
-	static boolean method1751() {
-		return Client.tapToDrop || KeyHandler.KeyHandler_pressedKeys[81];
+		DynamicObject.method2292();
+		return var0;
 	}
 }

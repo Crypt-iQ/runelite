@@ -43,6 +43,11 @@ import lombok.Getter;
 public enum Varbits
 {
 	/*
+	 * Kharedst's Memoirs Teleport Item
+	 */
+	KHAREDSTS_MEMOIRS_CHARGES(6035),
+
+	/*
 	 * If chatbox is transparent or not
 	 */
 	TRANSPARENT_CHATBOX(4608),
@@ -699,15 +704,6 @@ public enum Varbits
 	WITHDRAW_X_AMOUNT(3960),
 
 	IN_PVP_AREA(8121),
-
-	/**
-	 * Twisted league
-	 */
-	TWISTED_LEAGUE_RELIC_1(10049),
-	TWISTED_LEAGUE_RELIC_2(10050),
-	TWISTED_LEAGUE_RELIC_3(10051),
-	TWISTED_LEAGUE_RELIC_4(10052),
-	TWISTED_LEAGUE_RELIC_5(10053),
 
 	/**
 	 * Value of hotkey varbits can be 0-13

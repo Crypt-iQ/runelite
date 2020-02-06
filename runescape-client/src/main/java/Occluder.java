@@ -4,118 +4,118 @@ import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("ej")
+@ObfuscatedName("er")
 @Implements("Occluder")
 public final class Occluder {
-	@ObfuscatedName("u")
+	@ObfuscatedName("c")
 	@ObfuscatedGetter(
-		intValue = -868680993
+		intValue = -1590617607
 	)
 	@Export("minTileX")
 	int minTileX;
-	@ObfuscatedName("f")
+	@ObfuscatedName("t")
 	@ObfuscatedGetter(
-		intValue = -78813791
+		intValue = -547083531
 	)
 	@Export("maxTileX")
 	int maxTileX;
-	@ObfuscatedName("b")
+	@ObfuscatedName("o")
 	@ObfuscatedGetter(
-		intValue = -307237447
+		intValue = -50213873
 	)
 	@Export("minTileY")
 	int minTileY;
-	@ObfuscatedName("g")
+	@ObfuscatedName("e")
 	@ObfuscatedGetter(
-		intValue = -772985783
+		intValue = 468551341
 	)
 	@Export("maxTileY")
 	int maxTileY;
-	@ObfuscatedName("z")
+	@ObfuscatedName("i")
 	@ObfuscatedGetter(
-		intValue = 1542494109
+		intValue = 1458013883
 	)
 	@Export("type")
 	int type;
-	@ObfuscatedName("p")
+	@ObfuscatedName("g")
 	@ObfuscatedGetter(
-		intValue = -291894415
+		intValue = 1331967011
 	)
 	@Export("minX")
 	int minX;
-	@ObfuscatedName("h")
+	@ObfuscatedName("d")
 	@ObfuscatedGetter(
-		intValue = -724655561
+		intValue = -455782375
 	)
 	@Export("maxX")
 	int maxX;
-	@ObfuscatedName("y")
+	@ObfuscatedName("l")
 	@ObfuscatedGetter(
-		intValue = 686060305
+		intValue = 819505963
 	)
 	@Export("minZ")
 	int minZ;
-	@ObfuscatedName("w")
+	@ObfuscatedName("j")
 	@ObfuscatedGetter(
-		intValue = 2092987209
+		intValue = 1618672975
 	)
 	@Export("maxZ")
 	int maxZ;
-	@ObfuscatedName("i")
+	@ObfuscatedName("m")
 	@ObfuscatedGetter(
-		intValue = -264626047
+		intValue = -1033011613
 	)
 	@Export("minY")
 	int minY;
-	@ObfuscatedName("k")
+	@ObfuscatedName("p")
 	@ObfuscatedGetter(
-		intValue = -1980036159
+		intValue = -1435330577
 	)
 	@Export("maxY")
 	int maxY;
-	@ObfuscatedName("x")
+	@ObfuscatedName("h")
 	@ObfuscatedGetter(
-		intValue = -1409166921
+		intValue = 681234965
 	)
-	int field1896;
-	@ObfuscatedName("o")
+	int field1891;
+	@ObfuscatedName("v")
 	@ObfuscatedGetter(
-		intValue = -307213361
-	)
-	int field1897;
-	@ObfuscatedName("e")
-	@ObfuscatedGetter(
-		intValue = -1941150605
-	)
-	int field1898;
-	@ObfuscatedName("n")
-	@ObfuscatedGetter(
-		intValue = 1179191271
+		intValue = 460124457
 	)
 	int field1900;
-	@ObfuscatedName("r")
+	@ObfuscatedName("n")
 	@ObfuscatedGetter(
-		intValue = -1336984119
-	)
-	int field1890;
-	@ObfuscatedName("c")
-	@ObfuscatedGetter(
-		intValue = -863399609
+		intValue = -947874837
 	)
 	int field1901;
-	@ObfuscatedName("a")
+	@ObfuscatedName("x")
 	@ObfuscatedGetter(
-		intValue = -1653375525
+		intValue = -1101467095
 	)
-	int field1902;
+	int field1903;
+	@ObfuscatedName("w")
+	@ObfuscatedGetter(
+		intValue = -1920736103
+	)
+	int field1904;
+	@ObfuscatedName("k")
+	@ObfuscatedGetter(
+		intValue = -1277839357
+	)
+	int field1889;
+	@ObfuscatedName("q")
+	@ObfuscatedGetter(
+		intValue = 461878441
+	)
+	int field1905;
 
 	Occluder() {
 	}
 
-	@ObfuscatedName("f")
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
-		signature = "(II)Lil;",
-		garbageValue = "513049272"
+		signature = "(IB)Lir;",
+		garbageValue = "-54"
 	)
 	@Export("getObjectDefinition")
 	public static ObjectDefinition getObjectDefinition(int var0) {
@@ -141,37 +141,13 @@ public final class Occluder {
 		}
 	}
 
-	@ObfuscatedName("y")
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
-		signature = "(I)V",
-		garbageValue = "-1792672505"
+		signature = "(I)[Lgb;",
+		garbageValue = "1401703013"
 	)
-	public static void method3336() {
-		WorldMapElement.WorldMapElement_cachedSprites.clear();
-	}
-
-	@ObfuscatedName("i")
-	@ObfuscatedSignature(
-		signature = "(B)Lln;",
-		garbageValue = "0"
-	)
-	static Sprite method3338() {
-		Sprite var0 = new Sprite();
-		var0.width = class325.SpriteBuffer_spriteWidth;
-		var0.height = UserComparator9.SpriteBuffer_spriteHeight;
-		var0.xOffset = UrlRequester.SpriteBuffer_xOffsets[0];
-		var0.yOffset = class216.SpriteBuffer_yOffsets[0];
-		var0.subWidth = class325.SpriteBuffer_spriteWidths[0];
-		var0.subHeight = VarcInt.SpriteBuffer_spriteHeights[0];
-		int var1 = var0.subHeight * var0.subWidth;
-		byte[] var2 = FillMode.SpriteBuffer_pixels[0];
-		var0.pixels = new int[var1];
-
-		for (int var3 = 0; var3 < var1; ++var3) {
-			var0.pixels[var3] = class325.SpriteBuffer_spritePalette[var2[var3] & 255];
-		}
-
-		PcmPlayer.method2510();
-		return var0;
+	@Export("ServerPacket_values")
+	public static ServerPacket[] ServerPacket_values() {
+		return new ServerPacket[]{ServerPacket.field2127, ServerPacket.field2129, ServerPacket.field2168, ServerPacket.field2118, ServerPacket.field2119, ServerPacket.field2120, ServerPacket.field2121, ServerPacket.field2122, ServerPacket.field2123, ServerPacket.field2124, ServerPacket.field2159, ServerPacket.field2126, ServerPacket.field2165, ServerPacket.field2145, ServerPacket.field2200, ServerPacket.field2169, ServerPacket.field2131, ServerPacket.field2132, ServerPacket.field2117, ServerPacket.field2134, ServerPacket.field2135, ServerPacket.field2136, ServerPacket.field2137, ServerPacket.field2138, ServerPacket.field2139, ServerPacket.field2140, ServerPacket.field2141, ServerPacket.field2142, ServerPacket.field2181, ServerPacket.field2151, ServerPacket.field2173, ServerPacket.field2146, ServerPacket.field2178, ServerPacket.field2183, ServerPacket.field2172, ServerPacket.field2150, ServerPacket.field2148, ServerPacket.field2152, ServerPacket.field2153, ServerPacket.field2125, ServerPacket.field2143, ServerPacket.field2116, ServerPacket.field2157, ServerPacket.field2144, ServerPacket.field2115, ServerPacket.field2160, ServerPacket.field2161, ServerPacket.field2149, ServerPacket.field2163, ServerPacket.field2164, ServerPacket.field2133, ServerPacket.field2166, ServerPacket.field2128, ServerPacket.field2156, ServerPacket.field2162, ServerPacket.field2155, ServerPacket.field2171, ServerPacket.field2193, ServerPacket.field2167, ServerPacket.field2174, ServerPacket.field2175, ServerPacket.field2176, ServerPacket.field2177, ServerPacket.field2154, ServerPacket.field2179, ServerPacket.field2180, ServerPacket.field2158, ServerPacket.field2182, ServerPacket.field2130, ServerPacket.field2184, ServerPacket.field2187, ServerPacket.field2186, ServerPacket.field2147, ServerPacket.field2188, ServerPacket.field2189, ServerPacket.field2190, ServerPacket.field2191, ServerPacket.field2192, ServerPacket.field2170, ServerPacket.field2194, ServerPacket.field2195, ServerPacket.field2196, ServerPacket.field2197, ServerPacket.field2198, ServerPacket.field2199, ServerPacket.field2185};
 	}
 }

@@ -1,73 +1,74 @@
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.Random;
 import net.runelite.mapping.Export;
 import net.runelite.mapping.Implements;
 import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("bk")
+@ObfuscatedName("br")
 @Implements("GraphicsObject")
 public final class GraphicsObject extends Entity {
-	@ObfuscatedName("by")
-	@ObfuscatedSignature(
-		signature = "[Llm;"
-	)
-	@Export("worldSelectStars")
-	static IndexedSprite[] worldSelectStars;
-	@ObfuscatedName("u")
+	@ObfuscatedName("c")
 	@ObfuscatedGetter(
-		intValue = 816767025
+		intValue = 1800757053
 	)
 	@Export("id")
 	int id;
-	@ObfuscatedName("f")
+	@ObfuscatedName("t")
 	@ObfuscatedGetter(
-		intValue = -1764619827
+		intValue = 815583153
 	)
 	@Export("cycleStart")
 	int cycleStart;
-	@ObfuscatedName("b")
+	@ObfuscatedName("o")
 	@ObfuscatedGetter(
-		intValue = -356819999
+		intValue = 497499711
 	)
 	@Export("plane")
 	int plane;
-	@ObfuscatedName("g")
+	@ObfuscatedName("e")
 	@ObfuscatedGetter(
-		intValue = -200533199
+		intValue = -1418605465
 	)
 	@Export("x")
 	int x;
-	@ObfuscatedName("z")
+	@ObfuscatedName("i")
 	@ObfuscatedGetter(
-		intValue = 528585543
-	)
-	@Export("height")
-	int height;
-	@ObfuscatedName("p")
-	@ObfuscatedGetter(
-		intValue = 1230154279
+		intValue = -744262401
 	)
 	@Export("y")
 	int y;
-	@ObfuscatedName("h")
+	@ObfuscatedName("g")
+	@ObfuscatedGetter(
+		intValue = -1599899605
+	)
+	@Export("height")
+	int height;
+	@ObfuscatedName("d")
 	@ObfuscatedSignature(
-		signature = "Liy;"
+		signature = "Lip;"
 	)
 	@Export("sequenceDefinition")
 	SequenceDefinition sequenceDefinition;
-	@ObfuscatedName("y")
+	@ObfuscatedName("l")
 	@ObfuscatedGetter(
-		intValue = 1295103123
+		intValue = 715957131
 	)
 	@Export("frame")
 	int frame;
-	@ObfuscatedName("w")
+	@ObfuscatedName("j")
 	@ObfuscatedGetter(
-		intValue = 1745958933
+		intValue = 1558881033
 	)
 	@Export("frameCycle")
 	int frameCycle;
-	@ObfuscatedName("i")
+	@ObfuscatedName("m")
 	@Export("isFinished")
 	boolean isFinished;
 
@@ -81,20 +82,20 @@ public final class GraphicsObject extends Entity {
 		this.y = var4;
 		this.height = var5;
 		this.cycleStart = var7 + var6;
-		int var8 = WorldMapRegion.SpotAnimationDefinition_get(this.id).sequence;
+		int var8 = class65.SpotAnimationDefinition_get(this.id).sequence;
 		if (var8 != -1) {
 			this.isFinished = false;
-			this.sequenceDefinition = GrandExchangeOfferAgeComparator.SequenceDefinition_get(var8);
+			this.sequenceDefinition = GraphicsDefaults.SequenceDefinition_get(var8);
 		} else {
 			this.isFinished = true;
 		}
 
 	}
 
-	@ObfuscatedName("u")
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
-		signature = "(IB)V",
-		garbageValue = "-93"
+		signature = "(II)V",
+		garbageValue = "65536"
 	)
 	@Export("advance")
 	final void advance(int var1) {
@@ -113,14 +114,14 @@ public final class GraphicsObject extends Entity {
 		}
 	}
 
-	@ObfuscatedName("w")
+	@ObfuscatedName("j")
 	@ObfuscatedSignature(
-		signature = "(I)Ldf;",
-		garbageValue = "-174129419"
+		signature = "(I)Ldx;",
+		garbageValue = "-2133076860"
 	)
 	@Export("getModel")
 	protected final Model getModel() {
-		SpotAnimationDefinition var1 = WorldMapRegion.SpotAnimationDefinition_get(this.id);
+		SpotAnimationDefinition var1 = class65.SpotAnimationDefinition_get(this.id);
 		Model var2;
 		if (!this.isFinished) {
 			var2 = var1.getModel(this.frame);
@@ -131,207 +132,203 @@ public final class GraphicsObject extends Entity {
 		return var2 == null ? null : var2;
 	}
 
-	@ObfuscatedName("b")
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
-		signature = "(Lkj;I)V",
-		garbageValue = "-219604871"
+		signature = "(B)[Lih;",
+		garbageValue = "-51"
 	)
-	static final void method2041(PacketBuffer var0) {
-		int var1 = 0;
-		var0.importIndex();
+	static HorizontalAlignment[] method2064() {
+		return new HorizontalAlignment[]{HorizontalAlignment.field3454, HorizontalAlignment.HorizontalAlignment_centered, HorizontalAlignment.field3451};
+	}
 
-		byte[] var10000;
-		int var2;
-		int var3;
-		int var4;
-		for (var2 = 0; var2 < Players.Players_count; ++var2) {
-			var3 = Players.Players_indices[var2];
-			if ((Players.field1246[var3] & 1) == 0) {
-				if (var1 > 0) {
-					--var1;
-					var10000 = Players.field1246;
-					var10000[var3] = (byte)(var10000[var3] | 2);
-				} else {
-					var4 = var0.readBits(1);
-					if (var4 == 0) {
-						var1 = Login.method2124(var0);
-						var10000 = Players.field1246;
-						var10000[var3] = (byte)(var10000[var3] | 2);
-					} else {
-						GrandExchangeOfferNameComparator.readPlayerUpdate(var0, var3);
-					}
-				}
-			}
+	@ObfuscatedName("c")
+	@ObfuscatedSignature(
+		signature = "(Lii;B)V",
+		garbageValue = "66"
+	)
+	public static void method2063(AbstractArchive var0) {
+		StructDefinition.StructDefinition_archive = var0;
+	}
+
+	@ObfuscatedName("t")
+	@ObfuscatedSignature(
+		signature = "(JLjava/lang/String;I)I",
+		garbageValue = "-2060202992"
+	)
+	static final int method2060(long var0, String var2) {
+		Random var3 = new Random();
+		Buffer var4 = new Buffer(128);
+		Buffer var5 = new Buffer(128);
+		int[] var6 = new int[]{var3.nextInt(), var3.nextInt(), (int)(var0 >> 32), (int)var0};
+		var4.writeByte(10);
+
+		int var7;
+		for (var7 = 0; var7 < 4; ++var7) {
+			var4.writeInt(var3.nextInt());
 		}
 
-		var0.exportIndex();
-		if (var1 != 0) {
-			throw new RuntimeException();
-		} else {
-			var0.importIndex();
+		var4.writeInt(var6[0]);
+		var4.writeInt(var6[1]);
+		var4.writeLong(var0);
+		var4.writeLong(0L);
 
-			for (var2 = 0; var2 < Players.Players_count; ++var2) {
-				var3 = Players.Players_indices[var2];
-				if ((Players.field1246[var3] & 1) != 0) {
-					if (var1 > 0) {
-						--var1;
-						var10000 = Players.field1246;
-						var10000[var3] = (byte)(var10000[var3] | 2);
-					} else {
-						var4 = var0.readBits(1);
-						if (var4 == 0) {
-							var1 = Login.method2124(var0);
-							var10000 = Players.field1246;
-							var10000[var3] = (byte)(var10000[var3] | 2);
-						} else {
-							GrandExchangeOfferNameComparator.readPlayerUpdate(var0, var3);
-						}
-					}
+		for (var7 = 0; var7 < 4; ++var7) {
+			var4.writeInt(var3.nextInt());
+		}
+
+		var4.encryptRsa(class80.field1123, class80.field1120);
+		var5.writeByte(10);
+
+		for (var7 = 0; var7 < 3; ++var7) {
+			var5.writeInt(var3.nextInt());
+		}
+
+		var5.writeLong(var3.nextLong());
+		var5.writeLongMedium(var3.nextLong());
+		if (Client.randomDatData != null) {
+			var5.writeBytes(Client.randomDatData, 0, Client.randomDatData.length);
+		} else {
+			byte[] var8 = new byte[24];
+
+			try {
+				JagexCache.JagexCache_randomDat.seek(0L);
+				JagexCache.JagexCache_randomDat.readFully(var8);
+
+				int var9;
+				for (var9 = 0; var9 < 24 && var8[var9] == 0; ++var9) {
+				}
+
+				if (var9 >= 24) {
+					throw new IOException();
+				}
+			} catch (Exception var24) {
+				for (int var10 = 0; var10 < 24; ++var10) {
+					var8[var10] = -1;
 				}
 			}
 
-			var0.exportIndex();
-			if (var1 != 0) {
-				throw new RuntimeException();
-			} else {
-				var0.importIndex();
+			var5.writeBytes(var8, 0, var8.length);
+		}
 
-				for (var2 = 0; var2 < Players.Players_emptyIdxCount; ++var2) {
-					var3 = Players.Players_emptyIndices[var2];
-					if ((Players.field1246[var3] & 1) != 0) {
-						if (var1 > 0) {
-							--var1;
-							var10000 = Players.field1246;
-							var10000[var3] = (byte)(var10000[var3] | 2);
-						} else {
-							var4 = var0.readBits(1);
-							if (var4 == 0) {
-								var1 = Login.method2124(var0);
-								var10000 = Players.field1246;
-								var10000[var3] = (byte)(var10000[var3] | 2);
-							} else if (Client.updateExternalPlayer(var0, var3)) {
-								var10000 = Players.field1246;
-								var10000[var3] = (byte)(var10000[var3] | 2);
-							}
+		var5.writeLong(var3.nextLong());
+		var5.encryptRsa(class80.field1123, class80.field1120);
+		var7 = Buddy.stringCp1252NullTerminatedByteSize(var2);
+		if (var7 % 8 != 0) {
+			var7 += 8 - var7 % 8;
+		}
+
+		Buffer var25 = new Buffer(var7);
+		var25.writeStringCp1252NullTerminated(var2);
+		var25.offset = var7;
+		var25.xteaEncryptAll(var6);
+		Buffer var18 = new Buffer(var25.offset + var4.offset + var5.offset + 5);
+		var18.writeByte(2);
+		var18.writeByte(var4.offset);
+		var18.writeBytes(var4.array, 0, var4.offset);
+		var18.writeByte(var5.offset);
+		var18.writeBytes(var5.array, 0, var5.offset);
+		var18.writeShort(var25.offset);
+		var18.writeBytes(var25.array, 0, var25.offset);
+		String var20 = Frames.method3340(var18.array);
+
+		try {
+			URL var11 = new URL(class42.method809("services", false) + "m=accountappeal/login.ws");
+			URLConnection var12 = var11.openConnection();
+			var12.setDoInput(true);
+			var12.setDoOutput(true);
+			var12.setConnectTimeout(5000);
+			OutputStreamWriter var13 = new OutputStreamWriter(var12.getOutputStream());
+			var13.write("data2=" + ArchiveDiskAction.method4216(var20) + "&dest=" + ArchiveDiskAction.method4216("passwordchoice.ws"));
+			var13.flush();
+			InputStream var14 = var12.getInputStream();
+			var18 = new Buffer(new byte[1000]);
+
+			do {
+				int var15 = var14.read(var18.array, var18.offset, 1000 - var18.offset);
+				if (var15 == -1) {
+					var13.close();
+					var14.close();
+					String var21 = new String(var18.array);
+					if (var21.startsWith("OFFLINE")) {
+						return 4;
+					} else if (var21.startsWith("WRONG")) {
+						return 7;
+					} else if (var21.startsWith("RELOAD")) {
+						return 3;
+					} else if (var21.startsWith("Not permitted for social network accounts.")) {
+						return 6;
+					} else {
+						var18.xteaDecryptAll(var6);
+
+						while (var18.offset > 0 && var18.array[var18.offset - 1] == 0) {
+							--var18.offset;
 						}
-					}
-				}
 
-				var0.exportIndex();
-				if (var1 != 0) {
-					throw new RuntimeException();
-				} else {
-					var0.importIndex();
-
-					for (var2 = 0; var2 < Players.Players_emptyIdxCount; ++var2) {
-						var3 = Players.Players_emptyIndices[var2];
-						if ((Players.field1246[var3] & 1) == 0) {
-							if (var1 > 0) {
-								--var1;
-								var10000 = Players.field1246;
-								var10000[var3] = (byte)(var10000[var3] | 2);
-							} else {
-								var4 = var0.readBits(1);
-								if (var4 == 0) {
-									var1 = Login.method2124(var0);
-									var10000 = Players.field1246;
-									var10000[var3] = (byte)(var10000[var3] | 2);
-								} else if (Client.updateExternalPlayer(var0, var3)) {
-									var10000 = Players.field1246;
-									var10000[var3] = (byte)(var10000[var3] | 2);
+						var21 = new String(var18.array, 0, var18.offset);
+						boolean var16;
+						if (var21 == null) {
+							var16 = false;
+						} else {
+							label107: {
+								try {
+									new URL(var21);
+								} catch (MalformedURLException var22) {
+									var16 = false;
+									break label107;
 								}
-							}
-						}
-					}
 
-					var0.exportIndex();
-					if (var1 != 0) {
-						throw new RuntimeException();
-					} else {
-						Players.Players_count = 0;
-						Players.Players_emptyIdxCount = 0;
-
-						for (var2 = 1; var2 < 2048; ++var2) {
-							var10000 = Players.field1246;
-							var10000[var2] = (byte)(var10000[var2] >> 1);
-							Player var5 = Client.players[var2];
-							if (var5 != null) {
-								Players.Players_indices[++Players.Players_count - 1] = var2;
-							} else {
-								Players.Players_emptyIndices[++Players.Players_emptyIdxCount - 1] = var2;
+								var16 = true;
 							}
 						}
 
+						if (var16) {
+							class215.openURL(var21, true, false);
+							return 2;
+						} else {
+							return 5;
+						}
 					}
 				}
-			}
+
+				var18.offset += var15;
+			} while(var18.offset < 1000);
+
+			return 5;
+		} catch (Throwable var23) {
+			var23.printStackTrace();
+			return 5;
 		}
 	}
 
-	@ObfuscatedName("b")
+	@ObfuscatedName("t")
 	@ObfuscatedSignature(
-		signature = "(Ljava/lang/String;II)Z",
-		garbageValue = "1506076524"
+		signature = "(IB)Lix;",
+		garbageValue = "52"
 	)
-	static boolean method2040(String var0, int var1) {
-		return class237.method4422(var0, var1, "openjs");
-	}
-
-	@ObfuscatedName("x")
-	@ObfuscatedSignature(
-		signature = "(Lhf;IIB)Z",
-		garbageValue = "19"
-	)
-	public static boolean method2030(AbstractArchive var0, int var1, int var2) {
-		byte[] var3 = var0.takeFile(var1, var2);
-		if (var3 == null) {
-			return false;
+	public static FloorUnderlayDefinition method2055(int var0) {
+		FloorUnderlayDefinition var1 = (FloorUnderlayDefinition)FloorUnderlayDefinition.FloorUnderlayDefinition_cached.get((long)var0);
+		if (var1 != null) {
+			return var1;
 		} else {
-			Buffer.SpriteBuffer_decode(var3);
-			return true;
-		}
-	}
-
-	@ObfuscatedName("n")
-	@ObfuscatedSignature(
-		signature = "(I)V",
-		garbageValue = "-1587719078"
-	)
-	public static void method2039() {
-		ObjectDefinition.ObjectDefinition_cached.clear();
-		ObjectDefinition.ObjectDefinition_cachedModelData.clear();
-		ObjectDefinition.ObjectDefinition_cachedEntities.clear();
-		ObjectDefinition.ObjectDefinition_cachedModels.clear();
-	}
-
-	@ObfuscatedName("in")
-	@ObfuscatedSignature(
-		signature = "(Ljava/lang/String;Lhl;S)Ljava/lang/String;",
-		garbageValue = "128"
-	)
-	static String method2036(String var0, Widget var1) {
-		if (var0.indexOf("%") != -1) {
-			for (int var2 = 1; var2 <= 5; ++var2) {
-				while (true) {
-					int var3 = var0.indexOf("%" + var2);
-					if (var3 == -1) {
-						break;
-					}
-
-					String var4 = var0.substring(0, var3);
-					int var6 = Language.method3719(var1, var2 - 1);
-					String var5;
-					if (var6 < 999999999) {
-						var5 = Integer.toString(var6);
-					} else {
-						var5 = "*";
-					}
-
-					var0 = var4 + var5 + var0.substring(var3 + 2);
-				}
+			byte[] var2 = FloorUnderlayDefinition.FloorUnderlayDefinition_archive.takeFile(1, var0);
+			var1 = new FloorUnderlayDefinition();
+			if (var2 != null) {
+				var1.decode(new Buffer(var2), var0);
 			}
-		}
 
-		return var0;
+			var1.postDecode();
+			FloorUnderlayDefinition.FloorUnderlayDefinition_cached.put(var1, (long)var0);
+			return var1;
+		}
+	}
+
+	@ObfuscatedName("ic")
+	@ObfuscatedSignature(
+		signature = "(Ljava/lang/String;Ljava/lang/String;IIIIS)V",
+		garbageValue = "3604"
+	)
+	@Export("insertMenuItemNoShift")
+	public static final void insertMenuItemNoShift(String var0, String var1, int var2, int var3, int var4, int var5) {
+		class160.insertMenuItem(var0, var1, var2, var3, var4, var5, false);
 	}
 }

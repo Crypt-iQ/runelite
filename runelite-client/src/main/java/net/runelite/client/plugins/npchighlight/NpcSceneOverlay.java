@@ -31,15 +31,10 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.Shape;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.time.Instant;
 import java.util.List;
-import java.util.Locale;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.runelite.api.Client;
-import net.runelite.api.Constants;
 import net.runelite.api.NPC;
 import net.runelite.api.NPCDefinition;
 import net.runelite.api.Perspective;
@@ -63,12 +58,7 @@ public class NpcSceneOverlay extends Overlay
 	// a dark background
 	private static final Color TEXT_COLOR = Color.WHITE;
 
-	private static final NumberFormat TIME_LEFT_FORMATTER = DecimalFormat.getInstance(Locale.US);
 
-	static
-	{
-		((DecimalFormat) TIME_LEFT_FORMATTER).applyPattern("#0.0");
-	}
 
 	private final Client client;
 	private final NpcIndicatorsPlugin plugin;
@@ -128,11 +118,8 @@ public class NpcSceneOverlay extends Overlay
 			OverlayUtil.renderPolygon(graphics, poly, color);
 		}
 
-		final Instant now = Instant.now();
-		final double baseTick = ((npc.getDiedOnTick() + npc.getRespawnTime()) - client.getTickCount()) * (Constants.GAME_TICK_LENGTH / 1000.0);
-		final double sinceLast = (now.toEpochMilli() - plugin.getLastTickUpdate().toEpochMilli()) / 1000.0;
-		final double timeLeft = Math.max(0.0, baseTick - sinceLast);
-		final String timeLeftStr = TIME_LEFT_FORMATTER.format(timeLeft);
+
+		final String timeLeftStr = plugin.formatTime(plugin.getTimeLeftForNpc(npc));
 
 		final int textWidth = graphics.getFontMetrics().stringWidth(timeLeftStr);
 		final int textHeight = graphics.getFontMetrics().getAscent();
@@ -180,6 +167,7 @@ public class NpcSceneOverlay extends Overlay
 				break;
 			}
 			case TILE:
+			{
 				int size = 1;
 				NPCDefinition composition = actor.getTransformedDefinition();
 				if (composition != null)
@@ -190,6 +178,20 @@ public class NpcSceneOverlay extends Overlay
 				final Polygon tilePoly = Perspective.getCanvasTileAreaPoly(client, lp, size);
 				renderPoly(graphics, color, tilePoly);
 				break;
+			}
+			case THIN_TILE:
+			{
+				int size = 1;
+				NPCDefinition composition = actor.getTransformedDefinition();
+				if (composition != null)
+				{
+					size = composition.getSize();
+				}
+				final LocalPoint lp = actor.getLocalLocation();
+				final Polygon tilePoly = Perspective.getCanvasTileAreaPoly(client, lp, size);
+				renderPoly(graphics, color, tilePoly, 1);
+				break;
+			}
 			case HULL:
 				final Shape objectClickbox = actor.getConvexHull();
 				graphics.setColor(color);
@@ -208,8 +210,9 @@ public class NpcSceneOverlay extends Overlay
 				modelOutliner.drawOutline(actor, 8, color, TRANSPARENT);
 				break;
 			case TRUE_LOCATIONS:
-				size = 1;
-				composition = actor.getTransformedDefinition();
+			{
+				int size = 1;
+				NPCDefinition composition = actor.getTransformedDefinition();
 
 				if (composition != null)
 				{
@@ -222,6 +225,7 @@ public class NpcSceneOverlay extends Overlay
 				getSquare(wp, size).forEach(square ->
 					drawTile(graphics, square, squareColor, 1, 255, 50));
 				break;
+			}
 		}
 
 		if (plugin.isDrawNames() && actor.getName() != null)
@@ -254,6 +258,18 @@ public class NpcSceneOverlay extends Overlay
 		{
 			graphics.setColor(color);
 			graphics.setStroke(new BasicStroke(2));
+			graphics.draw(polygon);
+			graphics.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), 20));
+			graphics.fill(polygon);
+		}
+	}
+
+	private void renderPoly(Graphics2D graphics, Color color, Polygon polygon, int width)
+	{
+		if (polygon != null)
+		{
+			graphics.setColor(color);
+			graphics.setStroke(new BasicStroke(width));
 			graphics.draw(polygon);
 			graphics.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), 20));
 			graphics.fill(polygon);

@@ -1,57 +1,60 @@
+import java.io.IOException;
 import net.runelite.mapping.Export;
 import net.runelite.mapping.Implements;
 import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("db")
+@ObfuscatedName("dr")
 @Implements("TextureProvider")
 public class TextureProvider implements TextureLoader {
-	@ObfuscatedName("an")
-	@Export("hasFocus")
-	protected static boolean hasFocus;
-	@ObfuscatedName("u")
+	@ObfuscatedName("l")
+	@ObfuscatedGetter(
+		intValue = 1177508509
+	)
+	static int field1512;
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
-		signature = "[Ldv;"
+		signature = "[Ldb;"
 	)
 	@Export("textures")
 	Texture[] textures;
-	@ObfuscatedName("f")
+	@ObfuscatedName("t")
 	@ObfuscatedSignature(
-		signature = "Ljd;"
+		signature = "Ljw;"
 	)
 	@Export("deque")
 	NodeDeque deque;
-	@ObfuscatedName("b")
+	@ObfuscatedName("o")
 	@ObfuscatedGetter(
-		intValue = 913401883
+		intValue = -113844159
 	)
 	@Export("capacity")
 	int capacity;
-	@ObfuscatedName("g")
+	@ObfuscatedName("e")
 	@ObfuscatedGetter(
-		intValue = -793022159
+		intValue = -541291029
 	)
 	@Export("remaining")
 	int remaining;
-	@ObfuscatedName("z")
+	@ObfuscatedName("i")
 	@Export("brightness")
 	double brightness;
-	@ObfuscatedName("p")
+	@ObfuscatedName("g")
 	@ObfuscatedGetter(
-		intValue = 1514204273
+		intValue = -1626058997
 	)
 	@Export("textureSize")
 	int textureSize;
-	@ObfuscatedName("h")
+	@ObfuscatedName("d")
 	@ObfuscatedSignature(
-		signature = "Lhf;"
+		signature = "Lii;"
 	)
 	@Export("archive")
 	AbstractArchive archive;
 
 	@ObfuscatedSignature(
-		signature = "(Lhf;Lhf;IDI)V"
+		signature = "(Lii;Lii;IDI)V"
 	)
 	public TextureProvider(AbstractArchive var1, AbstractArchive var2, int var3, double var4, int var6) {
 		this.deque = new NodeDeque();
@@ -74,10 +77,10 @@ public class TextureProvider implements TextureLoader {
 
 	}
 
-	@ObfuscatedName("u")
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
 		signature = "(I)I",
-		garbageValue = "-1516350248"
+		garbageValue = "-2116644963"
 	)
 	@Export("getLoadedPercentage")
 	public int getLoadedPercentage() {
@@ -93,7 +96,7 @@ public class TextureProvider implements TextureLoader {
 
 				for (int var7 = 0; var7 < var6.length; ++var7) {
 					int var8 = var6[var7];
-					if (this.archive.method4237(var8)) {
+					if (this.archive.method4224(var8)) {
 						++var2;
 					}
 				}
@@ -107,17 +110,17 @@ public class TextureProvider implements TextureLoader {
 		}
 	}
 
-	@ObfuscatedName("f")
+	@ObfuscatedName("t")
 	@Export("setBrightness")
 	public void setBrightness(double var1) {
 		this.brightness = var1;
 		this.clear();
 	}
 
-	@ObfuscatedName("b")
+	@ObfuscatedName("o")
 	@ObfuscatedSignature(
-		signature = "(IB)[I",
-		garbageValue = "-64"
+		signature = "(II)[I",
+		garbageValue = "1435702999"
 	)
 	@Export("getTexturePixels")
 	public int[] getTexturePixels(int var1) {
@@ -147,39 +150,39 @@ public class TextureProvider implements TextureLoader {
 		return null;
 	}
 
-	@ObfuscatedName("g")
+	@ObfuscatedName("e")
 	@ObfuscatedSignature(
 		signature = "(II)I",
-		garbageValue = "298398688"
+		garbageValue = "16615935"
 	)
 	@Export("getAverageTextureRGB")
 	public int getAverageTextureRGB(int var1) {
 		return this.textures[var1] != null ? this.textures[var1].averageRGB : 0;
 	}
 
-	@ObfuscatedName("z")
+	@ObfuscatedName("i")
 	@ObfuscatedSignature(
-		signature = "(II)Z",
-		garbageValue = "561655524"
+		signature = "(IB)Z",
+		garbageValue = "1"
 	)
-	public boolean vmethod3330(int var1) {
-		return this.textures[var1].field1615;
+	public boolean vmethod3347(int var1) {
+		return this.textures[var1].field1610;
 	}
 
-	@ObfuscatedName("p")
+	@ObfuscatedName("g")
 	@ObfuscatedSignature(
 		signature = "(II)Z",
-		garbageValue = "-959544558"
+		garbageValue = "2100936507"
 	)
 	@Export("isLowDetail")
 	public boolean isLowDetail(int var1) {
 		return this.textureSize == 64;
 	}
 
-	@ObfuscatedName("h")
+	@ObfuscatedName("d")
 	@ObfuscatedSignature(
 		signature = "(I)V",
-		garbageValue = "1449865056"
+		garbageValue = "-304646242"
 	)
 	@Export("clear")
 	public void clear() {
@@ -193,10 +196,10 @@ public class TextureProvider implements TextureLoader {
 		this.remaining = this.capacity;
 	}
 
-	@ObfuscatedName("y")
+	@ObfuscatedName("l")
 	@ObfuscatedSignature(
 		signature = "(II)V",
-		garbageValue = "248051597"
+		garbageValue = "1864865553"
 	)
 	@Export("animate")
 	public void animate(int var1) {
@@ -210,83 +213,124 @@ public class TextureProvider implements TextureLoader {
 
 	}
 
-	@ObfuscatedName("u")
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
-		signature = "(II)Lit;",
-		garbageValue = "1399456300"
+		signature = "(CB)B",
+		garbageValue = "-59"
 	)
-	@Export("getInvDefinition")
-	public static InvDefinition getInvDefinition(int var0) {
-		InvDefinition var1 = (InvDefinition)InvDefinition.InvDefinition_cached.get((long)var0);
-		if (var1 != null) {
-			return var1;
+	@Export("charToByteCp1252")
+	public static byte charToByteCp1252(char var0) {
+		byte var1;
+		if (var0 > 0 && var0 < 128 || var0 >= 160 && var0 <= 255) {
+			var1 = (byte)var0;
+		} else if (var0 == 8364) {
+			var1 = -128;
+		} else if (var0 == 8218) {
+			var1 = -126;
+		} else if (var0 == 402) {
+			var1 = -125;
+		} else if (var0 == 8222) {
+			var1 = -124;
+		} else if (var0 == 8230) {
+			var1 = -123;
+		} else if (var0 == 8224) {
+			var1 = -122;
+		} else if (var0 == 8225) {
+			var1 = -121;
+		} else if (var0 == 710) {
+			var1 = -120;
+		} else if (var0 == 8240) {
+			var1 = -119;
+		} else if (var0 == 352) {
+			var1 = -118;
+		} else if (var0 == 8249) {
+			var1 = -117;
+		} else if (var0 == 338) {
+			var1 = -116;
+		} else if (var0 == 381) {
+			var1 = -114;
+		} else if (var0 == 8216) {
+			var1 = -111;
+		} else if (var0 == 8217) {
+			var1 = -110;
+		} else if (var0 == 8220) {
+			var1 = -109;
+		} else if (var0 == 8221) {
+			var1 = -108;
+		} else if (var0 == 8226) {
+			var1 = -107;
+		} else if (var0 == 8211) {
+			var1 = -106;
+		} else if (var0 == 8212) {
+			var1 = -105;
+		} else if (var0 == 732) {
+			var1 = -104;
+		} else if (var0 == 8482) {
+			var1 = -103;
+		} else if (var0 == 353) {
+			var1 = -102;
+		} else if (var0 == 8250) {
+			var1 = -101;
+		} else if (var0 == 339) {
+			var1 = -100;
+		} else if (var0 == 382) {
+			var1 = -98;
+		} else if (var0 == 376) {
+			var1 = -97;
 		} else {
-			byte[] var2 = InvDefinition.InvDefinition_archive.takeFile(5, var0);
-			var1 = new InvDefinition();
-			if (var2 != null) {
-				var1.decode(new Buffer(var2));
+			var1 = 63;
+		}
+
+		return var1;
+	}
+
+	@ObfuscatedName("t")
+	@ObfuscatedSignature(
+		signature = "(ZI)V",
+		garbageValue = "1809197817"
+	)
+	public static void method2833(boolean var0) {
+		if (NetCache.NetCache_socket != null) {
+			try {
+				Buffer var1 = new Buffer(4);
+				var1.writeByte(var0 ? 2 : 3);
+				var1.writeMedium(0);
+				NetCache.NetCache_socket.write(var1.array, 0, 4);
+			} catch (IOException var4) {
+				try {
+					NetCache.NetCache_socket.close();
+				} catch (Exception var3) {
+				}
+
+				++NetCache.NetCache_ioExceptions;
+				NetCache.NetCache_socket = null;
 			}
 
-			InvDefinition.InvDefinition_cached.put(var1, (long)var0);
-			return var1;
 		}
 	}
 
-	@ObfuscatedName("gu")
+	@ObfuscatedName("q")
 	@ObfuscatedSignature(
-		signature = "(IIIB)V",
-		garbageValue = "14"
+		signature = "(IIIIIIII)Z",
+		garbageValue = "1939701363"
 	)
-	@Export("worldToScreen")
-	static final void worldToScreen(int var0, int var1, int var2) {
-		if (var0 >= 128 && var1 >= 128 && var0 <= 13056 && var1 <= 13056) {
-			int var3 = class195.getTileHeight(var0, var1, ClientPacket.Client_plane) - var2;
-			var0 -= class30.cameraX;
-			var3 -= GameObject.cameraY;
-			var1 -= FloorDecoration.cameraZ;
-			int var4 = Rasterizer3D.Rasterizer3D_sine[ItemContainer.cameraPitch];
-			int var5 = Rasterizer3D.Rasterizer3D_cosine[ItemContainer.cameraPitch];
-			int var6 = Rasterizer3D.Rasterizer3D_sine[Decimator.cameraYaw];
-			int var7 = Rasterizer3D.Rasterizer3D_cosine[Decimator.cameraYaw];
-			int var8 = var6 * var1 + var0 * var7 >> 16;
-			var1 = var7 * var1 - var0 * var6 >> 16;
-			var0 = var8;
-			var8 = var3 * var5 - var4 * var1 >> 16;
-			var1 = var5 * var1 + var4 * var3 >> 16;
-			if (var1 >= 50) {
-				Client.viewportTempX = var0 * Client.viewportZoom / var1 + Client.viewportWidth / 2;
-				Client.viewportTempY = Client.viewportHeight / 2 + var8 * Client.viewportZoom / var1;
+	static final boolean method2811(int var0, int var1, int var2, int var3, int var4, int var5, int var6) {
+		int var7 = ViewportMouse.ViewportMouse_y + var6;
+		if (var7 < var0 && var7 < var1 && var7 < var2) {
+			return false;
+		} else {
+			var7 = ViewportMouse.ViewportMouse_y - var6;
+			if (var7 > var0 && var7 > var1 && var7 > var2) {
+				return false;
 			} else {
-				Client.viewportTempX = -1;
-				Client.viewportTempY = -1;
+				var7 = ViewportMouse.ViewportMouse_x + var6;
+				if (var7 < var3 && var7 < var4 && var7 < var5) {
+					return false;
+				} else {
+					var7 = ViewportMouse.ViewportMouse_x - var6;
+					return var7 <= var3 || var7 <= var4 || var7 <= var5;
+				}
 			}
-
-		} else {
-			Client.viewportTempX = -1;
-			Client.viewportTempY = -1;
 		}
-	}
-
-	@ObfuscatedName("ij")
-	@ObfuscatedSignature(
-		signature = "(IIIIB)V",
-		garbageValue = "-94"
-	)
-	@Export("selectSpell")
-	static void selectSpell(int var0, int var1, int var2, int var3) {
-		Widget var4 = UserComparator3.getWidgetChild(var0, var1);
-		if (var4 != null && var4.onTargetEnter != null) {
-			ScriptEvent var5 = new ScriptEvent();
-			var5.widget = var4;
-			var5.args = var4.onTargetEnter;
-			WorldMapLabel.runScriptEvent(var5);
-		}
-
-		Client.field799 = var3;
-		Client.isSpellSelected = true;
-		WorldMapAreaData.selectedSpellWidget = var0;
-		Client.selectedSpellChildIndex = var1;
-		Actor.selectedSpellFlags = var2;
-		ScriptEvent.invalidateWidget(var4);
 	}
 }

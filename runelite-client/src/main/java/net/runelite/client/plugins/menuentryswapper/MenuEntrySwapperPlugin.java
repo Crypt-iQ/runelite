@@ -34,6 +34,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import com.google.inject.Provides;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -136,38 +137,117 @@ public class MenuEntrySwapperPlugin extends Plugin
 		MenuOpcode.NPC_FIRST_OPTION, MenuOpcode.NPC_SECOND_OPTION, MenuOpcode.NPC_THIRD_OPTION,
 		MenuOpcode.NPC_FOURTH_OPTION, MenuOpcode.NPC_FIFTH_OPTION, MenuOpcode.EXAMINE_NPC
 	);
+	private static final List<String> jewelleryBox = Arrays.asList(
+		"duel arena", "castle wars", "clan wars", "burthorpe", "barbarian outpost", "corporeal beast",
+		"tears of guthix", "wintertodt camp", "warriors' guild", "champions' guild", "monastery", "ranging guild",
+		"fishing guild", "mining guild", "crafting guild", "cooking guild", "woodcutting guild", "farming guild",
+		"miscellania", "grand exchange", "falador park", "dondakan's rock", "edgeville", "karamja",
+		"draynor village", "al kharid"
+	);
+	private static final List<String> npcContact = Arrays.asList(
+		"honest jimmy", "bert the sandman", "advisor ghrim", "dark mage", "lanthus", "turael",
+		"mazchna", "vannaka", "chaeldar", "nieve", "steve", "duradel", "krystilia", "konar",
+		"murphy", "cyrisus", "smoggy", "ginea", "watson", "barbarian guard", "random"
+	);
+	
+		private static final AbstractComparableEntry WALK = new AbstractComparableEntry()
+	{
+		private final int hash = "WALK".hashCode() * 79 + getPriority();
+
+		@Override
+		public int hashCode()
+		{
+			return hash;
+		}
+
+		@Override
+		public boolean equals(Object entry)
+		{
+			return entry.getClass() == this.getClass() && entry.hashCode() == this.hashCode();
+		}
+
+		@Override
+		public int getPriority()
+		{
+			return 99;
+		}
+
+		@Override
+		public boolean matches(MenuEntry entry)
+		{
+			return
+				entry.getOpcode() == MenuOpcode.WALK.getId() ||
+					entry.getOpcode() == MenuOpcode.WALK.getId() + MenuOpcode.MENU_ACTION_DEPRIORITIZE_OFFSET;
+		}
+	};
+
+	private static final AbstractComparableEntry TAKE = new AbstractComparableEntry()
+	{
+		private final int hash = "TAKE".hashCode() * 79 + getPriority();
+
+		@Override
+		public int hashCode()
+		{
+			return hash;
+		}
+
+		@Override
+		public boolean equals(Object entry)
+		{
+			return entry.getClass() == this.getClass() && entry.hashCode() == this.hashCode();
+		}
+
+		@Override
+		public int getPriority()
+		{
+			return 100;
+		}
+
+		@Override
+		public boolean matches(MenuEntry entry)
+		{
+			int opcode = entry.getOpcode();
+			if (opcode > MenuOpcode.MENU_ACTION_DEPRIORITIZE_OFFSET)
+			{
+				opcode -= MenuOpcode.MENU_ACTION_DEPRIORITIZE_OFFSET;
+			}
+
+			return
+				opcode >= MenuOpcode.GROUND_ITEM_FIRST_OPTION.getId() &&
+					opcode <= MenuOpcode.GROUND_ITEM_FIFTH_OPTION.getId();
+		}
+	};
+
 	private static final Splitter NEWLINE_SPLITTER = Splitter
 		.on("\n")
 		.omitEmptyStrings()
 		.trimResults();
-
+	private final Map<AbstractComparableEntry, Integer> customSwaps = new HashMap<>();
+	private final Map<AbstractComparableEntry, Integer> customShiftSwaps = new HashMap<>();
+	private final Map<AbstractComparableEntry, AbstractComparableEntry> dePrioSwaps = new HashMap<>();
+	// 1, 5, 10, 50
+	private final AbstractComparableEntry[][] buyEntries = new AbstractComparableEntry[4][];
+	private final AbstractComparableEntry[][] sellEntries = new AbstractComparableEntry[4][];
+	// 1, 5, 10, X, All
+	private final AbstractComparableEntry[][] withdrawEntries = new AbstractComparableEntry[5][];
 	@Inject
 	private Client client;
-
 	@Inject
 	private ClientThread clientThread;
-
 	@Inject
 	private MenuEntrySwapperConfig config;
-
 	@Inject
 	private PluginManager pluginManager;
-
 	@Inject
 	private MenuManager menuManager;
-
 	@Inject
 	private KeyManager keyManager;
-
 	@Inject
 	private EventBus eventBus;
-
 	@Inject
 	private PvpToolsPlugin pvpTools;
-
 	@Inject
 	private PvpToolsConfig pvpToolsConfig;
-
 	private boolean buildingMode;
 	private boolean inTobRaid = false;
 	private boolean inCoxRaid = false;
@@ -175,16 +255,6 @@ public class MenuEntrySwapperPlugin extends Plugin
 	private boolean hotkeyActive;
 	@Setter(AccessLevel.PRIVATE)
 	private boolean controlActive;
-	private final Map<AbstractComparableEntry, Integer> customSwaps = new HashMap<>();
-	private final Map<AbstractComparableEntry, Integer> customShiftSwaps = new HashMap<>();
-	private final Map<AbstractComparableEntry, AbstractComparableEntry> dePrioSwaps = new HashMap<>();
-
-	// 1, 5, 10, 50
-	private final AbstractComparableEntry[][] buyEntries = new AbstractComparableEntry[4][];
-	private final AbstractComparableEntry[][] sellEntries = new AbstractComparableEntry[4][];
-	// 1, 5, 10, X, All
-	private final AbstractComparableEntry[][] withdrawEntries = new AbstractComparableEntry[5][];
-
 	private String[] removedObjects;
 
 	private List<String> bankItemNames = new ArrayList<>();
@@ -263,6 +333,13 @@ public class MenuEntrySwapperPlugin extends Plugin
 	private boolean swapBoxTrap;
 	private boolean swapChase;
 	private boolean swapClimbUpDown;
+	private boolean bankWieldItem;
+	private boolean bankWearItem;
+	private boolean bankEatItem;
+	private boolean bankDrinkItem;
+	private boolean bankEquipItem;
+	private boolean bankInvigorateItem;
+	private boolean swapNpcContact;
 	private boolean swapCoalBag;
 	private boolean swapContract;
 	private boolean swapEnchant;
@@ -289,6 +366,43 @@ public class MenuEntrySwapperPlugin extends Plugin
 	private boolean swapTrade;
 	private boolean swapTravel;
 	private boolean swapWildernessLever;
+	private boolean swapJewelleryBox;
+	private boolean getSwapOffer;
+	private boolean hotKeyLoot;
+	private boolean hotKeyWalk;
+	private final HotkeyListener hotkey = new HotkeyListener(() -> this.hotkeyMod)
+	{
+		@Override
+		public void hotkeyPressed()
+		{
+			startHotkey();
+			setHotkeyActive(true);
+		}
+
+		@Override
+		public void hotkeyReleased()
+		{
+			stopHotkey();
+			setHotkeyActive(false);
+		}
+	};
+	private final HotkeyListener ctrlHotkey = new HotkeyListener(() -> Keybind.CTRL)
+	{
+		@Override
+		public void hotkeyPressed()
+		{
+			startControl();
+			setControlActive(true);
+		}
+
+		@Override
+		public void hotkeyReleased()
+		{
+			stopControl();
+			setControlActive(false);
+		}
+	};
+
 
 	@Provides
 	MenuEntrySwapperConfig provideConfig(ConfigManager configManager)
@@ -610,7 +724,7 @@ public class MenuEntrySwapperPlugin extends Plugin
 						}
 						else
 						{
-							menuManager.removeSwaps(target);
+							menuManager.removeSwap("loot", target, "use");
 						}
 					}
 					break;
@@ -627,7 +741,7 @@ public class MenuEntrySwapperPlugin extends Plugin
 						}
 						else
 						{
-							menuManager.removeSwaps(target);
+							menuManager.removeSwap("loot", target, "use");
 						}
 					}
 					break;
@@ -644,7 +758,7 @@ public class MenuEntrySwapperPlugin extends Plugin
 						}
 						else
 						{
-							menuManager.removeSwaps(target);
+							menuManager.removeSwap("loot", target, "use");
 						}
 					}
 					break;
@@ -663,7 +777,7 @@ public class MenuEntrySwapperPlugin extends Plugin
 						}
 						else
 						{
-							menuManager.removeSwaps(target);
+							menuManager.removeSwap("loot", target, "use");
 						}
 					}
 					break;
@@ -681,7 +795,7 @@ public class MenuEntrySwapperPlugin extends Plugin
 						}
 						else
 						{
-							menuManager.removeSwaps(target);
+							menuManager.removeSwap("loot", target, "use");
 						}
 					}
 					break;
@@ -776,6 +890,11 @@ public class MenuEntrySwapperPlugin extends Plugin
 		if (this.getSwapTanning)
 		{
 			menuManager.addPriorityEntry("Tan <col=ff7000>All");
+		}
+
+		if (this.getSwapOffer)
+		{
+			menuManager.addPriorityEntry("Offer-All<col=ff9040>");
 		}
 
 		if (this.getSwapSawmill)
@@ -976,11 +1095,17 @@ public class MenuEntrySwapperPlugin extends Plugin
 		if (this.swapAdmire)
 		{
 			menuManager.addPriorityEntry("Teleport", "Mounted Strength Cape").setPriority(10);
+			menuManager.addPriorityEntry("Teleport", "Mounted Strength Cape (t)").setPriority(10);
 			menuManager.addPriorityEntry("Teleport", "Mounted Construction Cape").setPriority(10);
+			menuManager.addPriorityEntry("Teleport", "Mounted Construction Cape (t)").setPriority(10);
 			menuManager.addPriorityEntry("Teleport", "Mounted Crafting Cape").setPriority(10);
+			menuManager.addPriorityEntry("Teleport", "Mounted Crafting Cape (t)").setPriority(10);
 			menuManager.addPriorityEntry("Teleport", "Mounted Hunter Cape").setPriority(10);
+			menuManager.addPriorityEntry("Teleport", "Mounted Hunter Cape (t)").setPriority(10);
 			menuManager.addPriorityEntry("Teleport", "Mounted Fishing Cape").setPriority(10);
+			menuManager.addPriorityEntry("Teleport", "Mounted Fishing Cape (t)").setPriority(10);
 			menuManager.addPriorityEntry("Spellbook", "Mounted Magic Cape");
+			menuManager.addPriorityEntry("Spellbook", "Mounted Magic Cape (t)");
 			menuManager.addPriorityEntry("Perks", "Mounted Max Cape");
 		}
 
@@ -1179,6 +1304,16 @@ public class MenuEntrySwapperPlugin extends Plugin
 		{
 			menuManager.addPriorityEntry(new GrimyHerbComparableEntry(this.swapGrimyHerbMode, client));
 		}
+
+		if (this.swapJewelleryBox)
+		{
+			for (String jewellerybox : jewelleryBox)
+			{
+				menuManager.addPriorityEntry(jewellerybox, "basic jewellery box");
+				menuManager.addPriorityEntry(jewellerybox, "fancy jewellery box");
+				menuManager.addPriorityEntry(jewellerybox, "ornate jewellery box");
+			}
+		}
 	}
 
 	private void removeSwaps()
@@ -1260,6 +1395,7 @@ public class MenuEntrySwapperPlugin extends Plugin
 		menuManager.removePriorityEntry("Stun", "Hoop snake");
 		menuManager.removePriorityEntry("Take-boat");
 		menuManager.removePriorityEntry("Tan <col=ff7000>All");
+		menuManager.removePriorityEntry("Offer-All<col=ff9040>");
 		menuManager.removePriorityEntry("Teleport menu", "Portal nexus");
 		menuManager.removePriorityEntry("Teleport", "Crafting cape");
 		menuManager.removePriorityEntry("Teleport", "Crafting cape(t)");
@@ -1267,11 +1403,18 @@ public class MenuEntrySwapperPlugin extends Plugin
 		menuManager.removePriorityEntry("Teleport", "Explorer's ring 3");
 		menuManager.removePriorityEntry("Teleport", "Explorer's ring 4");
 		menuManager.removePriorityEntry("Teleport", "Mage of zamorak");
-		menuManager.removePriorityEntry("Teleport", "Mounted Construction Cape");
-		menuManager.removePriorityEntry("Teleport", "Mounted Crafting Cape");
-		menuManager.removePriorityEntry("Teleport", "Mounted Fishing Cape");
-		menuManager.removePriorityEntry("Teleport", "Mounted Hunter Cape");
 		menuManager.removePriorityEntry("Teleport", "Mounted Strength Cape");
+		menuManager.removePriorityEntry("Teleport", "Mounted Strength Cape (t)");
+		menuManager.removePriorityEntry("Teleport", "Mounted Construction Cape");
+		menuManager.removePriorityEntry("Teleport", "Mounted Construction Cape (t)");
+		menuManager.removePriorityEntry("Teleport", "Mounted Crafting Cape");
+		menuManager.removePriorityEntry("Teleport", "Mounted Crafting Cape (t)");
+		menuManager.removePriorityEntry("Teleport", "Mounted Hunter Cape");
+		menuManager.removePriorityEntry("Teleport", "Mounted Hunter Cape (t)");
+		menuManager.removePriorityEntry("Teleport", "Mounted Fishing Cape");
+		menuManager.removePriorityEntry("Teleport", "Mounted Fishing Cape (t)");
+		menuManager.removePriorityEntry("Spellbook", "Mounted Magic Cape");
+		menuManager.removePriorityEntry("Spellbook", "Mounted Magic Cape (t)");
 		menuManager.removePriorityEntry("Trade");
 		menuManager.removePriorityEntry("Trade-with");
 		menuManager.removePriorityEntry("Transport");
@@ -1301,6 +1444,12 @@ public class MenuEntrySwapperPlugin extends Plugin
 		menuManager.removePriorityEntry(this.questCapeMode.toString(), "quest point cape");
 		menuManager.removePriorityEntry(this.swapHouseAdMode.getEntry());
 		menuManager.removeSwap("Bury", "bone", "Use");
+		for (String jewellerybox : jewelleryBox)
+		{
+			menuManager.removePriorityEntry(jewellerybox, "basic jewellery box");
+			menuManager.removePriorityEntry(jewellerybox, "fancy jewellery box");
+			menuManager.removePriorityEntry(jewellerybox, "ornate jewellery box");
+		}
 
 		switch (this.swapFairyRingMode)
 		{
@@ -1369,6 +1518,7 @@ public class MenuEntrySwapperPlugin extends Plugin
 				menuManager.removePriorityEntry("Friend's house");
 				break;
 		}
+
 	}
 
 	private boolean isPuroPuro()
@@ -1417,9 +1567,48 @@ public class MenuEntrySwapperPlugin extends Plugin
 	{
 		loadCustomSwaps(this.configCustomShiftSwaps, customShiftSwaps);
 
+		if (this.bankWieldItem)
+		{
+			menuManager.addPriorityEntry(new BankComparableEntry("wield", "", false));
+		}
+		if (this.bankWearItem)
+		{
+			menuManager.addPriorityEntry(new BankComparableEntry("wear", "", false));
+		}
+		if (this.bankEatItem)
+		{
+			menuManager.addPriorityEntry(new BankComparableEntry("eat", "", false));
+		}
+		if (this.bankDrinkItem)
+		{
+			menuManager.addPriorityEntry(new BankComparableEntry("drink", "", false));
+		}
+		if (this.bankEquipItem)
+		{
+			menuManager.addPriorityEntry(new BankComparableEntry("equip", "", false));
+		}
+		if (this.bankInvigorateItem)
+		{
+			menuManager.addPriorityEntry(new BankComparableEntry("invigorate", "", false));
+		}
 		if (this.swapClimbUpDown)
 		{
 			menuManager.addPriorityEntry("climb-up").setPriority(100);
+		}
+		if (this.hotKeyLoot)
+		{
+			menuManager.addPriorityEntry(TAKE);
+		}
+		if (this.hotKeyWalk)
+		{
+			menuManager.addPriorityEntry(WALK);
+		}
+		if (this.swapNpcContact)
+		{
+			for (String npccontact : npcContact)
+			{
+				menuManager.addPriorityEntry(npccontact, "npc contact");
+			}
 		}
 
 		eventBus.unregister(HOTKEY);
@@ -1432,7 +1621,21 @@ public class MenuEntrySwapperPlugin extends Plugin
 
 	private void removeHotkey(ClientTick event)
 	{
+		menuManager.removePriorityEntry(new BankComparableEntry("wield", "", false));
+		menuManager.removePriorityEntry(new BankComparableEntry("wear", "", false));
+		menuManager.removePriorityEntry(new BankComparableEntry("eat", "", false));
+		menuManager.removePriorityEntry(new BankComparableEntry("drink", "", false));
+		menuManager.removePriorityEntry(new BankComparableEntry("equip", "", false));
+		menuManager.removePriorityEntry(new BankComparableEntry("invigorate", "", false));
 		menuManager.removePriorityEntry("climb-up");
+		menuManager.removePriorityEntry(TAKE);
+		menuManager.removePriorityEntry(WALK);
+
+		for (String npccontact : npcContact)
+		{
+			menuManager.removePriorityEntry(npccontact, "npc contact");
+		}
+
 		loadCustomSwaps("", customShiftSwaps);
 		eventBus.unregister(HOTKEY);
 	}
@@ -1663,6 +1866,17 @@ public class MenuEntrySwapperPlugin extends Plugin
 		this.swapWildernessLever = config.swapWildernessLever();
 		this.swapHouseAd = config.swapHouseAd();
 		this.swapHouseAdMode = config.swapHouseAdMode();
+		this.swapJewelleryBox = config.swapJewelleryBox();
+		this.bankWieldItem = config.bankWieldItem();
+		this.bankWearItem = config.bankWearItem();
+		this.bankEatItem = config.bankEatItem();
+		this.bankDrinkItem = config.bankDrinkItem();
+		this.bankEquipItem = config.bankEquipItem();
+		this.bankInvigorateItem = config.bankInvigorateItem();
+		this.swapNpcContact = config.swapNpcContact();
+		this.getSwapOffer = config.getSwapOffer();
+		this.hotKeyWalk = config.hotKeyWalk();
+		this.hotKeyLoot = config.hotKeyLoot();
 	}
 
 	private void addBuySellEntries()
@@ -1917,38 +2131,4 @@ public class MenuEntrySwapperPlugin extends Plugin
 			removedObjects = null;
 		}
 	}
-
-	private final HotkeyListener hotkey = new HotkeyListener(() -> this.hotkeyMod)
-	{
-		@Override
-		public void hotkeyPressed()
-		{
-			startHotkey();
-			setHotkeyActive(true);
-		}
-
-		@Override
-		public void hotkeyReleased()
-		{
-			stopHotkey();
-			setHotkeyActive(false);
-		}
-	};
-
-	private final HotkeyListener ctrlHotkey = new HotkeyListener(() -> Keybind.CTRL)
-	{
-		@Override
-		public void hotkeyPressed()
-		{
-			startControl();
-			setControlActive(true);
-		}
-
-		@Override
-		public void hotkeyReleased()
-		{
-			stopControl();
-			setControlActive(false);
-		}
-	};
 }

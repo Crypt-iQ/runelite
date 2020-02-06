@@ -7,51 +7,50 @@ import net.runelite.mapping.ObfuscatedSignature;
 @ObfuscatedName("du")
 @Implements("FloorDecoration")
 public final class FloorDecoration {
-	@ObfuscatedName("h")
+	@ObfuscatedName("j")
 	@ObfuscatedSignature(
-		signature = "[[Lhl;"
+		signature = "Lli;"
 	)
-	@Export("Widget_interfaceComponents")
-	public static Widget[][] Widget_interfaceComponents;
-	@ObfuscatedName("hj")
-	@ObfuscatedGetter(
-		intValue = -787534095
+	@Export("logoSprite")
+	static IndexedSprite logoSprite;
+	@ObfuscatedName("ja")
+	@ObfuscatedSignature(
+		signature = "Lhn;"
 	)
-	@Export("cameraZ")
-	static int cameraZ;
-	@ObfuscatedName("u")
+	static Widget field1604;
+	@ObfuscatedName("c")
 	@ObfuscatedGetter(
-		intValue = 1000348855
+		intValue = -340818917
 	)
 	@Export("tileHeight")
 	int tileHeight;
-	@ObfuscatedName("f")
+	@ObfuscatedName("t")
 	@ObfuscatedGetter(
-		intValue = -2093523795
+		intValue = 2029727385
 	)
 	@Export("x")
 	int x;
-	@ObfuscatedName("b")
+	@ObfuscatedName("o")
 	@ObfuscatedGetter(
-		intValue = -512662577
+		intValue = -588436191
 	)
 	@Export("y")
 	int y;
-	@ObfuscatedName("g")
+	@ObfuscatedName("e")
 	@ObfuscatedSignature(
-		signature = "Lee;"
+		signature = "Leq;"
 	)
 	@Export("entity")
 	public Entity entity;
-	@ObfuscatedName("z")
+	@ObfuscatedName("i")
 	@ObfuscatedGetter(
-		longValue = -2591467341780492125L
+		longValue = -1449564120774695343L
 	)
 	@Export("tag")
 	public long tag;
-	@ObfuscatedName("p")
+	@ObfuscatedName("g")
 	@ObfuscatedGetter(
-		intValue = 424120209
+		intValue = -1732648277
 	)
 	@Export("flags")
 	int flags;
@@ -61,26 +60,46 @@ public final class FloorDecoration {
 
 	@ObfuscatedName("o")
 	@ObfuscatedSignature(
-		signature = "(CI)Z",
-		garbageValue = "-345109095"
+		signature = "(Llp;ILjava/lang/String;I)Ljava/lang/String;",
+		garbageValue = "1267809906"
 	)
-	@Export("isCharPrintable")
-	public static boolean isCharPrintable(char var0) {
-		if (var0 >= ' ' && var0 <= '~') {
-			return true;
-		} else if (var0 >= 160 && var0 <= 255) {
-			return true;
+	static String method2914(IterableNodeHashTable var0, int var1, String var2) {
+		if (var0 == null) {
+			return var2;
 		} else {
-			return var0 == 8364 || var0 == 338 || var0 == 8212 || var0 == 339 || var0 == 376;
+			ObjectNode var3 = (ObjectNode)var0.get((long)var1);
+			return var3 == null ? var2 : (String)var3.obj;
 		}
 	}
 
-	@ObfuscatedName("fe")
+	@ObfuscatedName("o")
 	@ObfuscatedSignature(
-		signature = "(IB)I",
-		garbageValue = "3"
+		signature = "(IIIIIIB)I",
+		garbageValue = "94"
 	)
-	static int method2888(int var0) {
-		return var0 * 3 + 600;
+	public static int method2913(int var0, int var1, int var2, int var3, int var4, int var5) {
+		if ((var5 & 1) == 1) {
+			int var6 = var3;
+			var3 = var4;
+			var4 = var6;
+		}
+
+		var2 &= 3;
+		if (var2 == 0) {
+			return var0;
+		} else if (var2 == 1) {
+			return var1;
+		} else {
+			return var2 == 2 ? 7 - var0 - (var3 - 1) : 7 - var1 - (var4 - 1);
+		}
+	}
+
+	@ObfuscatedName("q")
+	@ObfuscatedSignature(
+		signature = "(Ljava/lang/String;I)V",
+		garbageValue = "-2102248580"
+	)
+	static final void method2912(String var0) {
+		class60.method1188("Please remove " + var0 + " from your friend list first");
 	}
 }

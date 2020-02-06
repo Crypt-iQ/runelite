@@ -26,6 +26,7 @@ package net.runelite.client.plugins.skybox;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.google.inject.Provides;
 import java.io.IOException;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
@@ -33,21 +34,28 @@ import net.runelite.api.Player;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.events.BeforeRender;
 import net.runelite.api.events.GameStateChanged;
+import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.plugins.PluginType;
+import net.runelite.client.plugins.skybox.config.SkyOverrideMode;
 
 @PluginDescriptor(
 	name = "Skybox",
 	description = "Draws an oldschool styled skybox",
 	enabledByDefault = false,
-	tags = {"sky"}
+	tags = {"sky"},
+	type = PluginType.MISCELLANEOUS
 )
 @Singleton
 public class SkyboxPlugin extends Plugin
 {
 	@Inject
 	private Client client;
+
+	@Inject
+	private SkyboxPluginConfig config;
 
 	private Skybox skybox;
 
@@ -63,6 +71,12 @@ public class SkyboxPlugin extends Plugin
 	{
 		client.setSkyboxColor(0);
 		skybox = null;
+	}
+
+	@Provides
+	SkyboxPluginConfig provideConfig(ConfigManager configManager)
+	{
+		return configManager.getConfig(SkyboxPluginConfig.class);
 	}
 
 	private int mapChunk(int cx, int cy, int plane)
@@ -93,6 +107,17 @@ public class SkyboxPlugin extends Plugin
 		{
 			return;
 		}
+
+		if
+		(
+			config.overrideMode() == SkyOverrideMode.ALL ||
+			(config.overrideMode() == SkyOverrideMode.OVERWORLD && client.getLocalPlayer().getWorldLocation().getY() < 4200)
+		)
+		{
+			client.setSkyboxColor(config.customColor().getRGB());
+			return;
+		}
+
 
 		int px, py;
 		if (client.getOculusOrbState() == 1)

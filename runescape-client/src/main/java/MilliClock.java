@@ -4,161 +4,176 @@ import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("fi")
+@ObfuscatedName("fj")
 @Implements("MilliClock")
 public class MilliClock extends Clock {
-	@ObfuscatedName("u")
-	long[] field2017;
-	@ObfuscatedName("f")
-	@ObfuscatedGetter(
-		intValue = 90836153
+	@ObfuscatedName("x")
+	@ObfuscatedSignature(
+		signature = "[Lme;"
 	)
-	int field2018;
+	@Export("JagexCache_idxFiles")
+	public static BufferedFile[] JagexCache_idxFiles;
 	@ObfuscatedName("b")
-	@ObfuscatedGetter(
-		intValue = 878139607
+	public static String field2015;
+	@ObfuscatedName("db")
+	@ObfuscatedSignature(
+		signature = "Lia;"
 	)
-	int field2019;
+	@Export("archive12")
+	static Archive archive12;
+	@ObfuscatedName("c")
+	long[] field2011;
+	@ObfuscatedName("t")
+	@ObfuscatedGetter(
+		intValue = 1924438695
+	)
+	int field2009;
+	@ObfuscatedName("o")
+	@ObfuscatedGetter(
+		intValue = 990081357
+	)
+	int field2008;
+	@ObfuscatedName("e")
+	@ObfuscatedGetter(
+		longValue = 1282621302724329393L
+	)
+	long field2013;
+	@ObfuscatedName("i")
+	@ObfuscatedGetter(
+		intValue = -552407369
+	)
+	int field2012;
 	@ObfuscatedName("g")
 	@ObfuscatedGetter(
-		longValue = -4513558875816337439L
+		intValue = 1470332853
 	)
-	long field2022;
-	@ObfuscatedName("z")
-	@ObfuscatedGetter(
-		intValue = -1976068769
-	)
-	int field2021;
-	@ObfuscatedName("p")
-	@ObfuscatedGetter(
-		intValue = 1447162639
-	)
-	int field2020;
+	int field2014;
 
-	public MilliClock() {
-		this.field2017 = new long[10];
-		this.field2018 = 256;
-		this.field2019 = 1;
-		this.field2021 = 0;
-		this.field2022 = TaskHandler.currentTimeMillis();
+	MilliClock() {
+		this.field2011 = new long[10];
+		this.field2009 = 256;
+		this.field2008 = 1;
+		this.field2012 = 0;
+		this.field2013 = WorldMapIcon_0.currentTimeMillis();
 
 		for (int var1 = 0; var1 < 10; ++var1) {
-			this.field2017[var1] = this.field2022;
+			this.field2011[var1] = this.field2013;
 		}
 
 	}
 
-	@ObfuscatedName("u")
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
-		signature = "(I)V",
-		garbageValue = "-26166053"
+		signature = "(B)V",
+		garbageValue = "29"
 	)
 	@Export("mark")
 	public void mark() {
 		for (int var1 = 0; var1 < 10; ++var1) {
-			this.field2017[var1] = 0L;
+			this.field2011[var1] = 0L;
 		}
 
 	}
 
-	@ObfuscatedName("f")
+	@ObfuscatedName("t")
 	@ObfuscatedSignature(
-		signature = "(IIB)I",
-		garbageValue = "6"
+		signature = "(III)I",
+		garbageValue = "-561232674"
 	)
 	@Export("wait")
 	public int wait(int var1, int var2) {
-		int var3 = this.field2018;
-		int var4 = this.field2019;
-		this.field2018 = 300;
-		this.field2019 = 1;
-		this.field2022 = TaskHandler.currentTimeMillis();
-		if (0L == this.field2017[this.field2020]) {
-			this.field2018 = var3;
-			this.field2019 = var4;
-		} else if (this.field2022 > this.field2017[this.field2020]) {
-			this.field2018 = (int)((long)(var1 * 2560) / (this.field2022 - this.field2017[this.field2020]));
+		int var3 = this.field2009;
+		int var4 = this.field2008;
+		this.field2009 = 300;
+		this.field2008 = 1;
+		this.field2013 = WorldMapIcon_0.currentTimeMillis();
+		if (this.field2011[this.field2014] == 0L) {
+			this.field2009 = var3;
+			this.field2008 = var4;
+		} else if (this.field2013 > this.field2011[this.field2014]) {
+			this.field2009 = (int)((long)(var1 * 2560) / (this.field2013 - this.field2011[this.field2014]));
 		}
 
-		if (this.field2018 < 25) {
-			this.field2018 = 25;
+		if (this.field2009 < 25) {
+			this.field2009 = 25;
 		}
 
-		if (this.field2018 > 256) {
-			this.field2018 = 256;
-			this.field2019 = (int)((long)var1 - (this.field2022 - this.field2017[this.field2020]) / 10L);
+		if (this.field2009 > 256) {
+			this.field2009 = 256;
+			this.field2008 = (int)((long)var1 - (this.field2013 - this.field2011[this.field2014]) / 10L);
 		}
 
-		if (this.field2019 > var1) {
-			this.field2019 = var1;
+		if (this.field2008 > var1) {
+			this.field2008 = var1;
 		}
 
-		this.field2017[this.field2020] = this.field2022;
-		this.field2020 = (this.field2020 + 1) % 10;
-		if (this.field2019 > 1) {
-			for (int var5 = 0; var5 < 10; ++var5) {
-				if (this.field2017[var5] != 0L) {
-					this.field2017[var5] += (long)this.field2019;
+		this.field2011[this.field2014] = this.field2013;
+		this.field2014 = (this.field2014 + 1) % 10;
+		int var5;
+		if (this.field2008 > 1) {
+			for (var5 = 0; var5 < 10; ++var5) {
+				if (0L != this.field2011[var5]) {
+					this.field2011[var5] += (long)this.field2008;
 				}
 			}
 		}
 
-		if (this.field2019 < var2) {
-			this.field2019 = var2;
+		if (this.field2008 < var2) {
+			this.field2008 = var2;
 		}
 
-		long var10 = (long)this.field2019;
-		if (var10 > 0L) {
-			if (0L == var10 % 10L) {
-				long var7 = var10 - 1L;
+		FriendLoginUpdate.method5325((long)this.field2008);
 
-				try {
-					Thread.sleep(var7);
-				} catch (InterruptedException var16) {
-				}
-
-				try {
-					Thread.sleep(1L);
-				} catch (InterruptedException var15) {
-				}
-			} else {
-				try {
-					Thread.sleep(var10);
-				} catch (InterruptedException var14) {
-				}
-			}
+		for (var5 = 0; this.field2012 < 256; this.field2012 += this.field2009) {
+			++var5;
 		}
 
-		int var13;
-		for (var13 = 0; this.field2021 < 256; this.field2021 += this.field2018) {
-			++var13;
-		}
-
-		this.field2021 &= 255;
-		return var13;
+		this.field2012 &= 255;
+		return var5;
 	}
 
-	@ObfuscatedName("ip")
+	@ObfuscatedName("o")
 	@ObfuscatedSignature(
-		signature = "([Lhl;Lhl;ZB)V",
-		garbageValue = "115"
+		signature = "(III)Lce;",
+		garbageValue = "-230494464"
 	)
-	@Export("revalidateWidgetScroll")
-	static void revalidateWidgetScroll(Widget[] var0, Widget var1, boolean var2) {
-		int var3 = var1.scrollWidth != 0 ? var1.scrollWidth : var1.width;
-		int var4 = var1.scrollHeight != 0 ? var1.scrollHeight : var1.height;
-		class225.resizeInterface(var0, var1.id, var3, var4, var2);
-		if (var1.children != null) {
-			class225.resizeInterface(var1.children, var1.id, var3, var4, var2);
-		}
+	static Script method3529(int var0, int var1) {
+		Script var2 = (Script)Script.Script_cached.get((long)(var0 << 16));
+		if (var2 != null) {
+			return var2;
+		} else {
+			String var3 = String.valueOf(var0);
+			int var4 = archive12.getGroupId(var3);
+			if (var4 == -1) {
+				return null;
+			} else {
+				byte[] var5 = archive12.takeFileFlat(var4);
+				if (var5 != null) {
+					if (var5.length <= 1) {
+						return null;
+					}
 
-		InterfaceParent var5 = (InterfaceParent)Client.interfaceParents.get((long)var1.id);
-		if (var5 != null) {
-			WorldMapSectionType.method272(var5.group, var3, var4, var2);
-		}
+					var2 = Clock.newScript(var5);
+					if (var2 != null) {
+						Script.Script_cached.put(var2, (long)(var0 << 16));
+						return var2;
+					}
+				}
 
-		if (var1.contentType == 1337) {
+				return null;
+			}
 		}
+	}
 
+	@ObfuscatedName("w")
+	@ObfuscatedSignature(
+		signature = "(I)V",
+		garbageValue = "-1997111110"
+	)
+	public static void method3535() {
+		Widget.Widget_cachedSprites.clear();
+		Widget.Widget_cachedModels.clear();
+		Widget.Widget_cachedFonts.clear();
+		Widget.Widget_cachedSpriteMasks.clear();
 	}
 }

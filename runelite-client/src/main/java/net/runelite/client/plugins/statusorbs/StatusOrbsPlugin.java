@@ -55,6 +55,7 @@ import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.plugins.PluginType;
 import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.util.Graceful;
 import net.runelite.client.util.ImageUtil;
@@ -63,7 +64,8 @@ import org.apache.commons.lang3.StringUtils;
 @PluginDescriptor(
 	name = "Status Orbs",
 	description = "Configure settings for the Minimap orbs",
-	tags = {"minimap", "orb", "regen", "energy", "special"}
+	tags = {"minimap", "orb", "regen", "energy", "special"},
+	type = PluginType.UTILITY
 )
 public class StatusOrbsPlugin extends Plugin
 {
@@ -80,7 +82,6 @@ public class StatusOrbsPlugin extends Plugin
 
 	private static final int SPEC_REGEN_TICKS = 50;
 	private static final int NORMAL_HP_REGEN_TICKS = 100;
-	private static final int TWISTED_LEAGUE_ENDLESS_ENDURANCE_RELIC = 2;
 
 	@Inject
 	private Client client;
@@ -125,6 +126,8 @@ public class StatusOrbsPlugin extends Plugin
 	private int lastEnergy = 0;
 	private boolean localPlayerRunningToDestination;
 	private WorldPoint prevLocalPlayerLocation;
+	@Getter(AccessLevel.PACKAGE)
+	private double recoverRate = 1;
 
 	private BufferedImage heart;
 
@@ -248,12 +251,6 @@ public class StatusOrbsPlugin extends Plugin
 			hpPerMs *= 2;
 		}
 
-		if (client.getVar(Varbits.TWISTED_LEAGUE_RELIC_1) == TWISTED_LEAGUE_ENDLESS_ENDURANCE_RELIC)
-		{
-			ticksPerHPRegen /= 4;
-			hpPerMs *= 4;
-		}
-
 		ticksSinceHPRegen = (ticksSinceHPRegen + 1) % ticksPerHPRegen;
 		hitpointsPercentage = ticksSinceHPRegen / (double) ticksPerHPRegen;
 
@@ -286,6 +283,8 @@ public class StatusOrbsPlugin extends Plugin
 				prevLocalPlayerLocation.distanceTo(client.getLocalPlayer().getWorldLocation()) > 1;
 
 		prevLocalPlayerLocation = client.getLocalPlayer().getWorldLocation();
+
+		recoverRate = Graceful.calculateRecoveryRate(client.getItemContainer(InventoryID.EQUIPMENT));
 
 		if (this.replaceOrbText)
 		{
@@ -380,11 +379,7 @@ public class StatusOrbsPlugin extends Plugin
 
 		// Calculate the amount of energy recovered every second
 		double recoverRate = (48 + client.getBoostedSkillLevel(Skill.AGILITY)) / 360.0;
-
-		if (Graceful.hasFullSet(client.getItemContainer(InventoryID.EQUIPMENT)))
-		{
-			recoverRate *= 1.3; // 30% recover rate increase from Graceful set effect
-		}
+		recoverRate *= Graceful.calculateRecoveryRate(client.getItemContainer(InventoryID.EQUIPMENT));
 
 		// Calculate the number of seconds left
 		final double secondsLeft = (100 - client.getEnergy()) / recoverRate;
@@ -430,11 +425,8 @@ public class StatusOrbsPlugin extends Plugin
 	private double runRegenPerTick()
 	{
 		double recoverRate = (client.getBoostedSkillLevel(Skill.AGILITY) / 6d + 8) / 100;
+		recoverRate *= Graceful.calculateRecoveryRate(client.getItemContainer(InventoryID.EQUIPMENT));
 
-		if (Graceful.hasFullSet(client.getItemContainer(InventoryID.EQUIPMENT)))
-		{
-			return recoverRate * 1.3;
-		}
 		return recoverRate;
 	}
 

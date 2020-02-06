@@ -37,6 +37,7 @@ import net.runelite.client.events.SessionOpen;
 import net.runelite.client.game.WorldService;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.plugins.PluginType;
 import net.runelite.client.util.WorldUtil;
 import net.runelite.http.api.worlds.World;
 import net.runelite.http.api.worlds.WorldResult;
@@ -44,7 +45,8 @@ import net.runelite.http.api.worlds.WorldResult;
 @PluginDescriptor(
 	name = "Default World",
 	description = "Enable a default world to be selected when launching the client",
-	tags = {"home"}
+	tags = {"home"},
+	type = PluginType.UTILITY
 )
 @Slf4j
 @Singleton
@@ -153,6 +155,11 @@ public class DefaultWorldPlugin extends Plugin
 		{
 			worldCache = client.getWorld();
 			log.debug("Stored old world {}", worldCache);
+		}
+
+		if (System.getProperty("cli.world") != null)
+		{
+			return;
 		}
 
 		final int newWorld = !config.useLastWorld() ? config.getWorld() : config.lastWorld();

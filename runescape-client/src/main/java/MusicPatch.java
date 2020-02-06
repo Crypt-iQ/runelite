@@ -3,48 +3,52 @@ import net.runelite.mapping.Implements;
 import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
+import net.runelite.rs.ScriptOpcodes;
 
-@ObfuscatedName("gv")
+@ObfuscatedName("gr")
 @Implements("MusicPatch")
 public class MusicPatch extends Node {
-	@ObfuscatedName("so")
-	@Export("foundItemIds")
-	static short[] foundItemIds;
-	@ObfuscatedName("u")
+	@ObfuscatedName("iz")
 	@ObfuscatedGetter(
-		intValue = -2129505551
+		intValue = -185966491
 	)
-	int field2489;
-	@ObfuscatedName("f")
+	@Export("selectedItemId")
+	static int selectedItemId;
+	@ObfuscatedName("c")
+	@ObfuscatedGetter(
+		intValue = -1990358497
+	)
+	int field2488;
+	@ObfuscatedName("t")
 	@ObfuscatedSignature(
-		signature = "[Lcw;"
+		signature = "[Lcv;"
 	)
 	@Export("rawSounds")
 	RawSound[] rawSounds;
-	@ObfuscatedName("b")
-	short[] field2485;
-	@ObfuscatedName("g")
+	@ObfuscatedName("o")
+	short[] field2483;
+	@ObfuscatedName("e")
 	byte[] field2486;
-	@ObfuscatedName("z")
-	byte[] field2483;
-	@ObfuscatedName("p")
+	@ObfuscatedName("i")
+	byte[] field2482;
+	@ObfuscatedName("g")
 	@ObfuscatedSignature(
-		signature = "[Lgl;"
+		signature = "[Lgf;"
 	)
-	MusicPatchNode2[] field2488;
-	@ObfuscatedName("h")
-	byte[] field2487;
-	@ObfuscatedName("y")
-	int[] field2492;
+	MusicPatchNode2[] field2487;
+	@ObfuscatedName("d")
+	byte[] field2485;
+	@ObfuscatedName("l")
+	int[] field2489;
 
 	MusicPatch(byte[] var1) {
 		this.rawSounds = new RawSound[128];
-		this.field2485 = new short[128];
+		this.field2483 = new short[128];
 		this.field2486 = new byte[128];
-		this.field2483 = new byte[128];
-		this.field2488 = new MusicPatchNode2[128];
-		this.field2487 = new byte[128];
-		this.field2492 = new int[128];
+		this.field2482 = new byte[128];
+		this.field2487 = new MusicPatchNode2[128];
+		this.field2485 = new byte[128];
+		this.field2489 = new int[128];
 		Buffer var2 = new Buffer(var1);
 
 		int var3;
@@ -91,11 +95,11 @@ public class MusicPatch extends Node {
 
 		++var2.offset;
 		++var9;
-		byte[] var38 = new byte[var9];
+		byte[] var36 = new byte[var9];
 		int var12;
 		int var14;
 		if (var9 > 1) {
-			var38[1] = 1;
+			var36[1] = 1;
 			int var13 = 1;
 			var12 = 2;
 
@@ -111,33 +115,33 @@ public class MusicPatch extends Node {
 					var13 = var15;
 				}
 
-				var38[var14] = (byte)var13;
+				var36[var14] = (byte)var13;
 			}
 		} else {
 			var12 = var9;
 		}
 
-		MusicPatchNode2[] var39 = new MusicPatchNode2[var12];
+		MusicPatchNode2[] var37 = new MusicPatchNode2[var12];
 
-		MusicPatchNode2 var40;
-		for (var14 = 0; var14 < var39.length; ++var14) {
-			var40 = var39[var14] = new MusicPatchNode2();
+		MusicPatchNode2 var38;
+		for (var14 = 0; var14 < var37.length; ++var14) {
+			var38 = var37[var14] = new MusicPatchNode2();
 			int var16 = var2.readUnsignedByte();
 			if (var16 > 0) {
-				var40.field2404 = new byte[var16 * 2];
+				var38.field2402 = new byte[var16 * 2];
 			}
 
 			var16 = var2.readUnsignedByte();
 			if (var16 > 0) {
-				var40.field2399 = new byte[var16 * 2 + 2];
-				var40.field2399[1] = 64;
+				var38.field2399 = new byte[var16 * 2 + 2];
+				var38.field2399[1] = 64;
 			}
 		}
 
 		var14 = var2.readUnsignedByte();
-		byte[] var47 = var14 > 0 ? new byte[var14 * 2] : null;
+		byte[] var45 = var14 > 0 ? new byte[var14 * 2] : null;
 		var14 = var2.readUnsignedByte();
-		byte[] var41 = var14 > 0 ? new byte[var14 * 2] : null;
+		byte[] var39 = var14 > 0 ? new byte[var14 * 2] : null;
 
 		int var17;
 		for (var17 = 0; var2.array[var17 + var2.offset] != 0; ++var17) {
@@ -157,16 +161,16 @@ public class MusicPatch extends Node {
 		int var20;
 		for (var20 = 0; var20 < 128; ++var20) {
 			var19 += var2.readUnsignedByte();
-			this.field2485[var20] = (short)var19;
+			this.field2483[var20] = (short)var19;
 		}
 
 		var19 = 0;
 
-		short[] var50;
+		short[] var48;
 		for (var20 = 0; var20 < 128; ++var20) {
 			var19 += var2.readUnsignedByte();
-			var50 = this.field2485;
-			var50[var20] = (short)(var50[var20] + (var19 << 8));
+			var48 = this.field2483;
+			var48[var20] = (short)(var48[var20] + (var19 << 8));
 		}
 
 		var20 = 0;
@@ -185,9 +189,9 @@ public class MusicPatch extends Node {
 				var22 = var2.readVarInt();
 			}
 
-			var50 = this.field2485;
-			var50[var23] = (short)(var50[var23] + ((var22 - 1 & 2) << 14));
-			this.field2492[var23] = var22;
+			var48 = this.field2483;
+			var48[var23] = (short)(var48[var23] + ((var22 - 1 & 2) << 14));
+			this.field2489[var23] = var22;
 			--var20;
 		}
 
@@ -197,7 +201,7 @@ public class MusicPatch extends Node {
 
 		int var24;
 		for (var24 = 0; var24 < 128; ++var24) {
-			if (this.field2492[var24] != 0) {
+			if (this.field2489[var24] != 0) {
 				if (var20 == 0) {
 					if (var21 < var4.length) {
 						var20 = var4[var21++];
@@ -208,7 +212,7 @@ public class MusicPatch extends Node {
 					var23 = var2.array[var5++] - 1;
 				}
 
-				this.field2487[var24] = (byte)var23;
+				this.field2485[var24] = (byte)var23;
 				--var20;
 			}
 		}
@@ -218,7 +222,7 @@ public class MusicPatch extends Node {
 		var24 = 0;
 
 		for (int var25 = 0; var25 < 128; ++var25) {
-			if (this.field2492[var25] != 0) {
+			if (this.field2489[var25] != 0) {
 				if (var20 == 0) {
 					if (var21 < var7.length) {
 						var20 = var7[var21++];
@@ -229,20 +233,20 @@ public class MusicPatch extends Node {
 					var24 = var2.array[var8++] + 16 << 2;
 				}
 
-				this.field2483[var25] = (byte)var24;
+				this.field2482[var25] = (byte)var24;
 				--var20;
 			}
 		}
 
 		var20 = 0;
 		var21 = 0;
-		MusicPatchNode2 var42 = null;
+		MusicPatchNode2 var40 = null;
 
 		int var26;
 		for (var26 = 0; var26 < 128; ++var26) {
-			if (this.field2492[var26] != 0) {
+			if (this.field2489[var26] != 0) {
 				if (var20 == 0) {
-					var42 = var39[var38[var21]];
+					var40 = var37[var36[var21]];
 					if (var21 < var10.length) {
 						var20 = var10[var21++];
 					} else {
@@ -250,7 +254,7 @@ public class MusicPatch extends Node {
 					}
 				}
 
-				this.field2488[var26] = var42;
+				this.field2487[var26] = var40;
 				--var20;
 			}
 		}
@@ -268,7 +272,7 @@ public class MusicPatch extends Node {
 					var20 = -1;
 				}
 
-				if (this.field2492[var27] > 0) {
+				if (this.field2489[var27] > 0) {
 					var26 = var2.readUnsignedByte() + 1;
 				}
 			}
@@ -277,15 +281,15 @@ public class MusicPatch extends Node {
 			--var20;
 		}
 
-		this.field2489 = var2.readUnsignedByte() + 1;
+		this.field2488 = var2.readUnsignedByte() + 1;
 
 		MusicPatchNode2 var28;
 		int var29;
 		for (var27 = 0; var27 < var12; ++var27) {
-			var28 = var39[var27];
-			if (var28.field2404 != null) {
-				for (var29 = 1; var29 < var28.field2404.length; var29 += 2) {
-					var28.field2404[var29] = var2.readByte();
+			var28 = var37[var27];
+			if (var28.field2402 != null) {
+				for (var29 = 1; var29 < var28.field2402.length; var29 += 2) {
+					var28.field2402[var29] = var2.readByte();
 				}
 			}
 
@@ -296,38 +300,38 @@ public class MusicPatch extends Node {
 			}
 		}
 
-		if (var47 != null) {
-			for (var27 = 1; var27 < var47.length; var27 += 2) {
-				var47[var27] = var2.readByte();
+		if (var45 != null) {
+			for (var27 = 1; var27 < var45.length; var27 += 2) {
+				var45[var27] = var2.readByte();
 			}
 		}
 
-		if (var41 != null) {
-			for (var27 = 1; var27 < var41.length; var27 += 2) {
-				var41[var27] = var2.readByte();
+		if (var39 != null) {
+			for (var27 = 1; var27 < var39.length; var27 += 2) {
+				var39[var27] = var2.readByte();
 			}
 		}
 
 		for (var27 = 0; var27 < var12; ++var27) {
-			var28 = var39[var27];
+			var28 = var37[var27];
 			if (var28.field2399 != null) {
 				var19 = 0;
 
 				for (var29 = 2; var29 < var28.field2399.length; var29 += 2) {
-					var19 = 1 + var19 + var2.readUnsignedByte();
+					var19 = var19 + 1 + var2.readUnsignedByte();
 					var28.field2399[var29] = (byte)var19;
 				}
 			}
 		}
 
 		for (var27 = 0; var27 < var12; ++var27) {
-			var28 = var39[var27];
-			if (var28.field2404 != null) {
+			var28 = var37[var27];
+			if (var28.field2402 != null) {
 				var19 = 0;
 
-				for (var29 = 2; var29 < var28.field2404.length; var29 += 2) {
-					var19 = 1 + var19 + var2.readUnsignedByte();
-					var28.field2404[var29] = (byte)var19;
+				for (var29 = 2; var29 < var28.field2402.length; var29 += 2) {
+					var19 = var19 + 1 + var2.readUnsignedByte();
+					var28.field2402[var29] = (byte)var19;
 				}
 			}
 		}
@@ -336,161 +340,155 @@ public class MusicPatch extends Node {
 		int var32;
 		int var33;
 		int var34;
-		int var35;
-		int var36;
-		int var44;
-		byte var46;
-		if (var47 != null) {
+		int var42;
+		byte var44;
+		if (var45 != null) {
 			var19 = var2.readUnsignedByte();
-			var47[0] = (byte)var19;
+			var45[0] = (byte)var19;
 
-			for (var27 = 2; var27 < var47.length; var27 += 2) {
+			for (var27 = 2; var27 < var45.length; var27 += 2) {
 				var19 = 1 + var19 + var2.readUnsignedByte();
-				var47[var27] = (byte)var19;
+				var45[var27] = (byte)var19;
 			}
 
-			var46 = var47[0];
-			byte var43 = var47[1];
+			var44 = var45[0];
+			byte var41 = var45[1];
 
-			for (var29 = 0; var29 < var46; ++var29) {
-				this.field2486[var29] = (byte)(var43 * this.field2486[var29] + 32 >> 6);
+			for (var29 = 0; var29 < var44; ++var29) {
+				this.field2486[var29] = (byte)(var41 * this.field2486[var29] + 32 >> 6);
 			}
 
-			for (var29 = 2; var29 < var47.length; var29 += 2) {
-				var30 = var47[var29];
-				byte var31 = var47[var29 + 1];
-				var32 = var43 * (var30 - var46) + (var30 - var46) / 2;
+			for (var29 = 2; var29 < var45.length; var29 += 2) {
+				var30 = var45[var29];
+				byte var31 = var45[var29 + 1];
+				var32 = var41 * (var30 - var44) + (var30 - var44) / 2;
 
-				for (var33 = var46; var33 < var30; ++var33) {
-					var35 = var30 - var46;
-					var36 = var32 >>> 31;
-					var34 = (var36 + var32) / var35 - var36;
+				for (var33 = var44; var33 < var30; ++var33) {
+					var34 = WorldMapLabel.method440(var32, var30 - var44);
 					this.field2486[var33] = (byte)(var34 * this.field2486[var33] + 32 >> 6);
-					var32 += var31 - var43;
+					var32 += var31 - var41;
 				}
 
-				var46 = var30;
-				var43 = var31;
+				var44 = var30;
+				var41 = var31;
 			}
 
-			for (var44 = var46; var44 < 128; ++var44) {
-				this.field2486[var44] = (byte)(var43 * this.field2486[var44] + 32 >> 6);
+			for (var42 = var44; var42 < 128; ++var42) {
+				this.field2486[var42] = (byte)(var41 * this.field2486[var42] + 32 >> 6);
 			}
 
-			var40 = null;
+			var38 = null;
 		}
 
-		if (var41 != null) {
+		if (var39 != null) {
 			var19 = var2.readUnsignedByte();
-			var41[0] = (byte)var19;
+			var39[0] = (byte)var19;
 
-			for (var27 = 2; var27 < var41.length; var27 += 2) {
-				var19 = 1 + var19 + var2.readUnsignedByte();
-				var41[var27] = (byte)var19;
+			for (var27 = 2; var27 < var39.length; var27 += 2) {
+				var19 = var19 + 1 + var2.readUnsignedByte();
+				var39[var27] = (byte)var19;
 			}
 
-			var46 = var41[0];
-			int var49 = var41[1] << 1;
+			var44 = var39[0];
+			int var47 = var39[1] << 1;
 
-			for (var29 = 0; var29 < var46; ++var29) {
-				var44 = var49 + (this.field2483[var29] & 255);
-				if (var44 < 0) {
-					var44 = 0;
+			for (var29 = 0; var29 < var44; ++var29) {
+				var42 = var47 + (this.field2482[var29] & 255);
+				if (var42 < 0) {
+					var42 = 0;
 				}
 
-				if (var44 > 128) {
-					var44 = 128;
+				if (var42 > 128) {
+					var42 = 128;
 				}
 
-				this.field2483[var29] = (byte)var44;
+				this.field2482[var29] = (byte)var42;
 			}
 
-			int var45;
-			for (var29 = 2; var29 < var41.length; var29 += 2) {
-				var30 = var41[var29];
-				var45 = var41[var29 + 1] << 1;
-				var32 = var49 * (var30 - var46) + (var30 - var46) / 2;
+			int var43;
+			for (var29 = 2; var29 < var39.length; var29 += 2) {
+				var30 = var39[var29];
+				var43 = var39[var29 + 1] << 1;
+				var32 = var47 * (var30 - var44) + (var30 - var44) / 2;
 
-				for (var33 = var46; var33 < var30; ++var33) {
-					var35 = var30 - var46;
-					var36 = var32 >>> 31;
-					var34 = (var36 + var32) / var35 - var36;
-					int var37 = var34 + (this.field2483[var33] & 255);
-					if (var37 < 0) {
-						var37 = 0;
+				for (var33 = var44; var33 < var30; ++var33) {
+					var34 = WorldMapLabel.method440(var32, var30 - var44);
+					int var35 = var34 + (this.field2482[var33] & 255);
+					if (var35 < 0) {
+						var35 = 0;
 					}
 
-					if (var37 > 128) {
-						var37 = 128;
+					if (var35 > 128) {
+						var35 = 128;
 					}
 
-					this.field2483[var33] = (byte)var37;
-					var32 += var45 - var49;
+					this.field2482[var33] = (byte)var35;
+					var32 += var43 - var47;
 				}
 
-				var46 = var30;
-				var49 = var45;
+				var44 = var30;
+				var47 = var43;
 			}
 
-			for (var44 = var46; var44 < 128; ++var44) {
-				var45 = var49 + (this.field2483[var44] & 255);
-				if (var45 < 0) {
-					var45 = 0;
+			for (var42 = var44; var42 < 128; ++var42) {
+				var43 = var47 + (this.field2482[var42] & 255);
+				if (var43 < 0) {
+					var43 = 0;
 				}
 
-				if (var45 > 128) {
-					var45 = 128;
+				if (var43 > 128) {
+					var43 = 128;
 				}
 
-				this.field2483[var44] = (byte)var45;
+				this.field2482[var42] = (byte)var43;
 			}
 
-			Object var48 = null;
+			Object var46 = null;
 		}
 
 		for (var27 = 0; var27 < var12; ++var27) {
-			var39[var27].field2400 = var2.readUnsignedByte();
+			var37[var27].field2404 = var2.readUnsignedByte();
 		}
 
 		for (var27 = 0; var27 < var12; ++var27) {
-			var28 = var39[var27];
-			if (var28.field2404 != null) {
-				var28.field2398 = var2.readUnsignedByte();
+			var28 = var37[var27];
+			if (var28.field2402 != null) {
+				var28.field2401 = var2.readUnsignedByte();
 			}
 
 			if (var28.field2399 != null) {
-				var28.field2407 = var2.readUnsignedByte();
+				var28.field2400 = var2.readUnsignedByte();
 			}
 
-			if (var28.field2400 > 0) {
+			if (var28.field2404 > 0) {
 				var28.field2403 = var2.readUnsignedByte();
 			}
 		}
 
 		for (var27 = 0; var27 < var12; ++var27) {
-			var39[var27].field2405 = var2.readUnsignedByte();
+			var37[var27].field2405 = var2.readUnsignedByte();
 		}
 
 		for (var27 = 0; var27 < var12; ++var27) {
-			var28 = var39[var27];
+			var28 = var37[var27];
 			if (var28.field2405 > 0) {
-				var28.field2401 = var2.readUnsignedByte();
+				var28.field2398 = var2.readUnsignedByte();
 			}
 		}
 
 		for (var27 = 0; var27 < var12; ++var27) {
-			var28 = var39[var27];
-			if (var28.field2401 > 0) {
-				var28.field2402 = var2.readUnsignedByte();
+			var28 = var37[var27];
+			if (var28.field2398 > 0) {
+				var28.field2406 = var2.readUnsignedByte();
 			}
 		}
 
 	}
 
-	@ObfuscatedName("u")
+	@ObfuscatedName("t")
 	@ObfuscatedSignature(
-		signature = "(Ldk;[B[II)Z",
-		garbageValue = "-1839137697"
+		signature = "(Ldv;[B[IB)Z",
+		garbageValue = "83"
 	)
 	boolean method3952(SoundCache var1, byte[] var2, int[] var3) {
 		boolean var4 = true;
@@ -499,7 +497,7 @@ public class MusicPatch extends Node {
 
 		for (int var7 = 0; var7 < 128; ++var7) {
 			if (var2 == null || var2[var7] != 0) {
-				int var8 = this.field2492[var7];
+				int var8 = this.field2489[var7];
 				if (var8 != 0) {
 					if (var5 != var8) {
 						var5 = var8--;
@@ -516,7 +514,7 @@ public class MusicPatch extends Node {
 
 					if (var6 != null) {
 						this.rawSounds[var7] = var6;
-						this.field2492[var7] = 0;
+						this.field2489[var7] = 0;
 					}
 				}
 			}
@@ -525,13 +523,374 @@ public class MusicPatch extends Node {
 		return var4;
 	}
 
-	@ObfuscatedName("f")
+	@ObfuscatedName("o")
 	@ObfuscatedSignature(
 		signature = "(I)V",
-		garbageValue = "-1390506407"
+		garbageValue = "-979915375"
 	)
 	@Export("clear")
 	void clear() {
-		this.field2492 = null;
+		this.field2489 = null;
+	}
+
+	@ObfuscatedName("ax")
+	@ObfuscatedSignature(
+		signature = "(ILce;ZI)I",
+		garbageValue = "-1621076022"
+	)
+	static int method3962(int var0, Script var1, boolean var2) {
+		if (var0 == ScriptOpcodes.FRIEND_COUNT) {
+			if (KeyHandler.friendSystem.field1063 == 0) {
+				Interpreter.Interpreter_intStack[++class320.Interpreter_intStackSize - 1] = -2;
+			} else if (KeyHandler.friendSystem.field1063 == 1) {
+				Interpreter.Interpreter_intStack[++class320.Interpreter_intStackSize - 1] = -1;
+			} else {
+				Interpreter.Interpreter_intStack[++class320.Interpreter_intStackSize - 1] = KeyHandler.friendSystem.friendsList.getSize();
+			}
+
+			return 1;
+		} else {
+			int var3;
+			if (var0 == ScriptOpcodes.FRIEND_GETNAME) {
+				var3 = Interpreter.Interpreter_intStack[--class320.Interpreter_intStackSize];
+				if (KeyHandler.friendSystem.method1857() && var3 >= 0 && var3 < KeyHandler.friendSystem.friendsList.getSize()) {
+					Friend var8 = (Friend)KeyHandler.friendSystem.friendsList.get(var3);
+					Interpreter.Interpreter_stringStack[++Message.Interpreter_stringStackSize - 1] = var8.getName();
+					Interpreter.Interpreter_stringStack[++Message.Interpreter_stringStackSize - 1] = var8.getPreviousName();
+				} else {
+					Interpreter.Interpreter_stringStack[++Message.Interpreter_stringStackSize - 1] = "";
+					Interpreter.Interpreter_stringStack[++Message.Interpreter_stringStackSize - 1] = "";
+				}
+
+				return 1;
+			} else if (var0 == ScriptOpcodes.FRIEND_GETWORLD) {
+				var3 = Interpreter.Interpreter_intStack[--class320.Interpreter_intStackSize];
+				if (KeyHandler.friendSystem.method1857() && var3 >= 0 && var3 < KeyHandler.friendSystem.friendsList.getSize()) {
+					Interpreter.Interpreter_intStack[++class320.Interpreter_intStackSize - 1] = ((Buddy)KeyHandler.friendSystem.friendsList.get(var3)).world;
+				} else {
+					Interpreter.Interpreter_intStack[++class320.Interpreter_intStackSize - 1] = 0;
+				}
+
+				return 1;
+			} else if (var0 == ScriptOpcodes.FRIEND_GETRANK) {
+				var3 = Interpreter.Interpreter_intStack[--class320.Interpreter_intStackSize];
+				if (KeyHandler.friendSystem.method1857() && var3 >= 0 && var3 < KeyHandler.friendSystem.friendsList.getSize()) {
+					Interpreter.Interpreter_intStack[++class320.Interpreter_intStackSize - 1] = ((Buddy)KeyHandler.friendSystem.friendsList.get(var3)).rank;
+				} else {
+					Interpreter.Interpreter_intStack[++class320.Interpreter_intStackSize - 1] = 0;
+				}
+
+				return 1;
+			} else {
+				String var5;
+				if (var0 == ScriptOpcodes.FRIEND_SETRANK) {
+					var5 = Interpreter.Interpreter_stringStack[--Message.Interpreter_stringStackSize];
+					int var6 = Interpreter.Interpreter_intStack[--class320.Interpreter_intStackSize];
+					BZip2State.method5833(var5, var6);
+					return 1;
+				} else if (var0 == ScriptOpcodes.FRIEND_ADD) {
+					var5 = Interpreter.Interpreter_stringStack[--Message.Interpreter_stringStackSize];
+					KeyHandler.friendSystem.addFriend(var5);
+					return 1;
+				} else if (var0 == ScriptOpcodes.FRIEND_DEL) {
+					var5 = Interpreter.Interpreter_stringStack[--Message.Interpreter_stringStackSize];
+					KeyHandler.friendSystem.removeFriend(var5);
+					return 1;
+				} else if (var0 == ScriptOpcodes.IGNORE_ADD) {
+					var5 = Interpreter.Interpreter_stringStack[--Message.Interpreter_stringStackSize];
+					KeyHandler.friendSystem.addIgnore(var5);
+					return 1;
+				} else if (var0 == ScriptOpcodes.IGNORE_DEL) {
+					var5 = Interpreter.Interpreter_stringStack[--Message.Interpreter_stringStackSize];
+					KeyHandler.friendSystem.removeIgnore(var5);
+					return 1;
+				} else if (var0 == ScriptOpcodes.FRIEND_TEST) {
+					var5 = Interpreter.Interpreter_stringStack[--Message.Interpreter_stringStackSize];
+					var5 = MouseRecorder.method1207(var5);
+					Interpreter.Interpreter_intStack[++class320.Interpreter_intStackSize - 1] = KeyHandler.friendSystem.isFriended(new Username(var5, class192.loginType), false) ? 1 : 0;
+					return 1;
+				} else if (var0 == ScriptOpcodes.CLAN_GETCHATDISPLAYNAME) {
+					if (InterfaceParent.clanChat != null) {
+						Interpreter.Interpreter_stringStack[++Message.Interpreter_stringStackSize - 1] = InterfaceParent.clanChat.name;
+					} else {
+						Interpreter.Interpreter_stringStack[++Message.Interpreter_stringStackSize - 1] = "";
+					}
+
+					return 1;
+				} else if (var0 == ScriptOpcodes.CLAN_GETCHATCOUNT) {
+					if (InterfaceParent.clanChat != null) {
+						Interpreter.Interpreter_intStack[++class320.Interpreter_intStackSize - 1] = InterfaceParent.clanChat.getSize();
+					} else {
+						Interpreter.Interpreter_intStack[++class320.Interpreter_intStackSize - 1] = 0;
+					}
+
+					return 1;
+				} else if (var0 == ScriptOpcodes.CLAN_GETCHATUSERNAME) {
+					var3 = Interpreter.Interpreter_intStack[--class320.Interpreter_intStackSize];
+					if (InterfaceParent.clanChat != null && var3 < InterfaceParent.clanChat.getSize()) {
+						Interpreter.Interpreter_stringStack[++Message.Interpreter_stringStackSize - 1] = InterfaceParent.clanChat.get(var3).getUsername().getName();
+					} else {
+						Interpreter.Interpreter_stringStack[++Message.Interpreter_stringStackSize - 1] = "";
+					}
+
+					return 1;
+				} else if (var0 == ScriptOpcodes.CLAN_GETCHATUSERWORLD) {
+					var3 = Interpreter.Interpreter_intStack[--class320.Interpreter_intStackSize];
+					if (InterfaceParent.clanChat != null && var3 < InterfaceParent.clanChat.getSize()) {
+						Interpreter.Interpreter_intStack[++class320.Interpreter_intStackSize - 1] = ((Buddy)InterfaceParent.clanChat.get(var3)).getWorld();
+					} else {
+						Interpreter.Interpreter_intStack[++class320.Interpreter_intStackSize - 1] = 0;
+					}
+
+					return 1;
+				} else if (var0 == ScriptOpcodes.CLAN_GETCHATUSERRANK) {
+					var3 = Interpreter.Interpreter_intStack[--class320.Interpreter_intStackSize];
+					if (InterfaceParent.clanChat != null && var3 < InterfaceParent.clanChat.getSize()) {
+						Interpreter.Interpreter_intStack[++class320.Interpreter_intStackSize - 1] = ((Buddy)InterfaceParent.clanChat.get(var3)).rank;
+					} else {
+						Interpreter.Interpreter_intStack[++class320.Interpreter_intStackSize - 1] = 0;
+					}
+
+					return 1;
+				} else if (var0 == ScriptOpcodes.CLAN_GETCHATMINKICK) {
+					Interpreter.Interpreter_intStack[++class320.Interpreter_intStackSize - 1] = InterfaceParent.clanChat != null ? InterfaceParent.clanChat.minKick : 0;
+					return 1;
+				} else if (var0 == ScriptOpcodes.CLAN_KICKUSER) {
+					var5 = Interpreter.Interpreter_stringStack[--Message.Interpreter_stringStackSize];
+					WorldMapID.clanKickUser(var5);
+					return 1;
+				} else if (var0 == ScriptOpcodes.CLAN_GETCHATRANK) {
+					Interpreter.Interpreter_intStack[++class320.Interpreter_intStackSize - 1] = InterfaceParent.clanChat != null ? InterfaceParent.clanChat.rank : 0;
+					return 1;
+				} else if (var0 == ScriptOpcodes.CLAN_JOINCHAT) {
+					var5 = Interpreter.Interpreter_stringStack[--Message.Interpreter_stringStackSize];
+					GrandExchangeOfferAgeComparator.Clan_joinChat(var5);
+					return 1;
+				} else if (var0 == ScriptOpcodes.CLAN_LEAVECHAT) {
+					MenuAction.Clan_leaveChat();
+					return 1;
+				} else if (var0 == ScriptOpcodes.IGNORE_COUNT) {
+					if (!KeyHandler.friendSystem.method1857()) {
+						Interpreter.Interpreter_intStack[++class320.Interpreter_intStackSize - 1] = -1;
+					} else {
+						Interpreter.Interpreter_intStack[++class320.Interpreter_intStackSize - 1] = KeyHandler.friendSystem.ignoreList.getSize();
+					}
+
+					return 1;
+				} else if (var0 == ScriptOpcodes.IGNORE_GETNAME) {
+					var3 = Interpreter.Interpreter_intStack[--class320.Interpreter_intStackSize];
+					if (KeyHandler.friendSystem.method1857() && var3 >= 0 && var3 < KeyHandler.friendSystem.ignoreList.getSize()) {
+						Ignored var4 = (Ignored)KeyHandler.friendSystem.ignoreList.get(var3);
+						Interpreter.Interpreter_stringStack[++Message.Interpreter_stringStackSize - 1] = var4.getName();
+						Interpreter.Interpreter_stringStack[++Message.Interpreter_stringStackSize - 1] = var4.getPreviousName();
+					} else {
+						Interpreter.Interpreter_stringStack[++Message.Interpreter_stringStackSize - 1] = "";
+						Interpreter.Interpreter_stringStack[++Message.Interpreter_stringStackSize - 1] = "";
+					}
+
+					return 1;
+				} else if (var0 == ScriptOpcodes.IGNORE_TEST) {
+					var5 = Interpreter.Interpreter_stringStack[--Message.Interpreter_stringStackSize];
+					var5 = MouseRecorder.method1207(var5);
+					Interpreter.Interpreter_intStack[++class320.Interpreter_intStackSize - 1] = KeyHandler.friendSystem.isIgnored(new Username(var5, class192.loginType)) ? 1 : 0;
+					return 1;
+				} else if (var0 == ScriptOpcodes.CLAN_ISSELF) {
+					var3 = Interpreter.Interpreter_intStack[--class320.Interpreter_intStackSize];
+					if (InterfaceParent.clanChat != null && var3 < InterfaceParent.clanChat.getSize() && InterfaceParent.clanChat.get(var3).getUsername().equals(class192.localPlayer.username)) {
+						Interpreter.Interpreter_intStack[++class320.Interpreter_intStackSize - 1] = 1;
+					} else {
+						Interpreter.Interpreter_intStack[++class320.Interpreter_intStackSize - 1] = 0;
+					}
+
+					return 1;
+				} else if (var0 == ScriptOpcodes.CLAN_GETCHATOWNERNAME) {
+					if (InterfaceParent.clanChat != null && InterfaceParent.clanChat.owner != null) {
+						Interpreter.Interpreter_stringStack[++Message.Interpreter_stringStackSize - 1] = InterfaceParent.clanChat.owner;
+					} else {
+						Interpreter.Interpreter_stringStack[++Message.Interpreter_stringStackSize - 1] = "";
+					}
+
+					return 1;
+				} else if (var0 == ScriptOpcodes.CLAN_ISFRIEND) {
+					var3 = Interpreter.Interpreter_intStack[--class320.Interpreter_intStackSize];
+					if (InterfaceParent.clanChat != null && var3 < InterfaceParent.clanChat.getSize() && ((ClanMate)InterfaceParent.clanChat.get(var3)).isFriend()) {
+						Interpreter.Interpreter_intStack[++class320.Interpreter_intStackSize - 1] = 1;
+					} else {
+						Interpreter.Interpreter_intStack[++class320.Interpreter_intStackSize - 1] = 0;
+					}
+
+					return 1;
+				} else if (var0 != ScriptOpcodes.CLAN_ISIGNORE) {
+					if (var0 == 3628) {
+						KeyHandler.friendSystem.friendsList.removeComparator();
+						return 1;
+					} else {
+						boolean var7;
+						if (var0 == 3629) {
+							var7 = Interpreter.Interpreter_intStack[--class320.Interpreter_intStackSize] == 1;
+							KeyHandler.friendSystem.friendsList.addComparator(new UserComparator1(var7));
+							return 1;
+						} else if (var0 == 3630) {
+							var7 = Interpreter.Interpreter_intStack[--class320.Interpreter_intStackSize] == 1;
+							KeyHandler.friendSystem.friendsList.addComparator(new UserComparator2(var7));
+							return 1;
+						} else if (var0 == 3631) {
+							var7 = Interpreter.Interpreter_intStack[--class320.Interpreter_intStackSize] == 1;
+							KeyHandler.friendSystem.friendsList.addComparator(new UserComparator3(var7));
+							return 1;
+						} else if (var0 == 3632) {
+							var7 = Interpreter.Interpreter_intStack[--class320.Interpreter_intStackSize] == 1;
+							KeyHandler.friendSystem.friendsList.addComparator(new UserComparator4(var7));
+							return 1;
+						} else if (var0 == 3633) {
+							var7 = Interpreter.Interpreter_intStack[--class320.Interpreter_intStackSize] == 1;
+							KeyHandler.friendSystem.friendsList.addComparator(new UserComparator5(var7));
+							return 1;
+						} else if (var0 == 3634) {
+							var7 = Interpreter.Interpreter_intStack[--class320.Interpreter_intStackSize] == 1;
+							KeyHandler.friendSystem.friendsList.addComparator(new UserComparator6(var7));
+							return 1;
+						} else if (var0 == 3635) {
+							var7 = Interpreter.Interpreter_intStack[--class320.Interpreter_intStackSize] == 1;
+							KeyHandler.friendSystem.friendsList.addComparator(new UserComparator7(var7));
+							return 1;
+						} else if (var0 == 3636) {
+							var7 = Interpreter.Interpreter_intStack[--class320.Interpreter_intStackSize] == 1;
+							KeyHandler.friendSystem.friendsList.addComparator(new UserComparator8(var7));
+							return 1;
+						} else if (var0 == 3637) {
+							var7 = Interpreter.Interpreter_intStack[--class320.Interpreter_intStackSize] == 1;
+							KeyHandler.friendSystem.friendsList.addComparator(new UserComparator9(var7));
+							return 1;
+						} else if (var0 == 3638) {
+							var7 = Interpreter.Interpreter_intStack[--class320.Interpreter_intStackSize] == 1;
+							KeyHandler.friendSystem.friendsList.addComparator(new UserComparator10(var7));
+							return 1;
+						} else if (var0 == 3639) {
+							KeyHandler.friendSystem.friendsList.sort();
+							return 1;
+						} else if (var0 == 3640) {
+							KeyHandler.friendSystem.ignoreList.removeComparator();
+							return 1;
+						} else if (var0 == 3641) {
+							var7 = Interpreter.Interpreter_intStack[--class320.Interpreter_intStackSize] == 1;
+							KeyHandler.friendSystem.ignoreList.addComparator(new UserComparator1(var7));
+							return 1;
+						} else if (var0 == 3642) {
+							var7 = Interpreter.Interpreter_intStack[--class320.Interpreter_intStackSize] == 1;
+							KeyHandler.friendSystem.ignoreList.addComparator(new UserComparator2(var7));
+							return 1;
+						} else if (var0 == 3643) {
+							KeyHandler.friendSystem.ignoreList.sort();
+							return 1;
+						} else if (var0 == 3644) {
+							if (InterfaceParent.clanChat != null) {
+								InterfaceParent.clanChat.removeComparator();
+							}
+
+							return 1;
+						} else if (var0 == 3645) {
+							var7 = Interpreter.Interpreter_intStack[--class320.Interpreter_intStackSize] == 1;
+							if (InterfaceParent.clanChat != null) {
+								InterfaceParent.clanChat.addComparator(new UserComparator1(var7));
+							}
+
+							return 1;
+						} else if (var0 == 3646) {
+							var7 = Interpreter.Interpreter_intStack[--class320.Interpreter_intStackSize] == 1;
+							if (InterfaceParent.clanChat != null) {
+								InterfaceParent.clanChat.addComparator(new UserComparator2(var7));
+							}
+
+							return 1;
+						} else if (var0 == 3647) {
+							var7 = Interpreter.Interpreter_intStack[--class320.Interpreter_intStackSize] == 1;
+							if (InterfaceParent.clanChat != null) {
+								InterfaceParent.clanChat.addComparator(new UserComparator3(var7));
+							}
+
+							return 1;
+						} else if (var0 == 3648) {
+							var7 = Interpreter.Interpreter_intStack[--class320.Interpreter_intStackSize] == 1;
+							if (InterfaceParent.clanChat != null) {
+								InterfaceParent.clanChat.addComparator(new UserComparator4(var7));
+							}
+
+							return 1;
+						} else if (var0 == 3649) {
+							var7 = Interpreter.Interpreter_intStack[--class320.Interpreter_intStackSize] == 1;
+							if (InterfaceParent.clanChat != null) {
+								InterfaceParent.clanChat.addComparator(new UserComparator5(var7));
+							}
+
+							return 1;
+						} else if (var0 == 3650) {
+							var7 = Interpreter.Interpreter_intStack[--class320.Interpreter_intStackSize] == 1;
+							if (InterfaceParent.clanChat != null) {
+								InterfaceParent.clanChat.addComparator(new UserComparator6(var7));
+							}
+
+							return 1;
+						} else if (var0 == 3651) {
+							var7 = Interpreter.Interpreter_intStack[--class320.Interpreter_intStackSize] == 1;
+							if (InterfaceParent.clanChat != null) {
+								InterfaceParent.clanChat.addComparator(new UserComparator7(var7));
+							}
+
+							return 1;
+						} else if (var0 == 3652) {
+							var7 = Interpreter.Interpreter_intStack[--class320.Interpreter_intStackSize] == 1;
+							if (InterfaceParent.clanChat != null) {
+								InterfaceParent.clanChat.addComparator(new UserComparator8(var7));
+							}
+
+							return 1;
+						} else if (var0 == 3653) {
+							var7 = Interpreter.Interpreter_intStack[--class320.Interpreter_intStackSize] == 1;
+							if (InterfaceParent.clanChat != null) {
+								InterfaceParent.clanChat.addComparator(new UserComparator9(var7));
+							}
+
+							return 1;
+						} else if (var0 == 3654) {
+							var7 = Interpreter.Interpreter_intStack[--class320.Interpreter_intStackSize] == 1;
+							if (InterfaceParent.clanChat != null) {
+								InterfaceParent.clanChat.addComparator(new UserComparator10(var7));
+							}
+
+							return 1;
+						} else if (var0 == 3655) {
+							if (InterfaceParent.clanChat != null) {
+								InterfaceParent.clanChat.sort();
+							}
+
+							return 1;
+						} else if (var0 == 3656) {
+							var7 = Interpreter.Interpreter_intStack[--class320.Interpreter_intStackSize] == 1;
+							KeyHandler.friendSystem.friendsList.addComparator(new BuddyRankComparator(var7));
+							return 1;
+						} else if (var0 == 3657) {
+							var7 = Interpreter.Interpreter_intStack[--class320.Interpreter_intStackSize] == 1;
+							if (InterfaceParent.clanChat != null) {
+								InterfaceParent.clanChat.addComparator(new BuddyRankComparator(var7));
+							}
+
+							return 1;
+						} else {
+							return 2;
+						}
+					}
+				} else {
+					var3 = Interpreter.Interpreter_intStack[--class320.Interpreter_intStackSize];
+					if (InterfaceParent.clanChat != null && var3 < InterfaceParent.clanChat.getSize() && ((ClanMate)InterfaceParent.clanChat.get(var3)).isIgnored()) {
+						Interpreter.Interpreter_intStack[++class320.Interpreter_intStackSize - 1] = 1;
+					} else {
+						Interpreter.Interpreter_intStack[++class320.Interpreter_intStackSize - 1] = 0;
+					}
+
+					return 1;
+				}
+			}
+		}
 	}
 }

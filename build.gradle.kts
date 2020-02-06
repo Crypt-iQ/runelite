@@ -44,13 +44,11 @@ plugins {
     id(Plugins.latestVersion.first) version Plugins.latestVersion.second
     id(Plugins.grgit.first) version Plugins.grgit.second
 
-    checkstyle
     application
 }
 
 val grgit = Grgit.open(mapOf("dir" to rootProject.projectDir.absolutePath))
 val localGitCommit = grgit.head().id
-val localGitCommitShort = grgit.head().getAbbreviatedId(7)
 
 fun isNonStable(version: String): Boolean {
     return listOf("ALPHA", "BETA", "RC").any {
@@ -61,11 +59,13 @@ fun isNonStable(version: String): Boolean {
 allprojects {
     group = "com.openosrs"
     version = ProjectVersions.rlVersion
+    apply<MavenPublishPlugin>()
 }
 
 subprojects {
     repositories {
-        //mavenLocal()
+        if (System.getenv("JITPACK") != null)
+            mavenLocal()
         jcenter()
         maven(url = "https://mvnrepository.com/artifact")
         maven(url = "https://repo.runelite.net")
@@ -74,18 +74,16 @@ subprojects {
     }
 
     apply<JavaLibraryPlugin>()
-    apply<MavenPublishPlugin>()
+    //apply<MavenPublishPlugin>()
     apply(plugin = Plugins.testLogger.first)
 
     project.extra["gitCommit"] = localGitCommit
-    project.extra["gitCommitShort"] = localGitCommitShort
-
     project.extra["rootPath"] = rootDir.toString().replace("\\", "/")
 
     if (this.name != "runescape-client") {
-        apply(plugin = "checkstyle")
+        apply<CheckstylePlugin>()
 
-        checkstyle {
+        configure<CheckstyleExtension> {
             maxWarnings = 0
             toolVersion = "8.25"
             isShowViolations = true
@@ -96,26 +94,20 @@ subprojects {
     configure<PublishingExtension> {
         repositories {
             maven {
-                name = "runelite"
-                url = uri("https://maven.pkg.github.com/open-osrs/runelite")
-                credentials {
-                    username = System.getProperty("gpr_user")
-                    password = System.getProperty("gpr_key")
-                }
+                url = uri("$buildDir/repo")
             }
         }
         publications {
-            register("gpr", MavenPublication::class) {
+            register("mavenJava", MavenPublication::class) {
                 from(components["java"])
             }
         }
     }
 
-
     tasks {
         java {
-            sourceCompatibility = JavaVersion.VERSION_1_8
-            targetCompatibility = JavaVersion.VERSION_1_8
+            sourceCompatibility = JavaVersion.VERSION_11
+            targetCompatibility = JavaVersion.VERSION_11
         }
 
         withType<JavaCompile> {

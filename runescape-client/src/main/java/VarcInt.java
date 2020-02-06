@@ -1,36 +1,24 @@
-import java.awt.Component;
 import net.runelite.mapping.Export;
 import net.runelite.mapping.Implements;
-import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
-import net.runelite.rs.Reflection;
 
-@ObfuscatedName("ia")
+@ObfuscatedName("ie")
 @Implements("VarcInt")
 public class VarcInt extends DualNode {
-	@ObfuscatedName("u")
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
-		signature = "Lhf;"
+		signature = "Lii;"
 	)
 	@Export("VarcInt_archive")
 	public static AbstractArchive VarcInt_archive;
-	@ObfuscatedName("f")
+	@ObfuscatedName("t")
 	@ObfuscatedSignature(
-		signature = "Lef;"
+		signature = "Leh;"
 	)
 	@Export("VarcInt_cached")
-	static EvictingDualNodeHashTable VarcInt_cached;
-	@ObfuscatedName("h")
-	@Export("SpriteBuffer_spriteHeights")
-	static int[] SpriteBuffer_spriteHeights;
-	@ObfuscatedName("fa")
-	@ObfuscatedGetter(
-		intValue = -1499248159
-	)
-	@Export("baseY")
-	static int baseY;
-	@ObfuscatedName("b")
+	public static EvictingDualNodeHashTable VarcInt_cached;
+	@ObfuscatedName("o")
 	@Export("persist")
 	public boolean persist;
 
@@ -38,98 +26,90 @@ public class VarcInt extends DualNode {
 		VarcInt_cached = new EvictingDualNodeHashTable(64);
 	}
 
-	VarcInt() {
+	public VarcInt() {
 		this.persist = false;
 	}
 
-	@ObfuscatedName("f")
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
-		signature = "(Lkg;I)V",
-		garbageValue = "-407905796"
+		signature = "(Lkp;I)V",
+		garbageValue = "-1301624128"
 	)
-	void method4485(Buffer var1) {
+	public void method4478(Buffer var1) {
 		while (true) {
 			int var2 = var1.readUnsignedByte();
 			if (var2 == 0) {
 				return;
 			}
 
-			this.method4486(var1, var2);
+			this.method4477(var1, var2);
 		}
 	}
 
-	@ObfuscatedName("b")
+	@ObfuscatedName("t")
 	@ObfuscatedSignature(
-		signature = "(Lkg;IB)V",
-		garbageValue = "-67"
+		signature = "(Lkp;IB)V",
+		garbageValue = "7"
 	)
-	void method4486(Buffer var1, int var2) {
+	void method4477(Buffer var1, int var2) {
 		if (var2 == 2) {
 			this.persist = true;
 		}
 
 	}
 
-	@ObfuscatedName("u")
+	@ObfuscatedName("ig")
 	@ObfuscatedSignature(
-		signature = "(Ljava/awt/Component;B)V",
-		garbageValue = "85"
+		signature = "(Lhn;IIIIIIB)V",
+		garbageValue = "-50"
 	)
-	static void method4484(Component var0) {
-		var0.addMouseListener(MouseHandler.MouseHandler_instance);
-		var0.addMouseMotionListener(MouseHandler.MouseHandler_instance);
-		var0.addFocusListener(MouseHandler.MouseHandler_instance);
-	}
-
-	@ObfuscatedName("u")
-	@ObfuscatedSignature(
-		signature = "(II)Lih;",
-		garbageValue = "1798735547"
-	)
-	@Export("getNpcDefinition")
-	public static NPCDefinition getNpcDefinition(int var0) {
-		NPCDefinition var1 = (NPCDefinition)NPCDefinition.NpcDefinition_cached.get((long)var0);
-		if (var1 != null) {
-			return var1;
+	static final void method4485(Widget var0, int var1, int var2, int var3, int var4, int var5, int var6) {
+		if (Client.field712) {
+			Client.alternativeScrollbarWidth = 32;
 		} else {
-			byte[] var2 = NPCDefinition.NpcDefinition_archive.takeFile(9, var0);
-			var1 = new NPCDefinition();
-			var1.id = var0;
-			if (var2 != null) {
-				var1.decode(new Buffer(var2));
+			Client.alternativeScrollbarWidth = 0;
+		}
+
+		Client.field712 = false;
+		int var7;
+		if (MouseHandler.MouseHandler_currentButton == 1 || !ArchiveLoader.mouseCam && MouseHandler.MouseHandler_currentButton == 4) {
+			if (var5 >= var1 && var5 < var1 + 16 && var6 >= var2 && var6 < var2 + 16) {
+				var0.scrollY -= 4;
+				NPCDefinition.invalidateWidget(var0);
+			} else if (var5 >= var1 && var5 < var1 + 16 && var6 >= var3 + var2 - 16 && var6 < var3 + var2) {
+				var0.scrollY += 4;
+				NPCDefinition.invalidateWidget(var0);
+			} else if (var5 >= var1 - Client.alternativeScrollbarWidth && var5 < Client.alternativeScrollbarWidth + var1 + 16 && var6 >= var2 + 16 && var6 < var3 + var2 - 16) {
+				var7 = var3 * (var3 - 32) / var4;
+				if (var7 < 8) {
+					var7 = 8;
+				}
+
+				int var8 = var6 - var2 - 16 - var7 / 2;
+				int var9 = var3 - 32 - var7;
+				var0.scrollY = var8 * (var4 - var3) / var9;
+				NPCDefinition.invalidateWidget(var0);
+				Client.field712 = true;
 			}
-
-			var1.postDecode();
-			NPCDefinition.NpcDefinition_cached.put(var1, (long)var0);
-			return var1;
 		}
+
+		if (Client.mouseWheelRotation != 0) {
+			var7 = var0.width;
+			if (var5 >= var1 - var7 && var6 >= var2 && var5 < var1 + 16 && var6 <= var3 + var2) {
+				var0.scrollY += Client.mouseWheelRotation * 45;
+				NPCDefinition.invalidateWidget(var0);
+			}
+		}
+
 	}
 
-	@ObfuscatedName("z")
+	@ObfuscatedName("kd")
 	@ObfuscatedSignature(
-		signature = "(Ljava/lang/String;S)Ljava/lang/Class;",
-		garbageValue = "2623"
+		signature = "(Lhn;I)Z",
+		garbageValue = "-1381346816"
 	)
-	@Export("loadClassFromDescriptor")
-	static Class loadClassFromDescriptor(String var0) throws ClassNotFoundException {
-		if (var0.equals("B")) {
-			return Byte.TYPE;
-		} else if (var0.equals("I")) {
-			return Integer.TYPE;
-		} else if (var0.equals("S")) {
-			return Short.TYPE;
-		} else if (var0.equals("J")) {
-			return Long.TYPE;
-		} else if (var0.equals("Z")) {
-			return Boolean.TYPE;
-		} else if (var0.equals("F")) {
-			return Float.TYPE;
-		} else if (var0.equals("D")) {
-			return Double.TYPE;
-		} else if (var0.equals("C")) {
-			return Character.TYPE;
-		} else {
-			return var0.equals("void") ? Void.TYPE : Reflection.findClass(var0);
-		}
+	@Export("isComponentHidden")
+	static boolean isComponentHidden(Widget var0) {
+		return var0.isHidden;
 	}
 }

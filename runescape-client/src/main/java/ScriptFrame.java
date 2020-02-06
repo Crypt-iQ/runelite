@@ -1,41 +1,34 @@
-import java.io.File;
-import java.io.InputStream;
-import java.io.OutputStreamWriter;
-import java.io.RandomAccessFile;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.Random;
 import net.runelite.mapping.Export;
 import net.runelite.mapping.Implements;
 import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("bd")
+@ObfuscatedName("bb")
 @Implements("ScriptFrame")
 public class ScriptFrame {
-	@ObfuscatedName("du")
+	@ObfuscatedName("i")
 	@ObfuscatedSignature(
-		signature = "Lij;"
+		signature = "Lli;"
 	)
-	@Export("archive11")
-	static Archive archive11;
-	@ObfuscatedName("u")
+	@Export("titleboxSprite")
+	static IndexedSprite titleboxSprite;
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
-		signature = "Lci;"
+		signature = "Lce;"
 	)
 	@Export("script")
 	Script script;
-	@ObfuscatedName("f")
+	@ObfuscatedName("t")
 	@ObfuscatedGetter(
-		intValue = 1054193233
+		intValue = -424456735
 	)
 	@Export("pc")
 	int pc;
-	@ObfuscatedName("b")
+	@ObfuscatedName("o")
 	@Export("intLocals")
 	int[] intLocals;
-	@ObfuscatedName("g")
+	@ObfuscatedName("e")
 	@Export("stringLocals")
 	String[] stringLocals;
 
@@ -43,299 +36,308 @@ public class ScriptFrame {
 		this.pc = -1;
 	}
 
-	@ObfuscatedName("u")
+	@ObfuscatedName("e")
 	@ObfuscatedSignature(
-		signature = "(Ljava/lang/String;B)Ljava/io/File;",
-		garbageValue = "16"
+		signature = "(II)Z",
+		garbageValue = "1752318627"
 	)
-	@Export("getFile")
-	public static File getFile(String var0) {
-		if (!FileSystem.FileSystem_hasPermissions) {
-			throw new RuntimeException("");
+	@Export("loadInterface")
+	public static boolean loadInterface(int var0) {
+		if (class197.Widget_loadedInterfaces[var0]) {
+			return true;
+		} else if (!class197.Widget_archive.tryLoadGroup(var0)) {
+			return false;
 		} else {
-			File var1 = (File)FileSystem.FileSystem_cacheFiles.get(var0);
-			if (var1 != null) {
-				return var1;
+			int var1 = class197.Widget_archive.getGroupFileCount(var0);
+			if (var1 == 0) {
+				class197.Widget_loadedInterfaces[var0] = true;
+				return true;
 			} else {
-				File var2 = new File(FileSystem.FileSystem_cacheDir, var0);
-				RandomAccessFile var3 = null;
+				if (WorldMapLabel.Widget_interfaceComponents[var0] == null) {
+					WorldMapLabel.Widget_interfaceComponents[var0] = new Widget[var1];
+				}
 
-				try {
-					File var4 = new File(var2.getParent());
-					if (!var4.exists()) {
-						throw new RuntimeException("");
-					} else {
-						var3 = new RandomAccessFile(var2, "rw");
-						int var5 = var3.read();
-						var3.seek(0L);
-						var3.write(var5);
-						var3.seek(0L);
-						var3.close();
-						FileSystem.FileSystem_cacheFiles.put(var0, var2);
-						return var2;
-					}
-				} catch (Exception var8) {
-					try {
+				for (int var2 = 0; var2 < var1; ++var2) {
+					if (WorldMapLabel.Widget_interfaceComponents[var0][var2] == null) {
+						byte[] var3 = class197.Widget_archive.takeFile(var0, var2);
 						if (var3 != null) {
-							var3.close();
-							var3 = null;
+							WorldMapLabel.Widget_interfaceComponents[var0][var2] = new Widget();
+							WorldMapLabel.Widget_interfaceComponents[var0][var2].id = var2 + (var0 << 16);
+							if (var3[0] == -1) {
+								WorldMapLabel.Widget_interfaceComponents[var0][var2].decode(new Buffer(var3));
+							} else {
+								WorldMapLabel.Widget_interfaceComponents[var0][var2].decodeLegacy(new Buffer(var3));
+							}
 						}
-					} catch (Exception var7) {
 					}
-
-					throw new RuntimeException();
 				}
+
+				class197.Widget_loadedInterfaces[var0] = true;
+				return true;
 			}
 		}
 	}
 
-	@ObfuscatedName("u")
+	@ObfuscatedName("g")
 	@ObfuscatedSignature(
-		signature = "(B)J",
-		garbageValue = "0"
+		signature = "([BIII)Ljava/lang/String;",
+		garbageValue = "-1282364496"
 	)
-	static long method1162() {
-		try {
-			URL var0 = new URL(PacketBuffer.method5582("services", false) + "m=accountappeal/login.ws");
-			URLConnection var1 = var0.openConnection();
-			var1.setRequestProperty("connection", "close");
-			var1.setDoInput(true);
-			var1.setDoOutput(true);
-			var1.setConnectTimeout(5000);
-			OutputStreamWriter var2 = new OutputStreamWriter(var1.getOutputStream());
-			var2.write("data1=req");
-			var2.flush();
-			InputStream var3 = var1.getInputStream();
-			Buffer var4 = new Buffer(new byte[1000]);
+	@Export("decodeStringCp1252")
+	public static String decodeStringCp1252(byte[] var0, int var1, int var2) {
+		char[] var3 = new char[var2];
+		int var4 = 0;
 
-			do {
-				int var5 = var3.read(var4.array, var4.offset, 1000 - var4.offset);
-				if (var5 == -1) {
-					var4.offset = 0;
-					long var7 = var4.readLong();
-					return var7;
+		for (int var5 = 0; var5 < var2; ++var5) {
+			int var6 = var0[var5 + var1] & 255;
+			if (var6 != 0) {
+				if (var6 >= 128 && var6 < 160) {
+					char var7 = class288.cp1252AsciiExtension[var6 - 128];
+					if (var7 == 0) {
+						var7 = '?';
+					}
+
+					var6 = var7;
 				}
 
-				var4.offset += var5;
-			} while(var4.offset < 1000);
-
-			return 0L;
-		} catch (Exception var9) {
-			return 0L;
+				var3[var4++] = (char)var6;
+			}
 		}
+
+		return new String(var3, 0, var4);
 	}
 
-	@ObfuscatedName("y")
+	@ObfuscatedName("gi")
 	@ObfuscatedSignature(
-		signature = "(I)V",
-		garbageValue = "1620036213"
+		signature = "(Lbx;II)V",
+		garbageValue = "1584696624"
 	)
-	static void method1163() {
-		Login.Login_username = Login.Login_username.trim();
-		if (Login.Login_username.length() == 0) {
-			PacketWriter.setLoginResponseString("Please enter your username.", "If you created your account after November", "2010, this will be the creation email address.");
+	@Export("updateActorSequence")
+	static final void updateActorSequence(Actor var0, int var1) {
+		if (var0.field985 >= Client.cycle) {
+			class185.method3685(var0);
+		} else if (var0.field986 >= Client.cycle) {
+			GrandExchangeEvent.method88(var0);
 		} else {
-			long var1 = method1162();
-			byte var0;
-			if (var1 == 0L) {
-				var0 = 5;
+			WorldMapRegion.method565(var0);
+		}
+
+		if (var0.x < 128 || var0.y < 128 || var0.x >= 13184 || var0.y >= 13184) {
+			var0.sequence = -1;
+			var0.spotAnimation = -1;
+			var0.field985 = 0;
+			var0.field986 = 0;
+			var0.x = var0.pathX[0] * 128 + var0.field942 * 2013925376;
+			var0.y = var0.pathY[0] * 128 + var0.field942 * 2013925376;
+			var0.method1740();
+		}
+
+		if (class192.localPlayer == var0 && (var0.x < 1536 || var0.y < 1536 || var0.x >= 11776 || var0.y >= 11776)) {
+			var0.sequence = -1;
+			var0.spotAnimation = -1;
+			var0.field985 = 0;
+			var0.field986 = 0;
+			var0.x = var0.pathX[0] * 128 + var0.field942 * 2013925376;
+			var0.y = var0.pathY[0] * 128 + var0.field942 * 2013925376;
+			var0.method1740();
+		}
+
+		int var5;
+		if (var0.field975 != 0) {
+			if (var0.targetIndex != -1) {
+				Object var2 = null;
+				if (var0.targetIndex < 32768) {
+					var2 = Client.npcs[var0.targetIndex];
+				} else if (var0.targetIndex >= 32768) {
+					var2 = Client.players[var0.targetIndex - 32768];
+				}
+
+				if (var2 != null) {
+					int var6 = var0.x - ((Actor)var2).x;
+					int var4 = var0.y - ((Actor)var2).y;
+					if (var6 != 0 || var4 != 0) {
+						var0.orientation = (int)(Math.atan2((double)var6, (double)var4) * 325.949D) & 2047;
+					}
+				} else if (var0.false0) {
+					var0.targetIndex = -1;
+					var0.false0 = false;
+				}
+			}
+
+			if (var0.field967 != -1 && (var0.pathLength == 0 || var0.field997 > 0)) {
+				var0.orientation = var0.field967;
+				var0.field967 = -1;
+			}
+
+			var5 = var0.orientation - var0.rotation & 2047;
+			if (var5 == 0 && var0.false0) {
+				var0.targetIndex = -1;
+				var0.false0 = false;
+			}
+
+			if (var5 != 0) {
+				++var0.field956;
+				boolean var8;
+				if (var5 > 1024) {
+					var0.rotation -= var0.field975;
+					var8 = true;
+					if (var5 < var0.field975 || var5 > 2048 - var0.field975) {
+						var0.rotation = var0.orientation;
+						var8 = false;
+					}
+
+					if (var0.movementSequence == var0.readySequence && (var0.field956 > 25 || var8)) {
+						if (var0.turnLeftSequence != -1) {
+							var0.movementSequence = var0.turnLeftSequence;
+						} else {
+							var0.movementSequence = var0.walkSequence;
+						}
+					}
+				} else {
+					var0.rotation += var0.field975;
+					var8 = true;
+					if (var5 < var0.field975 || var5 > 2048 - var0.field975) {
+						var0.rotation = var0.orientation;
+						var8 = false;
+					}
+
+					if (var0.movementSequence == var0.readySequence && (var0.field956 > 25 || var8)) {
+						if (var0.turnRightSequence != -1) {
+							var0.movementSequence = var0.turnRightSequence;
+						} else {
+							var0.movementSequence = var0.walkSequence;
+						}
+					}
+				}
+
+				var0.rotation &= 2047;
 			} else {
-				String var4 = Login.Login_username;
-				Random var5 = new Random();
-				Buffer var6 = new Buffer(128);
-				Buffer var7 = new Buffer(128);
-				int[] var8 = new int[]{var5.nextInt(), var5.nextInt(), (int)(var1 >> 32), (int)var1};
-				var6.writeByte(10);
+				var0.field956 = 0;
+			}
+		}
 
-				int var9;
-				for (var9 = 0; var9 < 4; ++var9) {
-					var6.writeInt(var5.nextInt());
+		var0.isWalking = false;
+		SequenceDefinition var7;
+		if (var0.movementSequence != -1) {
+			var7 = GraphicsDefaults.SequenceDefinition_get(var0.movementSequence);
+			if (var7 != null && var7.frameIds != null) {
+				++var0.movementFrameCycle;
+				if (var0.movementFrame < var7.frameIds.length && var0.movementFrameCycle > var7.frameLengths[var0.movementFrame]) {
+					var0.movementFrameCycle = 1;
+					++var0.movementFrame;
+					GameObject.addSequenceSoundEffect(var7, var0.movementFrame, var0.x, var0.y);
 				}
 
-				var6.writeInt(var8[0]);
-				var6.writeInt(var8[1]);
-				var6.writeLong(var1);
-				var6.writeLong(0L);
-
-				for (var9 = 0; var9 < 4; ++var9) {
-					var6.writeInt(var5.nextInt());
+				if (var0.movementFrame >= var7.frameIds.length) {
+					var0.movementFrameCycle = 0;
+					var0.movementFrame = 0;
+					GameObject.addSequenceSoundEffect(var7, var0.movementFrame, var0.x, var0.y);
 				}
+			} else {
+				var0.movementSequence = -1;
+			}
+		}
 
-				var6.encryptRsa(class80.field1129, class80.field1130);
-				var7.writeByte(10);
-
-				for (var9 = 0; var9 < 3; ++var9) {
-					var7.writeInt(var5.nextInt());
-				}
-
-				var7.writeLong(var5.nextLong());
-				var7.writeLongMedium(var5.nextLong());
-				GrandExchangeOfferTotalQuantityComparator.method104(var7);
-				var7.writeLong(var5.nextLong());
-				var7.encryptRsa(class80.field1129, class80.field1130);
-				var9 = class173.stringCp1252NullTerminatedByteSize(var4);
-				if (var9 % 8 != 0) {
-					var9 += 8 - var9 % 8;
-				}
-
-				Buffer var10 = new Buffer(var9);
-				var10.writeStringCp1252NullTerminated(var4);
-				var10.offset = var9;
-				var10.xteaEncryptAll(var8);
-				Buffer var11 = new Buffer(var7.offset + var6.offset + var10.offset + 5);
-				var11.writeByte(2);
-				var11.writeByte(var6.offset);
-				var11.writeBytes(var6.array, 0, var6.offset);
-				var11.writeByte(var7.offset);
-				var11.writeBytes(var7.array, 0, var7.offset);
-				var11.writeShort(var10.offset);
-				var11.writeBytes(var10.array, 0, var10.offset);
-				String var12 = StudioGame.method4220(var11.array);
-
-				byte var3;
-				try {
-					URL var13 = new URL(PacketBuffer.method5582("services", false) + "m=accountappeal/login.ws");
-					URLConnection var14 = var13.openConnection();
-					var14.setDoInput(true);
-					var14.setDoOutput(true);
-					var14.setConnectTimeout(5000);
-					OutputStreamWriter var15 = new OutputStreamWriter(var14.getOutputStream());
-					int var18 = var12.length();
-					StringBuilder var19 = new StringBuilder(var18);
-
-					int var20;
-					for (var20 = 0; var20 < var18; ++var20) {
-						char var21 = var12.charAt(var20);
-						if ((var21 < 'a' || var21 > 'z') && (var21 < 'A' || var21 > 'Z') && (var21 < '0' || var21 > '9') && var21 != '.' && var21 != '-' && var21 != '*' && var21 != '_') {
-							if (var21 == ' ') {
-								var19.append('+');
-							} else {
-								byte var22 = Skills.charToByteCp1252(var21);
-								var19.append('%');
-								int var23 = var22 >> 4 & 15;
-								if (var23 >= 10) {
-									var19.append((char)(var23 + 55));
-								} else {
-									var19.append((char)(var23 + 48));
-								}
-
-								var23 = var22 & 15;
-								if (var23 >= 10) {
-									var19.append((char)(var23 + 55));
-								} else {
-									var19.append((char)(var23 + 48));
-								}
-							}
-						} else {
-							var19.append(var21);
-						}
-					}
-
-					String var17 = var19.toString();
-					String var26 = "data2=" + var17 + "&dest=";
-					var20 = "passwordchoice.ws".length();
-					StringBuilder var27 = new StringBuilder(var20);
-
-					for (int var32 = 0; var32 < var20; ++var32) {
-						char var33 = "passwordchoice.ws".charAt(var32);
-						if ((var33 < 'a' || var33 > 'z') && (var33 < 'A' || var33 > 'Z') && (var33 < '0' || var33 > '9') && var33 != '.' && var33 != '-' && var33 != '*' && var33 != '_') {
-							if (var33 == ' ') {
-								var27.append('+');
-							} else {
-								byte var24 = Skills.charToByteCp1252(var33);
-								var27.append('%');
-								int var25 = var24 >> 4 & 15;
-								if (var25 >= 10) {
-									var27.append((char)(var25 + 55));
-								} else {
-									var27.append((char)(var25 + 48));
-								}
-
-								var25 = var24 & 15;
-								if (var25 >= 10) {
-									var27.append((char)(var25 + 55));
-								} else {
-									var27.append((char)(var25 + 48));
-								}
-							}
-						} else {
-							var27.append(var33);
-						}
-					}
-
-					String var30 = var27.toString();
-					var15.write(var26 + var30);
-					var15.flush();
-					InputStream var28 = var14.getInputStream();
-					var11 = new Buffer(new byte[1000]);
-
-					while (true) {
-						int var31 = var28.read(var11.array, var11.offset, 1000 - var11.offset);
-						if (var31 == -1) {
-							var15.close();
-							var28.close();
-							String var34 = new String(var11.array);
-							if (var34.startsWith("OFFLINE")) {
-								var3 = 4;
-							} else if (var34.startsWith("WRONG")) {
-								var3 = 7;
-							} else if (var34.startsWith("RELOAD")) {
-								var3 = 3;
-							} else if (var34.startsWith("Not permitted for social network accounts.")) {
-								var3 = 6;
-							} else {
-								var11.xteaDecryptAll(var8);
-
-								while (var11.offset > 0 && var11.array[var11.offset - 1] == 0) {
-									--var11.offset;
-								}
-
-								var34 = new String(var11.array, 0, var11.offset);
-								if (WorldMapLabel.isValidURL(var34)) {
-									WorldMapAreaData.openURL(var34, true, false);
-									var3 = 2;
-								} else {
-									var3 = 5;
-								}
-							}
-							break;
-						}
-
-						var11.offset += var31;
-						if (var11.offset >= 1000) {
-							var3 = 5;
-							break;
-						}
-					}
-				} catch (Throwable var29) {
-					var29.printStackTrace();
-					var3 = 5;
-				}
-
-				var0 = var3;
+		if (var0.spotAnimation != -1 && Client.cycle >= var0.field979) {
+			if (var0.spotAnimationFrame < 0) {
+				var0.spotAnimationFrame = 0;
 			}
 
-			switch(var0) {
-			case 2:
-				PacketWriter.setLoginResponseString(Strings.field2912, Strings.field3039, Strings.field2786);
-				Login.loginIndex = 6;
-				break;
-			case 3:
-				PacketWriter.setLoginResponseString("", "Error connecting to server.", "");
-				break;
-			case 4:
-				PacketWriter.setLoginResponseString("The part of the website you are trying", "to connect to is offline at the moment.", "Please try again later.");
-				break;
-			case 5:
-				PacketWriter.setLoginResponseString("Sorry, there was an error trying to", "log you in to this part of the website.", "Please try again later.");
-				break;
-			case 6:
-				PacketWriter.setLoginResponseString("", "Error connecting to server.", "");
-				break;
-			case 7:
-				PacketWriter.setLoginResponseString("You must enter a valid login to proceed. For accounts", "created after 24th November 2010, please use your", "email address. Otherwise please use your username.");
+			var5 = class65.SpotAnimationDefinition_get(var0.spotAnimation).sequence;
+			if (var5 != -1) {
+				SequenceDefinition var3 = GraphicsDefaults.SequenceDefinition_get(var5);
+				if (var3 != null && var3.frameIds != null) {
+					++var0.spotAnimationFrameCycle;
+					if (var0.spotAnimationFrame < var3.frameIds.length && var0.spotAnimationFrameCycle > var3.frameLengths[var0.spotAnimationFrame]) {
+						var0.spotAnimationFrameCycle = 1;
+						++var0.spotAnimationFrame;
+						GameObject.addSequenceSoundEffect(var3, var0.spotAnimationFrame, var0.x, var0.y);
+					}
+
+					if (var0.spotAnimationFrame >= var3.frameIds.length && (var0.spotAnimationFrame < 0 || var0.spotAnimationFrame >= var3.frameIds.length)) {
+						var0.spotAnimation = -1;
+					}
+				} else {
+					var0.spotAnimation = -1;
+				}
+			} else {
+				var0.spotAnimation = -1;
+			}
+		}
+
+		if (var0.sequence != -1 && var0.sequenceDelay <= 1) {
+			var7 = GraphicsDefaults.SequenceDefinition_get(var0.sequence);
+			if (var7.field3523 == 1 && var0.field998 > 0 && var0.field985 <= Client.cycle && var0.field986 < Client.cycle) {
+				var0.sequenceDelay = 1;
+				return;
+			}
+		}
+
+		if (var0.sequence != -1 && var0.sequenceDelay == 0) {
+			var7 = GraphicsDefaults.SequenceDefinition_get(var0.sequence);
+			if (var7 != null && var7.frameIds != null) {
+				++var0.sequenceFrameCycle;
+				if (var0.sequenceFrame < var7.frameIds.length && var0.sequenceFrameCycle > var7.frameLengths[var0.sequenceFrame]) {
+					var0.sequenceFrameCycle = 1;
+					++var0.sequenceFrame;
+					GameObject.addSequenceSoundEffect(var7, var0.sequenceFrame, var0.x, var0.y);
+				}
+
+				if (var0.sequenceFrame >= var7.frameIds.length) {
+					var0.sequenceFrame -= var7.frameCount;
+					++var0.field983;
+					if (var0.field983 >= var7.field3522) {
+						var0.sequence = -1;
+					} else if (var0.sequenceFrame >= 0 && var0.sequenceFrame < var7.frameIds.length) {
+						GameObject.addSequenceSoundEffect(var7, var0.sequenceFrame, var0.x, var0.y);
+					} else {
+						var0.sequence = -1;
+					}
+				}
+
+				var0.isWalking = var7.field3518;
+			} else {
+				var0.sequence = -1;
+			}
+		}
+
+		if (var0.sequenceDelay > 0) {
+			--var0.sequenceDelay;
+		}
+
+	}
+
+	@ObfuscatedName("jj")
+	@ObfuscatedSignature(
+		signature = "(Lhn;B)Z",
+		garbageValue = "-53"
+	)
+	@Export("runCs1")
+	static final boolean runCs1(Widget var0) {
+		if (var0.cs1Comparisons == null) {
+			return false;
+		} else {
+			for (int var1 = 0; var1 < var0.cs1Comparisons.length; ++var1) {
+				int var2 = GrandExchangeOfferTotalQuantityComparator.method106(var0, var1);
+				int var3 = var0.cs1ComparisonValues[var1];
+				if (var0.cs1Comparisons[var1] == 2) {
+					if (var2 >= var3) {
+						return false;
+					}
+				} else if (var0.cs1Comparisons[var1] == 3) {
+					if (var2 <= var3) {
+						return false;
+					}
+				} else if (var0.cs1Comparisons[var1] == 4) {
+					if (var3 == var2) {
+						return false;
+					}
+				} else if (var2 != var3) {
+					return false;
+				}
 			}
 
+			return true;
 		}
 	}
 }

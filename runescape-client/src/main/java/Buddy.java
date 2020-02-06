@@ -4,24 +4,24 @@ import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("jt")
+@ObfuscatedName("je")
 @Implements("Buddy")
 public class Buddy extends User {
-	@ObfuscatedName("z")
+	@ObfuscatedName("i")
 	@ObfuscatedGetter(
-		intValue = -1985676249
+		intValue = -1462953665
 	)
 	@Export("world")
 	public int world;
-	@ObfuscatedName("p")
+	@ObfuscatedName("g")
 	@ObfuscatedGetter(
-		intValue = 1502929201
+		intValue = 179134735
 	)
 	@Export("int2")
 	public int int2;
-	@ObfuscatedName("h")
+	@ObfuscatedName("d")
 	@ObfuscatedGetter(
-		intValue = -588738279
+		intValue = -1349530221
 	)
 	@Export("rank")
 	public int rank;
@@ -30,10 +30,10 @@ public class Buddy extends User {
 		this.world = -1;
 	}
 
-	@ObfuscatedName("ar")
+	@ObfuscatedName("ai")
 	@ObfuscatedSignature(
-		signature = "(IIS)V",
-		garbageValue = "13296"
+		signature = "(III)V",
+		garbageValue = "1991575010"
 	)
 	@Export("set")
 	void set(int var1, int var2) {
@@ -41,37 +41,49 @@ public class Buddy extends User {
 		this.int2 = var2;
 	}
 
-	@ObfuscatedName("av")
+	@ObfuscatedName("ab")
 	@ObfuscatedSignature(
 		signature = "(I)I",
-		garbageValue = "1862219925"
+		garbageValue = "-1822334974"
 	)
 	@Export("getWorld")
 	public int getWorld() {
 		return this.world;
 	}
 
-	@ObfuscatedName("aq")
+	@ObfuscatedName("ap")
 	@ObfuscatedSignature(
-		signature = "(I)Z",
-		garbageValue = "-127464442"
+		signature = "(B)Z",
+		garbageValue = "-101"
 	)
 	@Export("hasWorld")
 	public boolean hasWorld() {
 		return this.world > 0;
 	}
 
-	@ObfuscatedName("g")
+	@ObfuscatedName("m")
 	@ObfuscatedSignature(
-		signature = "(I)V",
-		garbageValue = "595265698"
+		signature = "(Ljava/lang/CharSequence;I)I",
+		garbageValue = "631809601"
 	)
-	static void method5251() {
-		if (Client.Login_isUsernameRemembered && Login.Login_username != null && Login.Login_username.length() > 0) {
-			Login.currentLoginField = 1;
-		} else {
-			Login.currentLoginField = 0;
+	public static int method5234(CharSequence var0) {
+		int var1 = var0.length();
+		int var2 = 0;
+
+		for (int var3 = 0; var3 < var1; ++var3) {
+			var2 = (var2 << 5) - var2 + var0.charAt(var3);
 		}
 
+		return var2;
+	}
+
+	@ObfuscatedName("ah")
+	@ObfuscatedSignature(
+		signature = "(Ljava/lang/String;I)I",
+		garbageValue = "-2002208158"
+	)
+	@Export("stringCp1252NullTerminatedByteSize")
+	public static int stringCp1252NullTerminatedByteSize(String var0) {
+		return var0.length() + 1;
 	}
 }

@@ -4,93 +4,90 @@ import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("s")
+@ObfuscatedName("y")
 @Implements("WorldMapSection0")
 public class WorldMapSection0 implements WorldMapSection {
-	@ObfuscatedName("bi")
-	@Export("otp")
-	static String otp;
-	@ObfuscatedName("u")
+	@ObfuscatedName("c")
 	@ObfuscatedGetter(
-		intValue = 794568467
+		intValue = -2146402029
 	)
 	@Export("oldZ")
 	int oldZ;
-	@ObfuscatedName("f")
+	@ObfuscatedName("t")
 	@ObfuscatedGetter(
-		intValue = -1084191983
+		intValue = -2085039341
 	)
 	@Export("newZ")
 	int newZ;
-	@ObfuscatedName("b")
+	@ObfuscatedName("o")
 	@ObfuscatedGetter(
-		intValue = 1594820829
+		intValue = 555505141
 	)
 	@Export("oldX")
 	int oldX;
-	@ObfuscatedName("g")
+	@ObfuscatedName("e")
 	@ObfuscatedGetter(
-		intValue = -937429385
+		intValue = -1856751623
 	)
 	@Export("oldY")
 	int oldY;
-	@ObfuscatedName("z")
+	@ObfuscatedName("i")
 	@ObfuscatedGetter(
-		intValue = -1148101127
+		intValue = -2086851217
 	)
 	@Export("newX")
 	int newX;
-	@ObfuscatedName("p")
+	@ObfuscatedName("g")
 	@ObfuscatedGetter(
-		intValue = 253679643
+		intValue = 1346820565
 	)
 	@Export("newY")
 	int newY;
-	@ObfuscatedName("h")
+	@ObfuscatedName("d")
 	@ObfuscatedGetter(
-		intValue = -1649308031
+		intValue = -1459523587
 	)
 	@Export("oldChunkXLow")
 	int oldChunkXLow;
-	@ObfuscatedName("y")
+	@ObfuscatedName("l")
 	@ObfuscatedGetter(
-		intValue = 842286875
+		intValue = -954702965
 	)
 	@Export("oldChunkYLow")
 	int oldChunkYLow;
-	@ObfuscatedName("w")
+	@ObfuscatedName("j")
 	@ObfuscatedGetter(
-		intValue = 491567857
+		intValue = -1622063887
 	)
 	@Export("oldChunkXHigh")
 	int oldChunkXHigh;
-	@ObfuscatedName("i")
+	@ObfuscatedName("m")
 	@ObfuscatedGetter(
-		intValue = 1271565133
+		intValue = -2070491231
 	)
 	@Export("oldChunkYHigh")
 	int oldChunkYHigh;
-	@ObfuscatedName("k")
+	@ObfuscatedName("p")
 	@ObfuscatedGetter(
-		intValue = -79221889
+		intValue = 1112408651
 	)
 	@Export("newChunkXLow")
 	int newChunkXLow;
-	@ObfuscatedName("x")
+	@ObfuscatedName("h")
 	@ObfuscatedGetter(
-		intValue = 1895250651
+		intValue = -749966597
 	)
 	@Export("newChunkYLow")
 	int newChunkYLow;
-	@ObfuscatedName("o")
+	@ObfuscatedName("v")
 	@ObfuscatedGetter(
-		intValue = -422163411
+		intValue = -1079927535
 	)
 	@Export("newChunkXHigh")
 	int newChunkXHigh;
-	@ObfuscatedName("e")
+	@ObfuscatedName("n")
 	@ObfuscatedGetter(
-		intValue = 2009466803
+		intValue = 524547303
 	)
 	@Export("newChunkYHigh")
 	int newChunkYHigh;
@@ -98,10 +95,10 @@ public class WorldMapSection0 implements WorldMapSection {
 	WorldMapSection0() {
 	}
 
-	@ObfuscatedName("u")
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
-		signature = "(Laf;I)V",
-		garbageValue = "-567179164"
+		signature = "(Lae;I)V",
+		garbageValue = "-1034100543"
 	)
 	@Export("expandBounds")
 	public void expandBounds(WorldMapArea var1) {
@@ -123,34 +120,34 @@ public class WorldMapSection0 implements WorldMapSection {
 
 	}
 
-	@ObfuscatedName("f")
+	@ObfuscatedName("t")
 	@ObfuscatedSignature(
 		signature = "(IIIB)Z",
-		garbageValue = "0"
+		garbageValue = "-110"
 	)
 	@Export("containsCoord")
 	public boolean containsCoord(int var1, int var2, int var3) {
-		if (var1 >= this.oldZ && var1 < this.newZ + this.oldZ) {
+		if (var1 >= this.oldZ && var1 < this.oldZ + this.newZ) {
 			return var2 >= (this.oldX << 6) + (this.oldChunkXLow << 3) && var2 <= (this.oldX << 6) + (this.oldChunkXHigh << 3) + 7 && var3 >= (this.oldY << 6) + (this.oldChunkYLow << 3) && var3 <= (this.oldY << 6) + (this.oldChunkYHigh << 3) + 7;
 		} else {
 			return false;
 		}
 	}
 
-	@ObfuscatedName("b")
+	@ObfuscatedName("o")
 	@ObfuscatedSignature(
-		signature = "(III)Z",
-		garbageValue = "110675609"
+		signature = "(IIB)Z",
+		garbageValue = "37"
 	)
 	@Export("containsPosition")
 	public boolean containsPosition(int var1, int var2) {
 		return var1 >= (this.newX << 6) + (this.newChunkXLow << 3) && var1 <= (this.newX << 6) + (this.newChunkXHigh << 3) + 7 && var2 >= (this.newY << 6) + (this.newChunkYLow << 3) && var2 <= (this.newY << 6) + (this.newChunkYHigh << 3) + 7;
 	}
 
-	@ObfuscatedName("g")
+	@ObfuscatedName("e")
 	@ObfuscatedSignature(
-		signature = "(IIIB)[I",
-		garbageValue = "69"
+		signature = "(IIII)[I",
+		garbageValue = "-96920779"
 	)
 	@Export("getBorderTileLengths")
 	public int[] getBorderTileLengths(int var1, int var2, int var3) {
@@ -162,10 +159,10 @@ public class WorldMapSection0 implements WorldMapSection {
 		}
 	}
 
-	@ObfuscatedName("z")
+	@ObfuscatedName("i")
 	@ObfuscatedSignature(
-		signature = "(III)Lhx;",
-		garbageValue = "1062204141"
+		signature = "(III)Lhj;",
+		garbageValue = "911083222"
 	)
 	@Export("coord")
 	public Coord coord(int var1, int var2) {
@@ -178,10 +175,10 @@ public class WorldMapSection0 implements WorldMapSection {
 		}
 	}
 
-	@ObfuscatedName("p")
+	@ObfuscatedName("g")
 	@ObfuscatedSignature(
-		signature = "(Lkg;I)V",
-		garbageValue = "-179898655"
+		signature = "(Lkp;B)V",
+		garbageValue = "76"
 	)
 	@Export("read")
 	public void read(Buffer var1) {
@@ -202,241 +199,370 @@ public class WorldMapSection0 implements WorldMapSection {
 		this.postRead();
 	}
 
-	@ObfuscatedName("h")
+	@ObfuscatedName("d")
 	@ObfuscatedSignature(
-		signature = "(I)V",
-		garbageValue = "-720698828"
+		signature = "(B)V",
+		garbageValue = "-127"
 	)
 	@Export("postRead")
 	void postRead() {
 	}
 
-	@ObfuscatedName("u")
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
-		signature = "(I)[Lhz;",
-		garbageValue = "524553725"
+		signature = "([Lgq;IB)Lgq;",
+		garbageValue = "-32"
 	)
-	public static ServerBuild[] method245() {
-		return new ServerBuild[]{ServerBuild.WIP, ServerBuild.BUILDLIVE, ServerBuild.LIVE, ServerBuild.RC};
-	}
+	@Export("findEnumerated")
+	public static Enumerated findEnumerated(Enumerated[] var0, int var1) {
+		Enumerated[] var2 = var0;
 
-	@ObfuscatedName("gk")
-	@ObfuscatedSignature(
-		signature = "(I)V",
-		garbageValue = "1303877167"
-	)
-	static final void method251() {
-		for (Projectile var0 = (Projectile)Client.projectiles.last(); var0 != null; var0 = (Projectile)Client.projectiles.previous()) {
-			if (var0.plane == ClientPacket.Client_plane && Client.cycle <= var0.cycleEnd) {
-				if (Client.cycle >= var0.cycleStart) {
-					if (var0.targetIndex > 0) {
-						NPC var1 = Client.npcs[var0.targetIndex - 1];
-						if (var1 != null && var1.x >= 0 && var1.x < 13312 && var1.y >= 0 && var1.y < 13312) {
-							var0.setDestination(var1.x, var1.y, class195.getTileHeight(var1.x, var1.y, var0.plane) - var0.endHeight, Client.cycle);
-						}
-					}
-
-					if (var0.targetIndex < 0) {
-						int var2 = -var0.targetIndex - 1;
-						Player var3;
-						if (var2 == Client.localPlayerIndex) {
-							var3 = class215.localPlayer;
-						} else {
-							var3 = Client.players[var2];
-						}
-
-						if (var3 != null && var3.x >= 0 && var3.x < 13312 && var3.y >= 0 && var3.y < 13312) {
-							var0.setDestination(var3.x, var3.y, class195.getTileHeight(var3.x, var3.y, var0.plane) - var0.endHeight, Client.cycle);
-						}
-					}
-
-					var0.advance(Client.field704);
-					class2.scene.drawEntity(ClientPacket.Client_plane, (int)var0.x, (int)var0.y, (int)var0.z, 60, var0, var0.yaw, -1L, false);
-				}
-			} else {
-				var0.remove();
+		for (int var3 = 0; var3 < var2.length; ++var3) {
+			Enumerated var4 = var2[var3];
+			if (var1 == var4.rsOrdinal()) {
+				return var4;
 			}
 		}
 
-	}
-
-	@ObfuscatedName("gq")
-	@ObfuscatedSignature(
-		signature = "(I)Z",
-		garbageValue = "-137026556"
-	)
-	static boolean method257() {
-		return (Client.drawPlayerNames & 4) != 0;
+		return null;
 	}
 
 	@ObfuscatedName("ha")
 	@ObfuscatedSignature(
-		signature = "(IIZB)V",
-		garbageValue = "1"
+		signature = "(IIIIIIIS)V",
+		garbageValue = "6328"
 	)
-	static final void method259(int var0, int var1, boolean var2) {
-		if (!var2 || var0 != CollisionMap.field2086 || SoundCache.field1438 != var1) {
-			CollisionMap.field2086 = var0;
-			SoundCache.field1438 = var1;
-			class81.updateGameState(25);
-			WorldMapIcon_1.drawLoadingMessage("Loading - please wait.", true);
-			int var3 = class51.baseX * 64;
-			int var4 = VarcInt.baseY * 64;
-			class51.baseX = (var0 - 6) * 8;
-			VarcInt.baseY = (var1 - 6) * 8;
-			int var5 = class51.baseX * 64 - var3;
-			int var6 = VarcInt.baseY * 64 - var4;
-			var3 = class51.baseX * 64;
-			var4 = VarcInt.baseY * 64;
+	@Export("addPendingSpawnToScene")
+	static final void addPendingSpawnToScene(int var0, int var1, int var2, int var3, int var4, int var5, int var6) {
+		if (var2 >= 1 && var3 >= 1 && var2 <= 102 && var3 <= 102) {
+			if (Client.isLowDetail && var0 != Clock.Client_plane) {
+				return;
+			}
 
-			int var7;
-			int var9;
-			int[] var10000;
-			for (var7 = 0; var7 < 32768; ++var7) {
-				NPC var8 = Client.npcs[var7];
-				if (var8 != null) {
-					for (var9 = 0; var9 < 10; ++var9) {
-						var10000 = var8.pathX;
-						var10000[var9] -= var5;
-						var10000 = var8.pathY;
-						var10000[var9] -= var6;
+			long var7 = 0L;
+			boolean var9 = true;
+			boolean var10 = false;
+			boolean var11 = false;
+			if (var1 == 0) {
+				var7 = ServerBuild.scene.getBoundaryObjectTag(var0, var2, var3);
+			}
+
+			if (var1 == 1) {
+				var7 = ServerBuild.scene.getWallDecorationTag(var0, var2, var3);
+			}
+
+			if (var1 == 2) {
+				var7 = ServerBuild.scene.getGameObjectTag(var0, var2, var3);
+			}
+
+			if (var1 == 3) {
+				var7 = ServerBuild.scene.getFloorDecorationTag(var0, var2, var3);
+			}
+
+			int var12;
+			if (var7 != 0L) {
+				var12 = ServerBuild.scene.getObjectFlags(var0, var2, var3, var7);
+				int var14 = GrandExchangeEvents.Entity_unpackID(var7);
+				int var15 = var12 & 31;
+				int var16 = var12 >> 6 & 3;
+				ObjectDefinition var13;
+				if (var1 == 0) {
+					ServerBuild.scene.removeBoundaryObject(var0, var2, var3);
+					var13 = Occluder.getObjectDefinition(var14);
+					if (var13.interactType != 0) {
+						Client.collisionMaps[var0].method3621(var2, var3, var15, var16, var13.boolean1);
+					}
+				}
+
+				if (var1 == 1) {
+					ServerBuild.scene.removeWallDecoration(var0, var2, var3);
+				}
+
+				if (var1 == 2) {
+					ServerBuild.scene.removeGameObject(var0, var2, var3);
+					var13 = Occluder.getObjectDefinition(var14);
+					if (var2 + var13.sizeX > 103 || var3 + var13.sizeX > 103 || var2 + var13.sizeY > 103 || var3 + var13.sizeY > 103) {
+						return;
 					}
 
-					var8.x -= var5 * 128;
-					var8.y -= var6 * 128;
+					if (var13.interactType != 0) {
+						Client.collisionMaps[var0].setFlagOffNonSquare(var2, var3, var13.sizeX, var13.sizeY, var16, var13.boolean1);
+					}
+				}
+
+				if (var1 == 3) {
+					ServerBuild.scene.removeFloorDecoration(var0, var2, var3);
+					var13 = Occluder.getObjectDefinition(var14);
+					if (var13.interactType == 1) {
+						Client.collisionMaps[var0].method3624(var2, var3);
+					}
 				}
 			}
 
-			for (var7 = 0; var7 < 2048; ++var7) {
-				Player var21 = Client.players[var7];
-				if (var21 != null) {
-					for (var9 = 0; var9 < 10; ++var9) {
-						var10000 = var21.pathX;
-						var10000[var9] -= var5;
-						var10000 = var21.pathY;
-						var10000[var9] -= var6;
-					}
-
-					var21.x -= var5 * 128;
-					var21.y -= var6 * 128;
+			if (var4 >= 0) {
+				var12 = var0;
+				if (var0 < 3 && (Tiles.Tiles_renderFlags[1][var2][var3] & 2) == 2) {
+					var12 = var0 + 1;
 				}
+
+				ArchiveLoader.method1168(var0, var12, var2, var3, var4, var5, var6, ServerBuild.scene, Client.collisionMaps[var0]);
+			}
+		}
+
+	}
+
+	@ObfuscatedName("ie")
+	@ObfuscatedSignature(
+		signature = "(IIIII)V",
+		garbageValue = "683461450"
+	)
+	@Export("addSceneMenuOptions")
+	static final void addSceneMenuOptions(int var0, int var1, int var2, int var3) {
+		if (Client.isItemSelected == 0 && !Client.isSpellSelected) {
+			GraphicsObject.insertMenuItemNoShift("Walk here", "", 23, 0, var0 - var2, var1 - var3);
+		}
+
+		long var4 = -1L;
+		long var6 = -1L;
+		int var8 = 0;
+
+		while (true) {
+			int var10 = ViewportMouse.ViewportMouse_entityCount;
+			if (var8 >= var10) {
+				if (var4 != -1L) {
+					var8 = GrandExchangeEvent.method96(var4);
+					int var9 = class14.method169(var4);
+					Player var25 = Client.players[Client.combatTargetPlayerIndex];
+					class191.addPlayerToMenu(var25, Client.combatTargetPlayerIndex, var8, var9);
+				}
+
+				return;
 			}
 
-			byte var20 = 0;
-			byte var18 = 104;
-			byte var22 = 1;
-			if (var5 < 0) {
-				var20 = 103;
-				var18 = -1;
-				var22 = -1;
-			}
+			long var11 = VertexNormal.method3063(var8);
+			if (var11 != var6) {
+				label324: {
+					var6 = var11;
+					int var13 = GrandExchangeOffer.method128(var8);
+					int var14 = class43.method816(var8);
+					int var15 = Tile.method2926(ViewportMouse.ViewportMouse_entityTags[var8]);
+					int var17 = GrandExchangeEvents.Entity_unpackID(ViewportMouse.ViewportMouse_entityTags[var8]);
+					int var18 = var17;
+					if (var15 == 2 && ServerBuild.scene.getObjectFlags(Clock.Client_plane, var13, var14, var11) >= 0) {
+						ObjectDefinition var19 = Occluder.getObjectDefinition(var17);
+						if (var19.transforms != null) {
+							var19 = var19.transform();
+						}
 
-			byte var10 = 0;
-			byte var11 = 104;
-			byte var12 = 1;
-			if (var6 < 0) {
-				var10 = 103;
-				var11 = -1;
-				var12 = -1;
-			}
+						if (var19 == null) {
+							break label324;
+						}
 
-			int var14;
-			for (int var13 = var20; var13 != var18; var13 += var22) {
-				for (var14 = var10; var14 != var11; var14 += var12) {
-					int var15 = var13 + var5;
-					int var16 = var6 + var14;
-
-					for (int var17 = 0; var17 < 4; ++var17) {
-						if (var15 >= 0 && var16 >= 0 && var15 < 104 && var16 < 104) {
-							Client.groundItems[var17][var13][var14] = Client.groundItems[var17][var15][var16];
+						if (Client.isItemSelected == 1) {
+							GraphicsObject.insertMenuItemNoShift("Use", Client.selectedItemName + " " + "->" + " " + PacketWriter.colorStartTag(65535) + var19.name, 1, var17, var13, var14);
+						} else if (Client.isSpellSelected) {
+							if ((NetSocket.selectedSpellFlags & 4) == 4) {
+								GraphicsObject.insertMenuItemNoShift(Client.selectedSpellActionName, Client.selectedSpellName + " " + "->" + " " + PacketWriter.colorStartTag(65535) + var19.name, 2, var17, var13, var14);
+							}
 						} else {
-							Client.groundItems[var17][var13][var14] = null;
+							String[] var20 = var19.actions;
+							if (var20 != null) {
+								for (int var21 = 4; var21 >= 0; --var21) {
+									if (var20[var21] != null) {
+										short var22 = 0;
+										if (var21 == 0) {
+											var22 = 3;
+										}
+
+										if (var21 == 1) {
+											var22 = 4;
+										}
+
+										if (var21 == 2) {
+											var22 = 5;
+										}
+
+										if (var21 == 3) {
+											var22 = 6;
+										}
+
+										if (var21 == 4) {
+											var22 = 1001;
+										}
+
+										GraphicsObject.insertMenuItemNoShift(var20[var21], PacketWriter.colorStartTag(65535) + var19.name, var22, var18, var13, var14);
+									}
+								}
+							}
+
+							GraphicsObject.insertMenuItemNoShift("Examine", PacketWriter.colorStartTag(65535) + var19.name, 1002, var19.id, var13, var14);
+						}
+					}
+
+					Player var23;
+					NPC var26;
+					int var27;
+					int var34;
+					int[] var35;
+					if (var15 == 1) {
+						NPC var30 = Client.npcs[var18];
+						if (var30 == null) {
+							break label324;
+						}
+
+						if (var30.definition.size == 1 && (var30.x & 127) == 64 && (var30.y & 127) == 64) {
+							for (var27 = 0; var27 < Client.npcCount; ++var27) {
+								var26 = Client.npcs[Client.npcIndices[var27]];
+								if (var26 != null && var26 != var30 && var26.definition.size == 1 && var26.x == var30.x && var30.y == var26.y) {
+									HorizontalAlignment.addNpcToMenu(var26.definition, Client.npcIndices[var27], var13, var14);
+								}
+							}
+
+							var27 = Players.Players_count;
+							var35 = Players.Players_indices;
+
+							for (var34 = 0; var34 < var27; ++var34) {
+								var23 = Client.players[var35[var34]];
+								if (var23 != null && var23.x == var30.x && var23.y == var30.y) {
+									class191.addPlayerToMenu(var23, var35[var34], var13, var14);
+								}
+							}
+						}
+
+						HorizontalAlignment.addNpcToMenu(var30.definition, var18, var13, var14);
+					}
+
+					if (var15 == 0) {
+						Player var31 = Client.players[var18];
+						if (var31 == null) {
+							break label324;
+						}
+
+						if ((var31.x & 127) == 64 && (var31.y & 127) == 64) {
+							for (var27 = 0; var27 < Client.npcCount; ++var27) {
+								var26 = Client.npcs[Client.npcIndices[var27]];
+								if (var26 != null && var26.definition.size == 1 && var26.x == var31.x && var26.y == var31.y) {
+									HorizontalAlignment.addNpcToMenu(var26.definition, Client.npcIndices[var27], var13, var14);
+								}
+							}
+
+							var27 = Players.Players_count;
+							var35 = Players.Players_indices;
+
+							for (var34 = 0; var34 < var27; ++var34) {
+								var23 = Client.players[var35[var34]];
+								if (var23 != null && var31 != var23 && var23.x == var31.x && var31.y == var23.y) {
+									class191.addPlayerToMenu(var23, var35[var34], var13, var14);
+								}
+							}
+						}
+
+						if (var18 != Client.combatTargetPlayerIndex) {
+							class191.addPlayerToMenu(var31, var18, var13, var14);
+						} else {
+							var4 = var11;
+						}
+					}
+
+					if (var15 == 3) {
+						NodeDeque var33 = Client.groundItems[Clock.Client_plane][var13][var14];
+						if (var33 != null) {
+							for (TileItem var32 = (TileItem)var33.first(); var32 != null; var32 = (TileItem)var33.next()) {
+								ItemDefinition var36 = HealthBarDefinition.ItemDefinition_get(var32.id);
+								if (Client.isItemSelected == 1) {
+									GraphicsObject.insertMenuItemNoShift("Use", Client.selectedItemName + " " + "->" + " " + PacketWriter.colorStartTag(16748608) + var36.name, 16, var32.id, var13, var14);
+								} else if (Client.isSpellSelected) {
+									if ((NetSocket.selectedSpellFlags & 1) == 1) {
+										GraphicsObject.insertMenuItemNoShift(Client.selectedSpellActionName, Client.selectedSpellName + " " + "->" + " " + PacketWriter.colorStartTag(16748608) + var36.name, 17, var32.id, var13, var14);
+									}
+								} else {
+									String[] var28 = var36.groundActions;
+
+									for (int var29 = 4; var29 >= 0; --var29) {
+										if (var28 != null && var28[var29] != null) {
+											byte var24 = 0;
+											if (var29 == 0) {
+												var24 = 18;
+											}
+
+											if (var29 == 1) {
+												var24 = 19;
+											}
+
+											if (var29 == 2) {
+												var24 = 20;
+											}
+
+											if (var29 == 3) {
+												var24 = 21;
+											}
+
+											if (var29 == 4) {
+												var24 = 22;
+											}
+
+											GraphicsObject.insertMenuItemNoShift(var28[var29], PacketWriter.colorStartTag(16748608) + var36.name, var24, var32.id, var13, var14);
+										} else if (var29 == 2) {
+											GraphicsObject.insertMenuItemNoShift("Take", PacketWriter.colorStartTag(16748608) + var36.name, 20, var32.id, var13, var14);
+										}
+									}
+
+									GraphicsObject.insertMenuItemNoShift("Examine", PacketWriter.colorStartTag(16748608) + var36.name, 1004, var32.id, var13, var14);
+								}
+							}
 						}
 					}
 				}
 			}
 
-			for (PendingSpawn var19 = (PendingSpawn)Client.pendingSpawns.last(); var19 != null; var19 = (PendingSpawn)Client.pendingSpawns.previous()) {
-				var19.x -= var5;
-				var19.y -= var6;
-				if (var19.x < 0 || var19.y < 0 || var19.x >= 104 || var19.y >= 104) {
-					var19.remove();
+			++var8;
+		}
+	}
+
+	@ObfuscatedName("jn")
+	@ObfuscatedSignature(
+		signature = "([Lhn;IB)V",
+		garbageValue = "2"
+	)
+	@Export("runComponentCloseListeners")
+	static final void runComponentCloseListeners(Widget[] var0, int var1) {
+		for (int var2 = 0; var2 < var0.length; ++var2) {
+			Widget var3 = var0[var2];
+			if (var3 != null) {
+				if (var3.type == 0) {
+					if (var3.children != null) {
+						runComponentCloseListeners(var3.children, var1);
+					}
+
+					InterfaceParent var4 = (InterfaceParent)Client.interfaceParents.get((long)var3.id);
+					if (var4 != null) {
+						class226.runIntfCloseListeners(var4.group, var1);
+					}
+				}
+
+				ScriptEvent var5;
+				if (var1 == 0 && var3.onDialogAbort != null) {
+					var5 = new ScriptEvent();
+					var5.widget = var3;
+					var5.args = var3.onDialogAbort;
+					class4.runScriptEvent(var5);
+				}
+
+				if (var1 == 1 && var3.onSubChange != null) {
+					if (var3.childIndex >= 0) {
+						Widget var6 = Varps.getWidget(var3.id);
+						if (var6 == null || var6.children == null || var3.childIndex >= var6.children.length || var3 != var6.children[var3.childIndex]) {
+							continue;
+						}
+					}
+
+					var5 = new ScriptEvent();
+					var5.widget = var3;
+					var5.args = var3.onSubChange;
+					class4.runScriptEvent(var5);
 				}
 			}
-
-			if (Client.destinationX != 0) {
-				Client.destinationX -= var5;
-				Client.destinationY -= var6;
-			}
-
-			Client.soundEffectCount = 0;
-			Client.isCameraLocked = false;
-			class30.cameraX -= var5 << 7;
-			FloorDecoration.cameraZ -= var6 << 7;
-			class80.oculusOrbFocalPointX -= var5 << 7;
-			class81.oculusOrbFocalPointY -= var6 << 7;
-			Client.field867 = -1;
-			Client.graphicsObjects.clear();
-			Client.projectiles.clear();
-
-			for (var14 = 0; var14 < 4; ++var14) {
-				Client.collisionMaps[var14].clear();
-			}
-
-		}
-	}
-
-	@ObfuscatedName("id")
-	@ObfuscatedSignature(
-		signature = "(IIIIIIB)V",
-		garbageValue = "-57"
-	)
-	static final void method255(int var0, int var1, int var2, int var3, int var4, int var5) {
-		int var6 = var2 - var0;
-		int var7 = var3 - var1;
-		int var8 = var6 >= 0 ? var6 : -var6;
-		int var9 = var7 >= 0 ? var7 : -var7;
-		int var10 = var8;
-		if (var8 < var9) {
-			var10 = var9;
 		}
 
-		if (var10 != 0) {
-			int var11 = (var6 << 16) / var10;
-			int var12 = (var7 << 16) / var10;
-			if (var12 <= var11) {
-				var11 = -var11;
-			} else {
-				var12 = -var12;
-			}
-
-			int var13 = var5 * var12 >> 17;
-			int var14 = var5 * var12 + 1 >> 17;
-			int var15 = var5 * var11 >> 17;
-			int var16 = var5 * var11 + 1 >> 17;
-			var0 -= Rasterizer2D.Rasterizer2D_xClipStart;
-			var1 -= Rasterizer2D.Rasterizer2D_yClipStart;
-			int var17 = var0 + var13;
-			int var18 = var0 - var14;
-			int var19 = var0 + var6 - var14;
-			int var20 = var0 + var6 + var13;
-			int var21 = var15 + var1;
-			int var22 = var1 - var16;
-			int var23 = var7 + var1 - var16;
-			int var24 = var15 + var7 + var1;
-			Rasterizer3D.method3035(var17, var18, var19);
-			Rasterizer3D.method3055(var21, var22, var23, var17, var18, var19, var4);
-			Rasterizer3D.method3035(var17, var19, var20);
-			Rasterizer3D.method3055(var21, var23, var24, var17, var19, var20, var4);
-		}
-	}
-
-	@ObfuscatedName("kd")
-	@ObfuscatedSignature(
-		signature = "(B)Z",
-		garbageValue = "-121"
-	)
-	public static boolean method254() {
-		return Client.staffModLevel >= 2;
 	}
 }

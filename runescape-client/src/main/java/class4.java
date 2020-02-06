@@ -1,204 +1,109 @@
 import net.runelite.mapping.Export;
+import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
-import net.runelite.rs.ScriptOpcodes;
 
-@ObfuscatedName("z")
+@ObfuscatedName("i")
 final class class4 implements class0 {
-	@ObfuscatedName("nw")
-	@ObfuscatedSignature(
-		signature = "[Lhl;"
+	@ObfuscatedName("h")
+	@ObfuscatedGetter(
+		intValue = -905472929
 	)
-	static Widget[] field22;
+	static int field26;
+	@ObfuscatedName("y")
+	@ObfuscatedSignature(
+		signature = "Lkp;"
+	)
+	@Export("NetCache_reference")
+	static Buffer NetCache_reference;
 
-	@ObfuscatedName("u")
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
-		signature = "(Ljava/lang/Object;Lkg;I)V",
-		garbageValue = "-1331780546"
+		signature = "(Ljava/lang/Object;Lkp;B)V",
+		garbageValue = "95"
 	)
-	public void vmethod57(Object var1, Buffer var2) {
-		this.method55((String)var1, var2);
+	public void vmethod55(Object var1, Buffer var2) {
+		this.method54((String)var1, var2);
 	}
 
-	@ObfuscatedName("f")
+	@ObfuscatedName("t")
 	@ObfuscatedSignature(
-		signature = "(Lkg;I)Ljava/lang/Object;",
-		garbageValue = "1713449680"
+		signature = "(Lkp;I)Ljava/lang/Object;",
+		garbageValue = "1665636232"
 	)
-	public Object vmethod65(Buffer var1) {
+	public Object vmethod53(Buffer var1) {
 		return var1.readStringCp1252NullTerminated();
 	}
 
-	@ObfuscatedName("y")
+	@ObfuscatedName("l")
 	@ObfuscatedSignature(
-		signature = "(Ljava/lang/String;Lkg;B)V",
-		garbageValue = "-1"
+		signature = "(Ljava/lang/String;Lkp;I)V",
+		garbageValue = "1837357255"
 	)
-	void method55(String var1, Buffer var2) {
+	void method54(String var1, Buffer var2) {
 		var2.writeStringCp1252NullTerminated(var1);
 	}
 
-	@ObfuscatedName("b")
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
-		signature = "(II)V",
-		garbageValue = "910919278"
+		signature = "(I)I",
+		garbageValue = "1447651687"
 	)
-	public static void method56(int var0) {
-		MouseHandler.MouseHandler_idleCycles = var0;
+	static int method57() {
+		return ++Messages.Messages_count - 1;
 	}
 
-	@ObfuscatedName("i")
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
-		signature = "(Lhl;IIII)V",
-		garbageValue = "1884834950"
+		signature = "(Lbw;I)V",
+		garbageValue = "1307142310"
 	)
-	@Export("Widget_setKeyRate")
-	static final void Widget_setKeyRate(Widget var0, int var1, int var2, int var3) {
-		if (var0.field2654 == null) {
-			throw new RuntimeException();
-		} else {
-			var0.field2654[var1] = var2;
-			var0.field2655[var1] = var3;
-		}
+	@Export("runScriptEvent")
+	public static void runScriptEvent(ScriptEvent var0) {
+		WorldMapID.runScript(var0, 500000);
 	}
 
-	@ObfuscatedName("ak")
+	@ObfuscatedName("hz")
 	@ObfuscatedSignature(
-		signature = "(ILci;ZI)I",
-		garbageValue = "-578960278"
+		signature = "(I)V",
+		garbageValue = "-2068371159"
 	)
-	static int method66(int var0, Script var1, boolean var2) {
-		int var3;
-		if (var0 == ScriptOpcodes.OC_NAME) {
-			var3 = Interpreter.Interpreter_intStack[--GrandExchangeOfferTotalQuantityComparator.Interpreter_intStackSize];
-			Interpreter.Interpreter_stringStack[++class43.Interpreter_stringStackSize - 1] = Interpreter.ItemDefinition_get(var3).name;
-			return 1;
-		} else {
-			int var4;
-			ItemDefinition var5;
-			if (var0 == ScriptOpcodes.OC_OP) {
-				GrandExchangeOfferTotalQuantityComparator.Interpreter_intStackSize -= 2;
-				var3 = Interpreter.Interpreter_intStack[GrandExchangeOfferTotalQuantityComparator.Interpreter_intStackSize];
-				var4 = Interpreter.Interpreter_intStack[GrandExchangeOfferTotalQuantityComparator.Interpreter_intStackSize + 1];
-				var5 = Interpreter.ItemDefinition_get(var3);
-				if (var4 >= 1 && var4 <= 5 && var5.groundActions[var4 - 1] != null) {
-					Interpreter.Interpreter_stringStack[++class43.Interpreter_stringStackSize - 1] = var5.groundActions[var4 - 1];
-				} else {
-					Interpreter.Interpreter_stringStack[++class43.Interpreter_stringStackSize - 1] = "";
-				}
+	static final void method64() {
+		int var0 = ArchiveDiskAction.menuX;
+		int var1 = SecureRandomCallable.menuY;
+		int var2 = InterfaceParent.menuWidth;
+		int var3 = Message.menuHeight;
+		int var4 = 6116423;
+		Rasterizer2D.Rasterizer2D_fillRectangle(var0, var1, var2, var3, var4);
+		Rasterizer2D.Rasterizer2D_fillRectangle(var0 + 1, var1 + 1, var2 - 2, 16, 0);
+		Rasterizer2D.Rasterizer2D_drawRectangle(var0 + 1, var1 + 18, var2 - 2, var3 - 19, 0);
+		class1.fontBold12.draw("Choose Option", var0 + 3, var1 + 14, var4, -1);
+		int var5 = MouseHandler.MouseHandler_x;
+		int var6 = MouseHandler.MouseHandler_y;
 
-				return 1;
-			} else if (var0 == ScriptOpcodes.OC_IOP) {
-				GrandExchangeOfferTotalQuantityComparator.Interpreter_intStackSize -= 2;
-				var3 = Interpreter.Interpreter_intStack[GrandExchangeOfferTotalQuantityComparator.Interpreter_intStackSize];
-				var4 = Interpreter.Interpreter_intStack[GrandExchangeOfferTotalQuantityComparator.Interpreter_intStackSize + 1];
-				var5 = Interpreter.ItemDefinition_get(var3);
-				if (var4 >= 1 && var4 <= 5 && var5.inventoryActions[var4 - 1] != null) {
-					Interpreter.Interpreter_stringStack[++class43.Interpreter_stringStackSize - 1] = var5.inventoryActions[var4 - 1];
-				} else {
-					Interpreter.Interpreter_stringStack[++class43.Interpreter_stringStackSize - 1] = "";
-				}
-
-				return 1;
-			} else if (var0 == ScriptOpcodes.OC_COST) {
-				var3 = Interpreter.Interpreter_intStack[--GrandExchangeOfferTotalQuantityComparator.Interpreter_intStackSize];
-				Interpreter.Interpreter_intStack[++GrandExchangeOfferTotalQuantityComparator.Interpreter_intStackSize - 1] = Interpreter.ItemDefinition_get(var3).price;
-				return 1;
-			} else if (var0 == ScriptOpcodes.OC_STACKABLE) {
-				var3 = Interpreter.Interpreter_intStack[--GrandExchangeOfferTotalQuantityComparator.Interpreter_intStackSize];
-				Interpreter.Interpreter_intStack[++GrandExchangeOfferTotalQuantityComparator.Interpreter_intStackSize - 1] = Interpreter.ItemDefinition_get(var3).isStackable == 1 ? 1 : 0;
-				return 1;
-			} else {
-				ItemDefinition var6;
-				if (var0 == ScriptOpcodes.OC_CERT) {
-					var3 = Interpreter.Interpreter_intStack[--GrandExchangeOfferTotalQuantityComparator.Interpreter_intStackSize];
-					var6 = Interpreter.ItemDefinition_get(var3);
-					if (var6.noteTemplate == -1 && var6.note >= 0) {
-						Interpreter.Interpreter_intStack[++GrandExchangeOfferTotalQuantityComparator.Interpreter_intStackSize - 1] = var6.note;
-					} else {
-						Interpreter.Interpreter_intStack[++GrandExchangeOfferTotalQuantityComparator.Interpreter_intStackSize - 1] = var3;
-					}
-
-					return 1;
-				} else if (var0 == ScriptOpcodes.OC_UNCERT) {
-					var3 = Interpreter.Interpreter_intStack[--GrandExchangeOfferTotalQuantityComparator.Interpreter_intStackSize];
-					var6 = Interpreter.ItemDefinition_get(var3);
-					if (var6.noteTemplate >= 0 && var6.note >= 0) {
-						Interpreter.Interpreter_intStack[++GrandExchangeOfferTotalQuantityComparator.Interpreter_intStackSize - 1] = var6.note;
-					} else {
-						Interpreter.Interpreter_intStack[++GrandExchangeOfferTotalQuantityComparator.Interpreter_intStackSize - 1] = var3;
-					}
-
-					return 1;
-				} else if (var0 == ScriptOpcodes.OC_MEMBERS) {
-					var3 = Interpreter.Interpreter_intStack[--GrandExchangeOfferTotalQuantityComparator.Interpreter_intStackSize];
-					Interpreter.Interpreter_intStack[++GrandExchangeOfferTotalQuantityComparator.Interpreter_intStackSize - 1] = Interpreter.ItemDefinition_get(var3).isMembersOnly ? 1 : 0;
-					return 1;
-				} else if (var0 == ScriptOpcodes.OC_PLACEHOLDER) {
-					var3 = Interpreter.Interpreter_intStack[--GrandExchangeOfferTotalQuantityComparator.Interpreter_intStackSize];
-					var6 = Interpreter.ItemDefinition_get(var3);
-					if (var6.placeholderTemplate == -1 && var6.placeholder >= 0) {
-						Interpreter.Interpreter_intStack[++GrandExchangeOfferTotalQuantityComparator.Interpreter_intStackSize - 1] = var6.placeholder;
-					} else {
-						Interpreter.Interpreter_intStack[++GrandExchangeOfferTotalQuantityComparator.Interpreter_intStackSize - 1] = var3;
-					}
-
-					return 1;
-				} else if (var0 == ScriptOpcodes.OC_UNPLACEHOLDER) {
-					var3 = Interpreter.Interpreter_intStack[--GrandExchangeOfferTotalQuantityComparator.Interpreter_intStackSize];
-					var6 = Interpreter.ItemDefinition_get(var3);
-					if (var6.placeholderTemplate >= 0 && var6.placeholder >= 0) {
-						Interpreter.Interpreter_intStack[++GrandExchangeOfferTotalQuantityComparator.Interpreter_intStackSize - 1] = var6.placeholder;
-					} else {
-						Interpreter.Interpreter_intStack[++GrandExchangeOfferTotalQuantityComparator.Interpreter_intStackSize - 1] = var3;
-					}
-
-					return 1;
-				} else if (var0 == ScriptOpcodes.OC_FIND) {
-					String var7 = Interpreter.Interpreter_stringStack[--class43.Interpreter_stringStackSize];
-					var4 = Interpreter.Interpreter_intStack[--GrandExchangeOfferTotalQuantityComparator.Interpreter_intStackSize];
-					Message.findItemDefinitions(var7, var4 == 1);
-					Interpreter.Interpreter_intStack[++GrandExchangeOfferTotalQuantityComparator.Interpreter_intStackSize - 1] = UserComparator10.foundItemIdCount;
-					return 1;
-				} else if (var0 != ScriptOpcodes.OC_FINDNEXT) {
-					if (var0 == ScriptOpcodes.OC_FINDRESET) {
-						GrandExchangeOfferAgeComparator.foundItemIndex = 0;
-						return 1;
-					} else {
-						return 2;
-					}
-				} else {
-					if (MusicPatch.foundItemIds != null && GrandExchangeOfferAgeComparator.foundItemIndex < UserComparator10.foundItemIdCount) {
-						Interpreter.Interpreter_intStack[++GrandExchangeOfferTotalQuantityComparator.Interpreter_intStackSize - 1] = MusicPatch.foundItemIds[++GrandExchangeOfferAgeComparator.foundItemIndex - 1] & '\uffff';
-					} else {
-						Interpreter.Interpreter_intStack[++GrandExchangeOfferTotalQuantityComparator.Interpreter_intStackSize - 1] = -1;
-					}
-
-					return 1;
-				}
-			}
-		}
-	}
-
-	@ObfuscatedName("ed")
-	@ObfuscatedSignature(
-		signature = "(I)Z",
-		garbageValue = "1158604899"
-	)
-	static boolean method63() {
-		if (Client.archiveLoaders != null && Client.archiveLoadersDone < Client.archiveLoaders.size()) {
-			while (Client.archiveLoadersDone < Client.archiveLoaders.size()) {
-				ArchiveLoader var0 = (ArchiveLoader)Client.archiveLoaders.get(Client.archiveLoadersDone);
-				if (!var0.isLoaded()) {
-					return false;
-				}
-
-				++Client.archiveLoadersDone;
+		int var7;
+		int var8;
+		int var9;
+		for (var7 = 0; var7 < Client.menuOptionsCount; ++var7) {
+			var8 = var1 + (Client.menuOptionsCount - 1 - var7) * 15 + 31;
+			var9 = 16777215;
+			if (var5 > var0 && var5 < var0 + var2 && var6 > var8 - 13 && var6 < var8 + 3) {
+				var9 = 16776960;
 			}
 
-			return true;
-		} else {
-			return true;
+			class1.fontBold12.draw(VerticalAlignment.method4426(var7), var0 + 3, var8, var9, 0);
 		}
+
+		var7 = ArchiveDiskAction.menuX;
+		var8 = SecureRandomCallable.menuY;
+		var9 = InterfaceParent.menuWidth;
+		int var10 = Message.menuHeight;
+
+		for (int var11 = 0; var11 < Client.rootWidgetCount; ++var11) {
+			if (Client.rootWidgetWidths[var11] + Client.rootWidgetXs[var11] > var7 && Client.rootWidgetXs[var11] < var9 + var7 && Client.rootWidgetHeights[var11] + Client.rootWidgetYs[var11] > var8 && Client.rootWidgetYs[var11] < var8 + var10) {
+				Client.field852[var11] = true;
+			}
+		}
+
 	}
 }

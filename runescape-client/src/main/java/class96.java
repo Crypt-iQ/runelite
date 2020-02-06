@@ -1,113 +1,191 @@
+import java.util.Iterator;
 import net.runelite.mapping.Export;
+import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("cp")
+@ObfuscatedName("ca")
 public class class96 {
-	@ObfuscatedName("u")
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
-		signature = "Ljm;"
+		signature = "Ljj;"
 	)
 	@Export("reflectionChecks")
 	static IterableNodeDeque reflectionChecks;
+	@ObfuscatedName("i")
+	@ObfuscatedSignature(
+		signature = "[Lbg;"
+	)
+	@Export("World_worlds")
+	static World[] World_worlds;
+	@ObfuscatedName("f")
+	@ObfuscatedGetter(
+		intValue = -44296149
+	)
+	@Export("loginBoxCenter")
+	static int loginBoxCenter;
 
 	static {
 		reflectionChecks = new IterableNodeDeque();
 	}
 
-	@ObfuscatedName("f")
+	@ObfuscatedName("gr")
 	@ObfuscatedSignature(
-		signature = "(II)Lid;",
-		garbageValue = "-208126476"
+		signature = "(I)I",
+		garbageValue = "512388995"
 	)
-	@Export("StructDefinition_getStructDefinition")
-	public static StructDefinition StructDefinition_getStructDefinition(int var0) {
-		StructDefinition var1 = (StructDefinition)StructDefinition.StructDefinition_cached.get((long)var0);
-		if (var1 != null) {
-			return var1;
+	static final int method2346() {
+		if (WorldMapSection2.clientPreferences.roofsHidden) {
+			return Clock.Client_plane;
 		} else {
-			byte[] var2 = StructDefinition.StructDefinition_archive.takeFile(34, var0);
-			var1 = new StructDefinition();
-			if (var2 != null) {
-				var1.decode(new Buffer(var2));
-			}
+			int var0 = 3;
+			if (GrandExchangeOffer.cameraPitch < 310) {
+				int var1;
+				int var2;
+				if (Client.oculusOrbState == 1) {
+					var1 = PendingSpawn.oculusOrbFocalPointX >> 7;
+					var2 = Skeleton.oculusOrbFocalPointY >> 7;
+				} else {
+					var1 = class192.localPlayer.x >> 7;
+					var2 = class192.localPlayer.y >> 7;
+				}
 
-			var1.postDecode();
-			StructDefinition.StructDefinition_cached.put(var1, (long)var0);
-			return var1;
-		}
-	}
+				int var3 = HitSplatDefinition.cameraX >> 7;
+				int var4 = Actor.cameraZ >> 7;
+				if (var3 < 0 || var4 < 0 || var3 >= 104 || var4 >= 104) {
+					return Clock.Client_plane;
+				}
 
-	@ObfuscatedName("b")
-	@ObfuscatedSignature(
-		signature = "(III)I",
-		garbageValue = "-1542678274"
-	)
-	static int method2314(int var0, int var1) {
-		ItemContainer var2 = (ItemContainer)ItemContainer.itemContainers.get((long)var0);
-		if (var2 == null) {
-			return 0;
-		} else if (var1 == -1) {
-			return 0;
-		} else {
-			int var3 = 0;
+				if (var1 < 0 || var2 < 0 || var1 >= 104 || var2 >= 104) {
+					return Clock.Client_plane;
+				}
 
-			for (int var4 = 0; var4 < var2.quantities.length; ++var4) {
-				if (var2.ids[var4] == var1) {
-					var3 += var2.quantities[var4];
+				if ((Tiles.Tiles_renderFlags[Clock.Client_plane][var3][var4] & 4) != 0) {
+					var0 = Clock.Client_plane;
+				}
+
+				int var5;
+				if (var1 > var3) {
+					var5 = var1 - var3;
+				} else {
+					var5 = var3 - var1;
+				}
+
+				int var6;
+				if (var2 > var4) {
+					var6 = var2 - var4;
+				} else {
+					var6 = var4 - var2;
+				}
+
+				int var7;
+				int var8;
+				if (var5 > var6) {
+					var7 = var6 * 65536 / var5;
+					var8 = 32768;
+
+					while (var1 != var3) {
+						if (var3 < var1) {
+							++var3;
+						} else if (var3 > var1) {
+							--var3;
+						}
+
+						if ((Tiles.Tiles_renderFlags[Clock.Client_plane][var3][var4] & 4) != 0) {
+							var0 = Clock.Client_plane;
+						}
+
+						var8 += var7;
+						if (var8 >= 65536) {
+							var8 -= 65536;
+							if (var4 < var2) {
+								++var4;
+							} else if (var4 > var2) {
+								--var4;
+							}
+
+							if ((Tiles.Tiles_renderFlags[Clock.Client_plane][var3][var4] & 4) != 0) {
+								var0 = Clock.Client_plane;
+							}
+						}
+					}
+				} else if (var6 > 0) {
+					var7 = var5 * 65536 / var6;
+					var8 = 32768;
+
+					while (var4 != var2) {
+						if (var4 < var2) {
+							++var4;
+						} else if (var4 > var2) {
+							--var4;
+						}
+
+						if ((Tiles.Tiles_renderFlags[Clock.Client_plane][var3][var4] & 4) != 0) {
+							var0 = Clock.Client_plane;
+						}
+
+						var8 += var7;
+						if (var8 >= 65536) {
+							var8 -= 65536;
+							if (var3 < var1) {
+								++var3;
+							} else if (var3 > var1) {
+								--var3;
+							}
+
+							if ((Tiles.Tiles_renderFlags[Clock.Client_plane][var3][var4] & 4) != 0) {
+								var0 = Clock.Client_plane;
+							}
+						}
+					}
 				}
 			}
 
-			return var3;
+			if (class192.localPlayer.x >= 0 && class192.localPlayer.y >= 0 && class192.localPlayer.x < 13312 && class192.localPlayer.y < 13312) {
+				if ((Tiles.Tiles_renderFlags[Clock.Client_plane][class192.localPlayer.x >> 7][class192.localPlayer.y >> 7] & 4) != 0) {
+					var0 = Clock.Client_plane;
+				}
+
+				return var0;
+			} else {
+				return Clock.Client_plane;
+			}
 		}
 	}
 
-	@ObfuscatedName("x")
+	@ObfuscatedName("hv")
 	@ObfuscatedSignature(
-		signature = "(B)V",
-		garbageValue = "72"
+		signature = "(I)V",
+		garbageValue = "-2092655823"
 	)
-	static final void method2307() {
-		if (!ViewportMouse.ViewportMouse_false0) {
-			int var0 = Scene.Scene_cameraPitchSine;
-			int var1 = Scene.Scene_cameraPitchCosine;
-			int var2 = Scene.Scene_cameraYawSine;
-			int var3 = Scene.Scene_cameraYawCosine;
-			byte var4 = 50;
-			short var5 = 3500;
-			int var6 = (ViewportMouse.ViewportMouse_x - Rasterizer3D.Rasterizer3D_clipMidX) * var4 / Rasterizer3D.Rasterizer3D_zoom;
-			int var7 = (ViewportMouse.ViewportMouse_y - Rasterizer3D.Rasterizer3D_clipMidY) * var4 / Rasterizer3D.Rasterizer3D_zoom;
-			int var8 = (ViewportMouse.ViewportMouse_x - Rasterizer3D.Rasterizer3D_clipMidX) * var5 / Rasterizer3D.Rasterizer3D_zoom;
-			int var9 = (ViewportMouse.ViewportMouse_y - Rasterizer3D.Rasterizer3D_clipMidY) * var5 / Rasterizer3D.Rasterizer3D_zoom;
-			int var10 = Rasterizer3D.method3048(var7, var4, var1, var0);
-			int var11 = Rasterizer3D.method3044(var7, var4, var1, var0);
-			var7 = var10;
-			var10 = Rasterizer3D.method3048(var9, var5, var1, var0);
-			int var12 = Rasterizer3D.method3044(var9, var5, var1, var0);
-			var9 = var10;
-			var10 = Rasterizer3D.method3054(var6, var11, var3, var2);
-			var11 = Rasterizer3D.method3067(var6, var11, var3, var2);
-			var6 = var10;
-			var10 = Rasterizer3D.method3054(var8, var12, var3, var2);
-			var12 = Rasterizer3D.method3067(var8, var12, var3, var2);
-			class30.field261 = (var6 + var10) / 2;
-			class2.field5 = (var7 + var9) / 2;
-			GrandExchangeEvents.field36 = (var12 + var11) / 2;
-			ViewportMouse.field1737 = (var10 - var6) / 2;
-			ViewportMouse.field1739 = (var9 - var7) / 2;
-			class288.field3652 = (var12 - var11) / 2;
-			Frames.field1880 = Math.abs(ViewportMouse.field1737);
-			class189.field2355 = Math.abs(ViewportMouse.field1739);
-			class65.field603 = Math.abs(class288.field3652);
-		}
+	@Export("addCancelMenuEntry")
+	static void addCancelMenuEntry() {
+		Client.menuOptionsCount = 0;
+		Client.isMenuOpen = false;
+		Client.menuActions[0] = "Cancel";
+		Client.menuTargets[0] = "";
+		Client.menuOpcodes[0] = 1006;
+		Client.menuShiftClick[0] = false;
+		Client.menuOptionsCount = 1;
 	}
 
-	@ObfuscatedName("ir")
+	@ObfuscatedName("kq")
 	@ObfuscatedSignature(
-		signature = "(IB)Z",
-		garbageValue = "-50"
+		signature = "(I)V",
+		garbageValue = "-1882557485"
 	)
-	static boolean method2315(int var0) {
-		return var0 == 57 || var0 == 58 || var0 == 1007 || var0 == 25 || var0 == 30;
+	@Export("FriendSystem_invalidateIgnoreds")
+	static final void FriendSystem_invalidateIgnoreds() {
+		Iterator var0 = Messages.Messages_hashTable.iterator();
+
+		while (var0.hasNext()) {
+			Message var1 = (Message)var0.next();
+			var1.clearIsFromIgnored();
+		}
+
+		if (InterfaceParent.clanChat != null) {
+			InterfaceParent.clanChat.invalidateIgnoreds();
+		}
+
 	}
 }

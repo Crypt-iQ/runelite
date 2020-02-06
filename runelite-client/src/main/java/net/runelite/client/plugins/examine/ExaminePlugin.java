@@ -26,7 +26,6 @@ package net.runelite.client.plugins.examine;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import io.reactivex.schedulers.Schedulers;
 import java.time.Instant;
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -37,6 +36,7 @@ import javax.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
+import net.runelite.api.Constants;
 import net.runelite.api.ItemDefinition;
 import net.runelite.api.ItemID;
 import net.runelite.api.events.ChatMessage;
@@ -49,7 +49,6 @@ import static net.runelite.api.widgets.WidgetInfo.SEED_VAULT_ITEM_CONTAINER;
 import static net.runelite.api.widgets.WidgetInfo.TO_CHILD;
 import static net.runelite.api.widgets.WidgetInfo.TO_GROUP;
 import net.runelite.api.widgets.WidgetItem;
-import net.runelite.client.callback.ClientThread;
 import net.runelite.client.chat.ChatColorType;
 import net.runelite.client.chat.ChatMessageBuilder;
 import net.runelite.client.chat.ChatMessageManager;
@@ -58,9 +57,9 @@ import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.plugins.PluginType;
 import net.runelite.client.util.QuantityFormatter;
 import net.runelite.http.api.examine.ExamineClient;
-import net.runelite.http.api.osbuddy.OSBGrandExchangeClient;
 
 /**
  * Submits examine info to the api
@@ -70,7 +69,8 @@ import net.runelite.http.api.osbuddy.OSBGrandExchangeClient;
 @PluginDescriptor(
 	name = "Examine",
 	description = "Send examine information to the API",
-	tags = {"npcs", "items", "inventory", "objects"}
+	tags = {"npcs", "items", "inventory", "objects"},
+	type = PluginType.UTILITY
 )
 @Slf4j
 @Singleton
@@ -79,7 +79,6 @@ public class ExaminePlugin extends Plugin
 	private static final Pattern X_PATTERN = Pattern.compile("^\\d+ x ");
 
 	private final Deque<PendingExamine> pending = new ArrayDeque<>();
-	private final OSBGrandExchangeClient CLIENT = new OSBGrandExchangeClient();
 	private final Cache<CacheKey, Boolean> cache = CacheBuilder.newBuilder()
 		.maximumSize(128L)
 		.build();
@@ -89,9 +88,6 @@ public class ExaminePlugin extends Plugin
 
 	@Inject
 	private Client client;
-
-	@Inject
-	private ClientThread clientThread;
 
 	@Inject
 	private ItemManager itemManager;
@@ -137,7 +133,7 @@ public class ExaminePlugin extends Plugin
 				type = ExamineType.ITEM;
 				id = event.getIdentifier();
 				break;
-			case EXAMINE_ITEM_BANK_EQ:
+			case CC_OP_LOW_PRIORITY:
 			{
 				type = ExamineType.ITEM_BANK_EQ;
 				int[] qi = findItemFromWidget(event.getParam1(), event.getParam0());
@@ -335,8 +331,8 @@ public class ExaminePlugin extends Plugin
 		// quantity is at least 1
 		quantity = Math.max(1, quantity);
 		int itemCompositionPrice = itemComposition.getPrice();
-		final int gePrice = itemManager.getItemPrice(id);
-		final int alchPrice = itemCompositionPrice <= 0 ? 0 : itemManager.getAlchValue(itemComposition);
+		final long gePrice = itemManager.getItemPrice(id);
+		final long alchPrice = itemCompositionPrice <= 0 ? 0 : Math.round(itemCompositionPrice * Constants.HIGH_ALCHEMY_MULTIPLIER);
 
 		if (gePrice > 0 || alchPrice > 0)
 		{
@@ -360,62 +356,44 @@ public class ExaminePlugin extends Plugin
 			if (gePrice > 0)
 			{
 				int finalQuantity = quantity;
-				CLIENT.lookupItem(id)
-					.subscribeOn(Schedulers.io())
-					.observeOn(Schedulers.from(clientThread))
-					.subscribe(
-						(osbresult) ->
-						{
-							message
-								.append(ChatColorType.NORMAL)
-								.append(" GE  ")
-								.append(ChatColorType.HIGHLIGHT)
-								.append(QuantityFormatter.formatNumber(gePrice * finalQuantity));
+				message
+					.append(ChatColorType.NORMAL)
+					.append(" GE  ")
+					.append(ChatColorType.HIGHLIGHT)
+					.append(QuantityFormatter.formatNumber(gePrice * finalQuantity));
 
-							if (osbresult != null)
-							{
-								message
-									.append(ChatColorType.NORMAL)
-									.append(" OSB  ")
-									.append(ChatColorType.HIGHLIGHT)
-									.append(QuantityFormatter.formatNumber(osbresult.getOverall_average() * finalQuantity));
-							}
+				if (finalQuantity > 1)
+				{
+					message
+						.append(ChatColorType.NORMAL)
+						.append(" (")
+						.append(ChatColorType.HIGHLIGHT)
+						.append(QuantityFormatter.formatNumber(gePrice))
+						.append(ChatColorType.NORMAL)
+						.append("ea)");
+				}
 
-							if (finalQuantity > 1)
-							{
-								message
-									.append(ChatColorType.NORMAL)
-									.append(" (")
-									.append(ChatColorType.HIGHLIGHT)
-									.append(QuantityFormatter.formatNumber(gePrice))
-									.append(ChatColorType.NORMAL)
-									.append("ea)");
-							}
+				message
+					.append(ChatColorType.NORMAL)
+					.append(" HA value ")
+					.append(ChatColorType.HIGHLIGHT)
+					.append(QuantityFormatter.formatNumber(alchPrice * finalQuantity));
 
-							message
-								.append(ChatColorType.NORMAL)
-								.append(" HA value ")
-								.append(ChatColorType.HIGHLIGHT)
-								.append(QuantityFormatter.formatNumber(alchPrice * finalQuantity));
+				if (finalQuantity > 1)
+				{
+					message
+						.append(ChatColorType.NORMAL)
+						.append(" (")
+						.append(ChatColorType.HIGHLIGHT)
+						.append(QuantityFormatter.formatNumber(alchPrice))
+						.append(ChatColorType.NORMAL)
+						.append("ea)");
+				}
 
-							if (finalQuantity > 1)
-							{
-								message
-									.append(ChatColorType.NORMAL)
-									.append(" (")
-									.append(ChatColorType.HIGHLIGHT)
-									.append(QuantityFormatter.formatNumber(alchPrice))
-									.append(ChatColorType.NORMAL)
-									.append("ea)");
-							}
-
-							chatMessageManager.queue(QueuedMessage.builder()
-								.type(ChatMessageType.ITEM_EXAMINE)
-								.runeLiteFormattedMessage(message.build())
-								.build());
-						},
-						(e) -> log.error(e.toString())
-					);
+				chatMessageManager.queue(QueuedMessage.builder()
+					.type(ChatMessageType.ITEM_EXAMINE)
+					.runeLiteFormattedMessage(message.build())
+					.build());
 			}
 			else
 			{

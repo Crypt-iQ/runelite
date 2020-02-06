@@ -1,18 +1,15 @@
 /*
- * BSD 2-Clause License
- *
- * Copyright (c) 2019, ThatGamerBlue <thatgamerblue@gmail.com>
+ * Copyright (c) 2016-2017, Adam <Adam@sigterm.info>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *
- *  Redistributions of source code must retain the above copyright notice, this
- *   list of conditions and the following disclaimer.
- *
- *  Redistributions in binary form must reproduce the above copyright notice,
- *   this list of conditions and the following disclaimer in the documentation
- *   and/or other materials provided with the distribution.
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -475,10 +472,6 @@ public interface RSClient extends RSGameShell, Client
 	@Override
 	int getGameCycle();
 
-	// unused
-	//@Import("packetHandler")
-	//void packetHandler();
-
 	@Import("Messages_channels")
 	@Override
 	Map getChatLineMap();
@@ -592,9 +585,17 @@ public interface RSClient extends RSGameShell, Client
 	@Override
 	int getMouseIdleTicks();
 
+	@Import("MouseHandler_idleCycles")
+	@Override
+	void setMouseIdleTicks(int cycles);
+
 	@Import("MouseHandler_lastPressedTimeMillis")
 	@Override
 	long getMouseLastPressedMillis();
+
+	@Import("KeyHandler_idleCycles")
+	@Override
+	void setKeyboardIdleTicks(int cycles);
 
 	@Import("KeyHandler_idleCycles")
 	@Override
@@ -667,7 +668,7 @@ public interface RSClient extends RSGameShell, Client
 	 * It should be between 128 and (pitchUnlimiter?512:383) JAUs(1).
 	 * The difference between this and cameraPitch is that cameraPitch has a lower limit, imposed by the surrounding
 	 * terrain.
-	 *
+	 * <p>
 	 * (1) JAU - Jagex Angle Unit; 1/1024 of a revolution
 	 */
 	@Import("camAngleX")
@@ -1071,7 +1072,7 @@ public interface RSClient extends RSGameShell, Client
 	void setViewportWalking(boolean viewportWalking);
 
 	@Import("playMusicTrack")
-	void playMusicTrack(RSAbstractArchive var0, int var1, int var2, int var3, boolean var4);
+	void playMusicTrack(int var0, RSAbstractArchive var1, int var2, int var3, int var4, boolean var5);
 
 	@Import("midiPcmStream")
 	RSMidiPcmStream getMidiPcmStream();
@@ -1141,4 +1142,14 @@ public interface RSClient extends RSGameShell, Client
 
 	@Import("updateItemPile")
 	void updateItemPile(int localX, int localY);
+
+	@Import("showMouseCross")
+	@Override
+	void setShowMouseCross(boolean show);
+
+	@Import("draggedWidgetX")
+	int getDraggedWidgetX(); // these should probably have if1 in their names somewhere
+
+	@Import("draggedWidgetY")
+	int getDraggedWidgetY();
 }

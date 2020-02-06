@@ -4,35 +4,24 @@ import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("it")
+@ObfuscatedName("id")
 @Implements("InvDefinition")
 public class InvDefinition extends DualNode {
-	@ObfuscatedName("sy")
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
-		signature = "Lif;"
-	)
-	public static class237 field3210;
-	@ObfuscatedName("u")
-	@ObfuscatedSignature(
-		signature = "Lhf;"
+		signature = "Lii;"
 	)
 	@Export("InvDefinition_archive")
 	public static AbstractArchive InvDefinition_archive;
-	@ObfuscatedName("f")
+	@ObfuscatedName("t")
 	@ObfuscatedSignature(
-		signature = "Lef;"
+		signature = "Leh;"
 	)
 	@Export("InvDefinition_cached")
 	static EvictingDualNodeHashTable InvDefinition_cached;
-	@ObfuscatedName("w")
-	@ObfuscatedSignature(
-		signature = "Lhf;"
-	)
-	@Export("Widget_archive")
-	public static AbstractArchive Widget_archive;
-	@ObfuscatedName("b")
+	@ObfuscatedName("o")
 	@ObfuscatedGetter(
-		intValue = 1331007469
+		intValue = -1229670201
 	)
 	@Export("size")
 	public int size;
@@ -45,10 +34,10 @@ public class InvDefinition extends DualNode {
 		this.size = 0;
 	}
 
-	@ObfuscatedName("f")
+	@ObfuscatedName("t")
 	@ObfuscatedSignature(
-		signature = "(Lkg;B)V",
-		garbageValue = "-67"
+		signature = "(Lkp;I)V",
+		garbageValue = "1060242106"
 	)
 	@Export("decode")
 	void decode(Buffer var1) {
@@ -62,10 +51,10 @@ public class InvDefinition extends DualNode {
 		}
 	}
 
-	@ObfuscatedName("b")
+	@ObfuscatedName("o")
 	@ObfuscatedSignature(
-		signature = "(Lkg;II)V",
-		garbageValue = "63686644"
+		signature = "(Lkp;II)V",
+		garbageValue = "774565733"
 	)
 	@Export("decodeNext")
 	void decodeNext(Buffer var1, int var2) {
@@ -73,24 +62,5 @@ public class InvDefinition extends DualNode {
 			this.size = var1.readUnsignedShort();
 		}
 
-	}
-
-	@ObfuscatedName("z")
-	@ObfuscatedSignature(
-		signature = "(B)Z",
-		garbageValue = "-77"
-	)
-	@Export("isKeyDown")
-	public static final boolean isKeyDown() {
-		synchronized(KeyHandler.KeyHandler_instance) {
-			if (KeyHandler.field399 == KeyHandler.field384) {
-				return false;
-			} else {
-				class49.field418 = KeyHandler.field396[KeyHandler.field399];
-				class297.field3699 = KeyHandler.field395[KeyHandler.field399];
-				KeyHandler.field399 = KeyHandler.field399 + 1 & 127;
-				return true;
-			}
-		}
 	}
 }

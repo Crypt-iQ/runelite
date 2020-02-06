@@ -5,72 +5,148 @@ import net.runelite.mapping.Implements;
 import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
+import net.runelite.rs.ScriptOpcodes;
 
-@ObfuscatedName("ce")
+@ObfuscatedName("cc")
 @Implements("ReflectionCheck")
 public class ReflectionCheck extends Node {
-	@ObfuscatedName("u")
+	@ObfuscatedName("qz")
 	@ObfuscatedGetter(
-		intValue = 200973425
+		intValue = -799338112
+	)
+	static int field1319;
+	@ObfuscatedName("by")
+	@ObfuscatedSignature(
+		signature = "[Lli;"
+	)
+	@Export("worldSelectFlagSprites")
+	static IndexedSprite[] worldSelectFlagSprites;
+	@ObfuscatedName("c")
+	@ObfuscatedGetter(
+		intValue = -677956283
 	)
 	@Export("id")
 	int id;
-	@ObfuscatedName("f")
-	@Export("intReplaceValues")
-	int[] intReplaceValues;
-	@ObfuscatedName("b")
+	@ObfuscatedName("t")
 	@ObfuscatedGetter(
-		intValue = 648866297
+		intValue = 1081173073
 	)
 	@Export("size")
 	int size;
-	@ObfuscatedName("g")
+	@ObfuscatedName("o")
 	@Export("operations")
 	int[] operations;
-	@ObfuscatedName("z")
+	@ObfuscatedName("e")
 	@Export("creationErrors")
 	int[] creationErrors;
-	@ObfuscatedName("p")
+	@ObfuscatedName("i")
 	@Export("fields")
 	Field[] fields;
-	@ObfuscatedName("h")
+	@ObfuscatedName("g")
+	@Export("intReplaceValues")
+	int[] intReplaceValues;
+	@ObfuscatedName("d")
 	@Export("methods")
 	Method[] methods;
-	@ObfuscatedName("y")
+	@ObfuscatedName("l")
 	@Export("arguments")
 	byte[][][] arguments;
 
 	ReflectionCheck() {
 	}
 
-	@ObfuscatedName("u")
+	@ObfuscatedName("av")
 	@ObfuscatedSignature(
-		signature = "(IIIIB)V",
-		garbageValue = "-15"
+		signature = "(ILce;ZI)I",
+		garbageValue = "1634047659"
 	)
-	static final void method2316(int var0, int var1, int var2, int var3) {
-		for (int var4 = var1; var4 <= var3 + var1; ++var4) {
-			for (int var5 = var0; var5 <= var0 + var2; ++var5) {
-				if (var5 >= 0 && var5 < 104 && var4 >= 0 && var4 < 104) {
-					class51.field423[0][var5][var4] = 127;
-					if (var0 == var5 && var5 > 0) {
-						Tiles.Tiles_heights[0][var5][var4] = Tiles.Tiles_heights[0][var5 - 1][var4];
-					}
-
-					if (var5 == var0 + var2 && var5 < 103) {
-						Tiles.Tiles_heights[0][var5][var4] = Tiles.Tiles_heights[0][var5 + 1][var4];
-					}
-
-					if (var4 == var1 && var4 > 0) {
-						Tiles.Tiles_heights[0][var5][var4] = Tiles.Tiles_heights[0][var5][var4 - 1];
-					}
-
-					if (var4 == var3 + var1 && var4 < 103) {
-						Tiles.Tiles_heights[0][var5][var4] = Tiles.Tiles_heights[0][var5][var4 + 1];
-					}
-				}
+	static int method2348(int var0, Script var1, boolean var2) {
+		if (var0 == ScriptOpcodes.VIEWPORT_SETFOV) {
+			class320.Interpreter_intStackSize -= 2;
+			Client.field908 = (short)GrandExchangeEvent.method97(Interpreter.Interpreter_intStack[class320.Interpreter_intStackSize]);
+			if (Client.field908 <= 0) {
+				Client.field908 = 256;
 			}
-		}
 
+			Client.field897 = (short)GrandExchangeEvent.method97(Interpreter.Interpreter_intStack[class320.Interpreter_intStackSize + 1]);
+			if (Client.field897 <= 0) {
+				Client.field897 = 256;
+			}
+
+			return 1;
+		} else if (var0 == ScriptOpcodes.VIEWPORT_SETZOOM) {
+			class320.Interpreter_intStackSize -= 2;
+			Client.zoomHeight = (short)Interpreter.Interpreter_intStack[class320.Interpreter_intStackSize];
+			if (Client.zoomHeight <= 0) {
+				Client.zoomHeight = 256;
+			}
+
+			Client.zoomWidth = (short)Interpreter.Interpreter_intStack[class320.Interpreter_intStackSize + 1];
+			if (Client.zoomWidth <= 0) {
+				Client.zoomWidth = 320;
+			}
+
+			return 1;
+		} else if (var0 == ScriptOpcodes.VIEWPORT_CLAMPFOV) {
+			class320.Interpreter_intStackSize -= 4;
+			Client.field900 = (short)Interpreter.Interpreter_intStack[class320.Interpreter_intStackSize];
+			if (Client.field900 <= 0) {
+				Client.field900 = 1;
+			}
+
+			Client.field673 = (short)Interpreter.Interpreter_intStack[class320.Interpreter_intStackSize + 1];
+			if (Client.field673 <= 0) {
+				Client.field673 = 32767;
+			} else if (Client.field673 < Client.field900) {
+				Client.field673 = Client.field900;
+			}
+
+			Client.field819 = (short)Interpreter.Interpreter_intStack[class320.Interpreter_intStackSize + 2];
+			if (Client.field819 <= 0) {
+				Client.field819 = 1;
+			}
+
+			Client.field903 = (short)Interpreter.Interpreter_intStack[class320.Interpreter_intStackSize + 3];
+			if (Client.field903 <= 0) {
+				Client.field903 = 32767;
+			} else if (Client.field903 < Client.field819) {
+				Client.field903 = Client.field819;
+			}
+
+			return 1;
+		} else if (var0 == ScriptOpcodes.VIEWPORT_GETEFFECTIVESIZE) {
+			if (Client.viewportWidget != null) {
+				GrandExchangeOfferUnitPriceComparator.setViewportShape(0, 0, Client.viewportWidget.width, Client.viewportWidget.height, false);
+				Interpreter.Interpreter_intStack[++class320.Interpreter_intStackSize - 1] = Client.viewportWidth;
+				Interpreter.Interpreter_intStack[++class320.Interpreter_intStackSize - 1] = Client.viewportHeight;
+			} else {
+				Interpreter.Interpreter_intStack[++class320.Interpreter_intStackSize - 1] = -1;
+				Interpreter.Interpreter_intStack[++class320.Interpreter_intStackSize - 1] = -1;
+			}
+
+			return 1;
+		} else if (var0 == ScriptOpcodes.VIEWPORT_GETZOOM) {
+			Interpreter.Interpreter_intStack[++class320.Interpreter_intStackSize - 1] = Client.zoomHeight;
+			Interpreter.Interpreter_intStack[++class320.Interpreter_intStackSize - 1] = Client.zoomWidth;
+			return 1;
+		} else if (var0 == ScriptOpcodes.VIEWPORT_GETFOV) {
+			Interpreter.Interpreter_intStack[++class320.Interpreter_intStackSize - 1] = UserComparator3.method3499(Client.field908);
+			Interpreter.Interpreter_intStack[++class320.Interpreter_intStackSize - 1] = UserComparator3.method3499(Client.field897);
+			return 1;
+		} else if (var0 == 6220) {
+			Interpreter.Interpreter_intStack[++class320.Interpreter_intStackSize - 1] = 0;
+			return 1;
+		} else if (var0 == 6221) {
+			Interpreter.Interpreter_intStack[++class320.Interpreter_intStackSize - 1] = 0;
+			return 1;
+		} else if (var0 == 6222) {
+			Interpreter.Interpreter_intStack[++class320.Interpreter_intStackSize - 1] = Username.canvasWidth;
+			return 1;
+		} else if (var0 == 6223) {
+			Interpreter.Interpreter_intStack[++class320.Interpreter_intStackSize - 1] = WorldMapData_1.canvasHeight;
+			return 1;
+		} else {
+			return 2;
+		}
 	}
 }

@@ -58,7 +58,7 @@ class GrandExchangePanel extends PluginPanel
 	private GrandExchangeOffersPanel offersPanel;
 
 	@Inject
-	private GrandExchangePanel(ClientThread clientThread, ItemManager itemManager, ScheduledExecutorService executor)
+	private GrandExchangePanel(ClientThread clientThread, ItemManager itemManager, ScheduledExecutorService executor, GrandExchangeConfig config)
 	{
 		super(false);
 

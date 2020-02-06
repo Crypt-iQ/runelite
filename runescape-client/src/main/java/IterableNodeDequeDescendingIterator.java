@@ -4,38 +4,38 @@ import net.runelite.mapping.Implements;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("jp")
+@ObfuscatedName("jv")
 @Implements("IterableNodeDequeDescendingIterator")
 public class IterableNodeDequeDescendingIterator implements Iterator {
-	@ObfuscatedName("u")
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
-		signature = "Ljm;"
+		signature = "Ljj;"
 	)
 	@Export("deque")
 	IterableNodeDeque deque;
-	@ObfuscatedName("f")
+	@ObfuscatedName("t")
 	@ObfuscatedSignature(
-		signature = "Lfb;"
+		signature = "Lft;"
 	)
-	Node field3545;
-	@ObfuscatedName("b")
+	Node field3538;
+	@ObfuscatedName("o")
 	@ObfuscatedSignature(
-		signature = "Lfb;"
+		signature = "Lft;"
 	)
 	@Export("last")
 	Node last;
 
 	@ObfuscatedSignature(
-		signature = "(Ljm;)V"
+		signature = "(Ljj;)V"
 	)
 	IterableNodeDequeDescendingIterator(IterableNodeDeque var1) {
 		this.last = null;
 		this.setDeque(var1);
 	}
 
-	@ObfuscatedName("y")
+	@ObfuscatedName("j")
 	@ObfuscatedSignature(
-		signature = "(Ljm;)V"
+		signature = "(Ljj;)V"
 	)
 	@Export("setDeque")
 	void setDeque(IterableNodeDeque var1) {
@@ -43,32 +43,36 @@ public class IterableNodeDequeDescendingIterator implements Iterator {
 		this.start();
 	}
 
-	@ObfuscatedName("w")
+	@ObfuscatedName("m")
 	@Export("start")
 	void start() {
-		this.field3545 = this.deque != null ? this.deque.sentinel.previous : null;
-		this.last = null;
-	}
-
-	public void remove() {
-		this.last.remove();
+		this.field3538 = this.deque != null ? this.deque.sentinel.previous : null;
 		this.last = null;
 	}
 
 	public boolean hasNext() {
-		return this.deque.sentinel != this.field3545;
+		return this.deque.sentinel != this.field3538;
 	}
 
 	public Object next() {
-		Node var1 = this.field3545;
+		Node var1 = this.field3538;
 		if (var1 == this.deque.sentinel) {
 			var1 = null;
-			this.field3545 = null;
+			this.field3538 = null;
 		} else {
-			this.field3545 = var1.previous;
+			this.field3538 = var1.previous;
 		}
 
 		this.last = var1;
 		return var1;
+	}
+
+	public void remove() {
+		if (this.last == null) {
+			throw new IllegalStateException();
+		} else {
+			this.last.remove();
+			this.last = null;
+		}
 	}
 }

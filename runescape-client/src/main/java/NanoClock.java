@@ -7,31 +7,31 @@ import net.runelite.mapping.ObfuscatedSignature;
 @ObfuscatedName("fz")
 @Implements("NanoClock")
 public class NanoClock extends Clock {
-	@ObfuscatedName("u")
+	@ObfuscatedName("c")
 	@ObfuscatedGetter(
-		longValue = 1210621623438616379L
+		longValue = 5230398222733750155L
 	)
 	@Export("lastTimeNano")
 	long lastTimeNano;
 
-	public NanoClock() {
+	NanoClock() {
 		this.lastTimeNano = System.nanoTime();
 	}
 
-	@ObfuscatedName("u")
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
-		signature = "(I)V",
-		garbageValue = "-26166053"
+		signature = "(B)V",
+		garbageValue = "29"
 	)
 	@Export("mark")
 	public void mark() {
 		this.lastTimeNano = System.nanoTime();
 	}
 
-	@ObfuscatedName("f")
+	@ObfuscatedName("t")
 	@ObfuscatedSignature(
-		signature = "(IIB)I",
-		garbageValue = "6"
+		signature = "(III)I",
+		garbageValue = "-561232674"
 	)
 	@Export("wait")
 	public int wait(int var1, int var2) {
@@ -41,40 +41,18 @@ public class NanoClock extends Clock {
 			var5 = var3;
 		}
 
-		long var7 = var5 / 1000000L;
-		long var9;
-		if (var7 > 0L) {
-			if (var7 % 10L == 0L) {
-				var9 = var7 - 1L;
+		FriendLoginUpdate.method5325(var5 / 1000000L);
+		long var7 = System.nanoTime();
 
-				try {
-					Thread.sleep(var9);
-				} catch (InterruptedException var16) {
-				}
-
-				try {
-					Thread.sleep(1L);
-				} catch (InterruptedException var15) {
-				}
-			} else {
-				try {
-					Thread.sleep(var7);
-				} catch (InterruptedException var14) {
-				}
-			}
+		int var9;
+		for (var9 = 0; var9 < 10 && (var9 < 1 || this.lastTimeNano < var7); this.lastTimeNano += 1000000L * (long)var1) {
+			++var9;
 		}
 
-		var9 = System.nanoTime();
-
-		int var13;
-		for (var13 = 0; var13 < 10 && (var13 < 1 || this.lastTimeNano < var9); this.lastTimeNano += 1000000L * (long)var1) {
-			++var13;
+		if (this.lastTimeNano < var7) {
+			this.lastTimeNano = var7;
 		}
 
-		if (this.lastTimeNano < var9) {
-			this.lastTimeNano = var9;
-		}
-
-		return var13;
+		return var9;
 	}
 }

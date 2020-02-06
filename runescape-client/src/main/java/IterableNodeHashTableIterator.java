@@ -4,33 +4,33 @@ import net.runelite.mapping.Implements;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("ll")
+@ObfuscatedName("lu")
 @Implements("IterableNodeHashTableIterator")
 public class IterableNodeHashTableIterator implements Iterator {
-	@ObfuscatedName("u")
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
-		signature = "Llb;"
+		signature = "Llp;"
 	)
 	@Export("hashTable")
 	IterableNodeHashTable hashTable;
-	@ObfuscatedName("f")
+	@ObfuscatedName("t")
 	@ObfuscatedSignature(
-		signature = "Lfb;"
+		signature = "Lft;"
 	)
 	@Export("head")
 	Node head;
-	@ObfuscatedName("b")
+	@ObfuscatedName("o")
 	@Export("index")
 	int index;
-	@ObfuscatedName("g")
+	@ObfuscatedName("e")
 	@ObfuscatedSignature(
-		signature = "Lfb;"
+		signature = "Lft;"
 	)
 	@Export("last")
 	Node last;
 
 	@ObfuscatedSignature(
-		signature = "(Llb;)V"
+		signature = "(Llp;)V"
 	)
 	IterableNodeHashTableIterator(IterableNodeHashTable var1) {
 		this.last = null;
@@ -38,29 +38,12 @@ public class IterableNodeHashTableIterator implements Iterator {
 		this.start();
 	}
 
-	@ObfuscatedName("y")
+	@ObfuscatedName("j")
 	@Export("start")
 	void start() {
 		this.head = this.hashTable.buckets[0].previous;
 		this.index = 1;
 		this.last = null;
-	}
-
-	public boolean hasNext() {
-		if (this.hashTable.buckets[this.index - 1] != this.head) {
-			return true;
-		} else {
-			while (this.index < this.hashTable.size) {
-				if (this.hashTable.buckets[this.index++].previous != this.hashTable.buckets[this.index - 1]) {
-					this.head = this.hashTable.buckets[this.index - 1].previous;
-					return true;
-				}
-
-				this.head = this.hashTable.buckets[this.index - 1];
-			}
-
-			return false;
-		}
 	}
 
 	public Object next() {
@@ -91,6 +74,23 @@ public class IterableNodeHashTableIterator implements Iterator {
 		} else {
 			this.last.remove();
 			this.last = null;
+		}
+	}
+
+	public boolean hasNext() {
+		if (this.hashTable.buckets[this.index - 1] != this.head) {
+			return true;
+		} else {
+			while (this.index < this.hashTable.size) {
+				if (this.hashTable.buckets[this.index++].previous != this.hashTable.buckets[this.index - 1]) {
+					this.head = this.hashTable.buckets[this.index - 1].previous;
+					return true;
+				}
+
+				this.head = this.hashTable.buckets[this.index - 1];
+			}
+
+			return false;
 		}
 	}
 }

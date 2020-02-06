@@ -1,52 +1,51 @@
-import java.util.Iterator;
 import net.runelite.mapping.Export;
 import net.runelite.mapping.Implements;
 import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("q")
+@ObfuscatedName("s")
 @Implements("WorldMapIcon_1")
 public class WorldMapIcon_1 extends AbstractWorldMapIcon {
-	@ObfuscatedName("u")
+	@ObfuscatedName("c")
 	@ObfuscatedGetter(
-		intValue = -2092116219
+		intValue = 52552105
 	)
 	@Export("objectDefId")
 	final int objectDefId;
-	@ObfuscatedName("f")
+	@ObfuscatedName("t")
 	@ObfuscatedSignature(
-		signature = "Lai;"
+		signature = "Lax;"
 	)
 	@Export("region")
 	final WorldMapRegion region;
-	@ObfuscatedName("b")
+	@ObfuscatedName("o")
 	@ObfuscatedGetter(
-		intValue = 1422868001
+		intValue = 1871075417
 	)
 	@Export("element")
 	int element;
-	@ObfuscatedName("g")
+	@ObfuscatedName("e")
 	@ObfuscatedSignature(
-		signature = "Lam;"
+		signature = "Laz;"
 	)
 	@Export("label")
 	WorldMapLabel label;
-	@ObfuscatedName("z")
+	@ObfuscatedName("i")
 	@ObfuscatedGetter(
-		intValue = -900902157
+		intValue = -260537351
 	)
 	@Export("subWidth")
 	int subWidth;
-	@ObfuscatedName("p")
+	@ObfuscatedName("g")
 	@ObfuscatedGetter(
-		intValue = -673960603
+		intValue = -753416785
 	)
 	@Export("subHeight")
 	int subHeight;
 
 	@ObfuscatedSignature(
-		signature = "(Lhx;Lhx;ILai;)V"
+		signature = "(Lhj;Lhj;ILax;)V"
 	)
 	WorldMapIcon_1(Coord var1, Coord var2, int var3, WorldMapRegion var4) {
 		super(var1, var2);
@@ -55,56 +54,56 @@ public class WorldMapIcon_1 extends AbstractWorldMapIcon {
 		this.init();
 	}
 
-	@ObfuscatedName("u")
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
 		signature = "(I)I",
-		garbageValue = "-871583687"
+		garbageValue = "1499764486"
 	)
 	@Export("getElement")
 	public int getElement() {
 		return this.element;
 	}
 
-	@ObfuscatedName("f")
+	@ObfuscatedName("t")
 	@ObfuscatedSignature(
-		signature = "(I)Lam;",
-		garbageValue = "969160497"
+		signature = "(B)Laz;",
+		garbageValue = "124"
 	)
 	@Export("getLabel")
 	WorldMapLabel getLabel() {
 		return this.label;
 	}
 
-	@ObfuscatedName("b")
+	@ObfuscatedName("o")
 	@ObfuscatedSignature(
-		signature = "(I)I",
-		garbageValue = "-55298135"
+		signature = "(S)I",
+		garbageValue = "-26101"
 	)
 	@Export("getSubWidth")
 	int getSubWidth() {
 		return this.subWidth;
 	}
 
-	@ObfuscatedName("g")
+	@ObfuscatedName("e")
 	@ObfuscatedSignature(
 		signature = "(B)I",
-		garbageValue = "-51"
+		garbageValue = "1"
 	)
 	@Export("getSubHeight")
 	int getSubHeight() {
 		return this.subHeight;
 	}
 
-	@ObfuscatedName("o")
+	@ObfuscatedName("n")
 	@ObfuscatedSignature(
 		signature = "(I)V",
-		garbageValue = "1280762110"
+		garbageValue = "-1452393190"
 	)
 	@Export("init")
 	void init() {
 		this.element = Occluder.getObjectDefinition(this.objectDefId).transform().mapIconId;
-		this.label = this.region.createMapLabel(Varcs.WorldMapElement_get(this.element));
-		WorldMapElement var1 = Varcs.WorldMapElement_get(this.getElement());
+		this.label = this.region.createMapLabel(PacketBufferNode.WorldMapElement_get(this.element));
+		WorldMapElement var1 = PacketBufferNode.WorldMapElement_get(this.getElement());
 		Sprite var2 = var1.getSpriteBool(false);
 		if (var2 != null) {
 			this.subWidth = var2.subWidth;
@@ -116,95 +115,68 @@ public class WorldMapIcon_1 extends AbstractWorldMapIcon {
 
 	}
 
-	@ObfuscatedName("aq")
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
-		signature = "(IB)I",
-		garbageValue = "80"
+		signature = "([BILjava/lang/CharSequence;B)I",
+		garbageValue = "112"
 	)
-	static int method309(int var0) {
-		return (int)Math.pow(2.0D, (double)((float)var0 / 256.0F + 7.0F));
-	}
+	public static int method310(byte[] var0, int var1, CharSequence var2) {
+		int var3 = var2.length();
+		int var4 = var1;
 
-	@ObfuscatedName("gx")
-	@ObfuscatedSignature(
-		signature = "(Ljava/lang/String;ZI)V",
-		garbageValue = "58684745"
-	)
-	@Export("drawLoadingMessage")
-	static final void drawLoadingMessage(String var0, boolean var1) {
-		if (Client.showLoadingMessages) {
-			byte var2 = 4;
-			int var3 = var2 + 6;
-			int var4 = var2 + 6;
-			int var5 = Player.fontPlain12.lineWidth(var0, 250);
-			int var6 = Player.fontPlain12.lineCount(var0, 250) * 13;
-			Rasterizer2D.Rasterizer2D_fillRectangle(var3 - var2, var4 - var2, var2 + var5 + var2, var2 + var6 + var2, 0);
-			Rasterizer2D.Rasterizer2D_drawRectangle(var3 - var2, var4 - var2, var2 + var5 + var2, var6 + var2 + var2, 16777215);
-			Player.fontPlain12.drawLines(var0, var3, var4, var5, var6, 16777215, -1, 1, 1, 0);
-			int var7 = var3 - var2;
-			int var8 = var4 - var2;
-			int var9 = var2 + var5 + var2;
-			int var10 = var2 + var6 + var2;
-
-			int var11;
-			for (var11 = 0; var11 < Client.rootWidgetCount; ++var11) {
-				if (Client.rootWidgetWidths[var11] + Client.rootWidgetXs[var11] > var7 && Client.rootWidgetXs[var11] < var9 + var7 && Client.rootWidgetYs[var11] + Client.rootWidgetHeights[var11] > var8 && Client.rootWidgetYs[var11] < var10 + var8) {
-					Client.field847[var11] = true;
-				}
-			}
-
-			if (var1) {
-				DirectByteArrayCopier.rasterProvider.drawFull(0, 0);
+		for (int var5 = 0; var5 < var3; ++var5) {
+			char var6 = var2.charAt(var5);
+			if (var6 <= 127) {
+				var0[var4++] = (byte)var6;
+			} else if (var6 <= 2047) {
+				var0[var4++] = (byte)(192 | var6 >> 6);
+				var0[var4++] = (byte)(128 | var6 & '?');
 			} else {
-				var11 = var3;
-				int var12 = var4;
-				int var13 = var5;
-				int var14 = var6;
-
-				for (int var15 = 0; var15 < Client.rootWidgetCount; ++var15) {
-					if (Client.rootWidgetXs[var15] + Client.rootWidgetWidths[var15] > var11 && Client.rootWidgetXs[var15] < var13 + var11 && Client.rootWidgetYs[var15] + Client.rootWidgetHeights[var15] > var12 && Client.rootWidgetYs[var15] < var14 + var12) {
-						Client.field837[var15] = true;
-					}
-				}
+				var0[var4++] = (byte)(224 | var6 >> '\f');
+				var0[var4++] = (byte)(128 | var6 >> 6 & 63);
+				var0[var4++] = (byte)(128 | var6 & '?');
 			}
+		}
 
+		return var4 - var1;
+	}
+
+	@ObfuscatedName("fg")
+	@ObfuscatedSignature(
+		signature = "(B)V",
+		garbageValue = "-8"
+	)
+	static final void method308() {
+		if (Client.logoutTimer > 0) {
+			class30.logOut();
+		} else {
+			Client.timer.method5045();
+			Projectile.updateGameState(40);
+			ClientPreferences.field1052 = Client.packetWriter.getSocket();
+			Client.packetWriter.removeSocket();
 		}
 	}
 
-	@ObfuscatedName("hy")
+	@ObfuscatedName("il")
 	@ObfuscatedSignature(
-		signature = "(III)Lfg;",
-		garbageValue = "1189073530"
+		signature = "([Lhn;Lhn;ZB)V",
+		garbageValue = "42"
 	)
-	static RouteStrategy method321(int var0, int var1) {
-		Client.field915.approxDestinationX = var0;
-		Client.field915.approxDestinationY = var1;
-		Client.field915.approxDestinationSizeX = 1;
-		Client.field915.approxDestinationSizeY = 1;
-		return Client.field915;
-	}
-
-	@ObfuscatedName("kf")
-	@ObfuscatedSignature(
-		signature = "(I)V",
-		garbageValue = "826026682"
-	)
-	@Export("FriendSystem_invalidateFriends")
-	static final void FriendSystem_invalidateFriends() {
-		for (int var0 = 0; var0 < Players.Players_count; ++var0) {
-			Player var1 = Client.players[Players.Players_indices[var0]];
-			var1.clearIsFriend();
+	@Export("revalidateWidgetScroll")
+	static void revalidateWidgetScroll(Widget[] var0, Widget var1, boolean var2) {
+		int var3 = var1.scrollWidth != 0 ? var1.scrollWidth : var1.width;
+		int var4 = var1.scrollHeight != 0 ? var1.scrollHeight : var1.height;
+		FloorUnderlayDefinition.resizeInterface(var0, var1.id, var3, var4, var2);
+		if (var1.children != null) {
+			FloorUnderlayDefinition.resizeInterface(var1.children, var1.id, var3, var4, var2);
 		}
 
-		Iterator var2 = Messages.Messages_hashTable.iterator();
-
-		while (var2.hasNext()) {
-			Message var3 = (Message)var2.next();
-			var3.clearIsFromFriend();
+		InterfaceParent var5 = (InterfaceParent)Client.interfaceParents.get((long)var1.id);
+		if (var5 != null) {
+			GrandExchangeOfferUnitPriceComparator.method135(var5.group, var3, var4, var2);
 		}
 
-		if (InterfaceParent.clanChat != null) {
-			InterfaceParent.clanChat.clearFriends();
+		if (var1.contentType == 1337) {
 		}
 
 	}

@@ -42,6 +42,8 @@ import net.runelite.api.GameObject;
 import net.runelite.api.ItemID;
 import net.runelite.api.MenuOpcode;
 import net.runelite.api.Player;
+import net.runelite.api.Point;
+import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.AnimationChanged;
 import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.GameObjectChanged;
@@ -57,6 +59,7 @@ import net.runelite.client.game.ItemManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.plugins.PluginType;
 import net.runelite.client.plugins.xptracker.XpTrackerPlugin;
 import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.ui.overlay.OverlayMenuEntry;
@@ -65,7 +68,8 @@ import net.runelite.client.ui.overlay.OverlayMenuEntry;
 	name = "Woodcutting",
 	description = "Show woodcutting statistics and/or bird nest notifications",
 	tags = {"birds", "nest", "notifications", "overlay", "skilling", "wc"},
-	enabledByDefault = false
+	enabledByDefault = false,
+	type = PluginType.SKILLING
 )
 @PluginDependency(XpTrackerPlugin.class)
 @Slf4j
@@ -110,6 +114,7 @@ public class WoodcuttingPlugin extends Plugin
 	private int treeTypeID;
 	@Getter(AccessLevel.PACKAGE)
 	private int gpEarned;
+	private int currentPlane;
 
 	@Provides
 	WoodcuttingConfig getConfig(ConfigManager configManager)
@@ -151,6 +156,7 @@ public class WoodcuttingPlugin extends Plugin
 	private void onGameTick(GameTick gameTick)
 	{
 		recentlyLoggedIn = false;
+		currentPlane = client.getPlane();
 
 		respawns.removeIf(TreeRespawn::isExpired);
 
@@ -215,10 +221,16 @@ public class WoodcuttingPlugin extends Plugin
 		Tree tree = Tree.findTree(object.getId());
 		if (tree != null)
 		{
-			if (tree.getRespawnTime() != null && !recentlyLoggedIn)
+			if (tree.getRespawnTime() != null && !recentlyLoggedIn && currentPlane == object.getPlane())
 			{
+				Point max = object.getSceneMaxLocation();
+				Point min = object.getSceneMinLocation();
+				int lenX = max.getX() - min.getX();
+				int lenY = max.getY() - min.getY();
 				log.debug("Adding respawn timer for {} tree at {}", tree, object.getLocalLocation());
-				TreeRespawn treeRespawn = new TreeRespawn(tree, object.getLocalLocation(), Instant.now(), (int) tree.getRespawnTime().toMillis());
+
+				final int region = client.getLocalPlayer().getWorldLocation().getRegionID();
+				TreeRespawn treeRespawn = new TreeRespawn(tree, lenX, lenY, WorldPoint.fromScene(client, min.getX(), min.getY(), client.getPlane()), Instant.now(), (int) tree.getRespawnTime(region).toMillis());
 				respawns.add(treeRespawn);
 			}
 
@@ -240,9 +252,9 @@ public class WoodcuttingPlugin extends Plugin
 	{
 		switch (event.getGameState())
 		{
-			case LOADING:
 			case HOPPING:
 				respawns.clear();
+			case LOADING:
 				treeObjects.clear();
 				break;
 			case LOGGED_IN:

@@ -2,28 +2,34 @@ import net.runelite.mapping.Export;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("ha")
+@ObfuscatedName("hi")
 public class class210 {
-	@ObfuscatedName("u")
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
-		signature = "Lhg;"
+		signature = "Lhc;"
 	)
 	@Export("huffman")
 	static Huffman huffman;
-	@ObfuscatedName("df")
-	@ObfuscatedSignature(
-		signature = "Lij;"
-	)
-	@Export("archive15")
-	static Archive archive15;
 
-	@ObfuscatedName("u")
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
-		signature = "(IB)Z",
-		garbageValue = "1"
+		signature = "(III)I",
+		garbageValue = "1848259847"
 	)
-	@Export("isWorldMapEvent")
-	public static boolean isWorldMapEvent(int var0) {
-		return var0 == 10 || var0 == 11 || var0 == 12 || var0 == 13 || var0 == 14 || var0 == 15 || var0 == 16 || var0 == 17;
+	public static int method4029(int var0, int var1) {
+		return (var0 + 40000 << 8) + var1;
+	}
+
+	@ObfuscatedName("i")
+	@ObfuscatedSignature(
+		signature = "(IIS)V",
+		garbageValue = "11236"
+	)
+	static void method4032(int var0, int var1) {
+		long var2 = (long)((var0 << 16) + var1);
+		NetFileRequest var4 = (NetFileRequest)NetCache.NetCache_pendingWrites.get(var2);
+		if (var4 != null) {
+			NetCache.NetCache_pendingWritesQueue.addLast(var4);
+		}
 	}
 }

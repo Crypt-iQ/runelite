@@ -4,100 +4,89 @@ import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("eh")
+@ObfuscatedName("ea")
 @Implements("GameObject")
 public final class GameObject {
-	@ObfuscatedName("qf")
+	@ObfuscatedName("c")
 	@ObfuscatedGetter(
-		intValue = -1623440827
-	)
-	static int field1933;
-	@ObfuscatedName("hl")
-	@ObfuscatedGetter(
-		intValue = 143211467
-	)
-	@Export("cameraY")
-	static int cameraY;
-	@ObfuscatedName("u")
-	@ObfuscatedGetter(
-		intValue = 602271545
+		intValue = -940773831
 	)
 	@Export("plane")
 	int plane;
-	@ObfuscatedName("f")
+	@ObfuscatedName("t")
 	@ObfuscatedGetter(
-		intValue = 996548305
+		intValue = 2132625949
 	)
 	@Export("height")
 	int height;
-	@ObfuscatedName("b")
+	@ObfuscatedName("o")
 	@ObfuscatedGetter(
-		intValue = -28565159
+		intValue = -2072532473
 	)
 	@Export("centerX")
 	int centerX;
-	@ObfuscatedName("g")
+	@ObfuscatedName("e")
 	@ObfuscatedGetter(
-		intValue = -213801155
+		intValue = 1479439291
 	)
 	@Export("centerY")
 	int centerY;
-	@ObfuscatedName("z")
+	@ObfuscatedName("i")
 	@ObfuscatedSignature(
-		signature = "Lee;"
+		signature = "Leq;"
 	)
 	@Export("entity")
 	public Entity entity;
-	@ObfuscatedName("p")
+	@ObfuscatedName("g")
 	@ObfuscatedGetter(
-		intValue = -1884988183
+		intValue = -638708115
 	)
 	@Export("orientation")
 	int orientation;
-	@ObfuscatedName("h")
+	@ObfuscatedName("d")
 	@ObfuscatedGetter(
-		intValue = -422485367
+		intValue = -1848719161
 	)
 	@Export("startX")
 	int startX;
-	@ObfuscatedName("y")
+	@ObfuscatedName("l")
 	@ObfuscatedGetter(
-		intValue = 640777493
+		intValue = 1367330545
 	)
 	@Export("endX")
 	int endX;
-	@ObfuscatedName("w")
+	@ObfuscatedName("j")
 	@ObfuscatedGetter(
-		intValue = -1986114597
+		intValue = 170965517
 	)
 	@Export("startY")
 	int startY;
-	@ObfuscatedName("i")
+	@ObfuscatedName("m")
 	@ObfuscatedGetter(
-		intValue = 1415770979
+		intValue = -281386629
 	)
 	@Export("endY")
 	int endY;
-	@ObfuscatedName("k")
+	@ObfuscatedName("p")
 	@ObfuscatedGetter(
-		intValue = -2079543087
+		intValue = 459315211
 	)
-	int field1925;
-	@ObfuscatedName("x")
+	int field1931;
+	@ObfuscatedName("h")
 	@ObfuscatedGetter(
-		intValue = -1243689435
+		intValue = 1057625291
 	)
 	@Export("lastDrawn")
 	int lastDrawn;
-	@ObfuscatedName("o")
+	@ObfuscatedName("v")
 	@ObfuscatedGetter(
-		longValue = 9016646142835721523L
+		longValue = 3023307687483633369L
 	)
 	@Export("tag")
 	public long tag;
-	@ObfuscatedName("e")
+	@ObfuscatedName("n")
 	@ObfuscatedGetter(
-		intValue = -2013432545
+		intValue = -1037464563
 	)
 	@Export("flags")
 	int flags;
@@ -107,110 +96,120 @@ public final class GameObject {
 		this.flags = 0;
 	}
 
-	@ObfuscatedName("b")
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
-		signature = "(IILfg;Lfh;I)Z",
-		garbageValue = "-1345578739"
+		signature = "(II)Liw;",
+		garbageValue = "-1799291125"
 	)
-	static final boolean method3342(int var0, int var1, RouteStrategy var2, CollisionMap var3) {
-		int var4 = var0;
-		int var5 = var1;
-		byte var6 = 64;
-		byte var7 = 64;
-		int var8 = var0 - var6;
-		int var9 = var1 - var7;
-		class173.directions[var6][var7] = 99;
-		class173.distances[var6][var7] = 0;
-		byte var10 = 0;
-		int var11 = 0;
-		class173.bufferX[var10] = var0;
-		byte var10001 = var10;
-		int var18 = var10 + 1;
-		class173.bufferY[var10001] = var1;
-		int[][] var12 = var3.flags;
-
-		while (var18 != var11) {
-			var4 = class173.bufferX[var11];
-			var5 = class173.bufferY[var11];
-			var11 = var11 + 1 & 4095;
-			int var16 = var4 - var8;
-			int var17 = var5 - var9;
-			int var13 = var4 - var3.xInset;
-			int var14 = var5 - var3.yInset;
-			if (var2.hasArrived(2, var4, var5, var3)) {
-				class173.field2103 = var4;
-				class173.field2100 = var5;
-				return true;
+	@Export("getEnum")
+	public static EnumDefinition getEnum(int var0) {
+		EnumDefinition var1 = (EnumDefinition)EnumDefinition.EnumDefinition_cached.get((long)var0);
+		if (var1 != null) {
+			return var1;
+		} else {
+			byte[] var2 = GrandExchangeOfferAgeComparator.EnumDefinition_archive.takeFile(8, var0);
+			var1 = new EnumDefinition();
+			if (var2 != null) {
+				var1.decode(new Buffer(var2));
 			}
 
-			int var15 = class173.distances[var16][var17] + 1;
-			if (var16 > 0 && class173.directions[var16 - 1][var17] == 0 && (var12[var13 - 1][var14] & 19136782) == 0 && (var12[var13 - 1][var14 + 1] & 19136824) == 0) {
-				class173.bufferX[var18] = var4 - 1;
-				class173.bufferY[var18] = var5;
-				var18 = var18 + 1 & 4095;
-				class173.directions[var16 - 1][var17] = 2;
-				class173.distances[var16 - 1][var17] = var15;
-			}
+			EnumDefinition.EnumDefinition_cached.put(var1, (long)var0);
+			return var1;
+		}
+	}
 
-			if (var16 < 126 && class173.directions[var16 + 1][var17] == 0 && (var12[var13 + 2][var14] & 19136899) == 0 && (var12[var13 + 2][var14 + 1] & 19136992) == 0) {
-				class173.bufferX[var18] = var4 + 1;
-				class173.bufferY[var18] = var5;
-				var18 = var18 + 1 & 4095;
-				class173.directions[var16 + 1][var17] = 8;
-				class173.distances[var16 + 1][var17] = var15;
+	@ObfuscatedName("fk")
+	@ObfuscatedSignature(
+		signature = "(Lip;IIII)V",
+		garbageValue = "-1299121306"
+	)
+	@Export("addSequenceSoundEffect")
+	static void addSequenceSoundEffect(SequenceDefinition var0, int var1, int var2, int var3) {
+		if (Client.soundEffectCount < 50 && Client.areaSoundEffectVolume != 0) {
+			if (var0.soundEffects != null && var1 < var0.soundEffects.length) {
+				int var4 = var0.soundEffects[var1];
+				if (var4 != 0) {
+					int var5 = var4 >> 8;
+					int var6 = var4 >> 4 & 7;
+					int var7 = var4 & 15;
+					Client.soundEffectIds[Client.soundEffectCount] = var5;
+					Client.queuedSoundEffectLoops[Client.soundEffectCount] = var6;
+					Client.queuedSoundEffectDelays[Client.soundEffectCount] = 0;
+					Client.soundEffects[Client.soundEffectCount] = null;
+					int var8 = (var2 - 64) / 128;
+					int var9 = (var3 - 64) / 128;
+					Client.soundLocations[Client.soundEffectCount] = var7 + (var9 << 8) + (var8 << 16);
+					++Client.soundEffectCount;
+				}
 			}
+		}
+	}
 
-			if (var17 > 0 && class173.directions[var16][var17 - 1] == 0 && (var12[var13][var14 - 1] & 19136782) == 0 && (var12[var13 + 1][var14 - 1] & 19136899) == 0) {
-				class173.bufferX[var18] = var4;
-				class173.bufferY[var18] = var5 - 1;
-				var18 = var18 + 1 & 4095;
-				class173.directions[var16][var17 - 1] = 1;
-				class173.distances[var16][var17 - 1] = var15;
-			}
+	@ObfuscatedName("ij")
+	@ObfuscatedSignature(
+		signature = "(B)V",
+		garbageValue = "101"
+	)
+	static void method3360() {
+		int var0;
+		int var2;
+		int var3;
+		for (var0 = 0; var0 < Client.menuOptionsCount; ++var0) {
+			var2 = Client.menuOpcodes[var0];
+			boolean var1 = var2 == 57 || var2 == 58 || var2 == 1007 || var2 == 25 || var2 == 30;
+			if (var1) {
+				if (var0 < Client.menuOptionsCount - 1) {
+					for (var3 = var0; var3 < Client.menuOptionsCount - 1; ++var3) {
+						Client.menuActions[var3] = Client.menuActions[var3 + 1];
+						Client.menuTargets[var3] = Client.menuTargets[var3 + 1];
+						Client.menuOpcodes[var3] = Client.menuOpcodes[var3 + 1];
+						Client.menuIdentifiers[var3] = Client.menuIdentifiers[var3 + 1];
+						Client.menuArguments1[var3] = Client.menuArguments1[var3 + 1];
+						Client.menuArguments2[var3] = Client.menuArguments2[var3 + 1];
+						Client.menuShiftClick[var3] = Client.menuShiftClick[var3 + 1];
+					}
+				}
 
-			if (var17 < 126 && class173.directions[var16][var17 + 1] == 0 && (var12[var13][var14 + 2] & 19136824) == 0 && (var12[var13 + 1][var14 + 2] & 19136992) == 0) {
-				class173.bufferX[var18] = var4;
-				class173.bufferY[var18] = var5 + 1;
-				var18 = var18 + 1 & 4095;
-				class173.directions[var16][var17 + 1] = 4;
-				class173.distances[var16][var17 + 1] = var15;
-			}
-
-			if (var16 > 0 && var17 > 0 && class173.directions[var16 - 1][var17 - 1] == 0 && (var12[var13 - 1][var14] & 19136830) == 0 && (var12[var13 - 1][var14 - 1] & 19136782) == 0 && (var12[var13][var14 - 1] & 19136911) == 0) {
-				class173.bufferX[var18] = var4 - 1;
-				class173.bufferY[var18] = var5 - 1;
-				var18 = var18 + 1 & 4095;
-				class173.directions[var16 - 1][var17 - 1] = 3;
-				class173.distances[var16 - 1][var17 - 1] = var15;
-			}
-
-			if (var16 < 126 && var17 > 0 && class173.directions[var16 + 1][var17 - 1] == 0 && (var12[var13 + 1][var14 - 1] & 19136911) == 0 && (var12[var13 + 2][var14 - 1] & 19136899) == 0 && (var12[var13 + 2][var14] & 19136995) == 0) {
-				class173.bufferX[var18] = var4 + 1;
-				class173.bufferY[var18] = var5 - 1;
-				var18 = var18 + 1 & 4095;
-				class173.directions[var16 + 1][var17 - 1] = 9;
-				class173.distances[var16 + 1][var17 - 1] = var15;
-			}
-
-			if (var16 > 0 && var17 < 126 && class173.directions[var16 - 1][var17 + 1] == 0 && (var12[var13 - 1][var14 + 1] & 19136830) == 0 && (var12[var13 - 1][var14 + 2] & 19136824) == 0 && (var12[var13][var14 + 2] & 19137016) == 0) {
-				class173.bufferX[var18] = var4 - 1;
-				class173.bufferY[var18] = var5 + 1;
-				var18 = var18 + 1 & 4095;
-				class173.directions[var16 - 1][var17 + 1] = 6;
-				class173.distances[var16 - 1][var17 + 1] = var15;
-			}
-
-			if (var16 < 126 && var17 < 126 && class173.directions[var16 + 1][var17 + 1] == 0 && (var12[var13 + 1][var14 + 2] & 19137016) == 0 && (var12[var13 + 2][var14 + 2] & 19136992) == 0 && (var12[var13 + 2][var14 + 1] & 19136995) == 0) {
-				class173.bufferX[var18] = var4 + 1;
-				class173.bufferY[var18] = var5 + 1;
-				var18 = var18 + 1 & 4095;
-				class173.directions[var16 + 1][var17 + 1] = 12;
-				class173.distances[var16 + 1][var17 + 1] = var15;
+				--var0;
+				--Client.menuOptionsCount;
 			}
 		}
 
-		class173.field2103 = var4;
-		class173.field2100 = var5;
-		return false;
+		var0 = InterfaceParent.menuWidth / 2 + ArchiveDiskAction.menuX;
+		int var6 = SecureRandomCallable.menuY;
+		var2 = class1.fontBold12.stringWidth("Choose Option");
+
+		int var4;
+		for (var3 = 0; var3 < Client.menuOptionsCount; ++var3) {
+			var4 = class1.fontBold12.stringWidth(VerticalAlignment.method4426(var3));
+			if (var4 > var2) {
+				var2 = var4;
+			}
+		}
+
+		var2 += 8;
+		var3 = Client.menuOptionsCount * 15 + 22;
+		var4 = var0 - var2 / 2;
+		if (var4 + var2 > Username.canvasWidth) {
+			var4 = Username.canvasWidth - var2;
+		}
+
+		if (var4 < 0) {
+			var4 = 0;
+		}
+
+		int var5 = var6;
+		if (var3 + var6 > WorldMapData_1.canvasHeight) {
+			var5 = WorldMapData_1.canvasHeight - var3;
+		}
+
+		if (var5 < 0) {
+			var5 = 0;
+		}
+
+		ArchiveDiskAction.menuX = var4;
+		SecureRandomCallable.menuY = var5;
+		InterfaceParent.menuWidth = var2;
+		Message.menuHeight = Client.menuOptionsCount * 15 + 22;
 	}
 }

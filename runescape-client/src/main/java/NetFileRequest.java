@@ -4,34 +4,53 @@ import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("hi")
+@ObfuscatedName("he")
 @Implements("NetFileRequest")
 public class NetFileRequest extends DualNode {
-	@ObfuscatedName("u")
+	@ObfuscatedName("fn")
 	@ObfuscatedSignature(
-		signature = "Lij;"
+		signature = "Lfw;"
+	)
+	@Export("socketTask")
+	static Task socketTask;
+	@ObfuscatedName("c")
+	@ObfuscatedSignature(
+		signature = "Lia;"
 	)
 	@Export("archive")
 	Archive archive;
-	@ObfuscatedName("f")
+	@ObfuscatedName("t")
 	@ObfuscatedGetter(
-		intValue = -1722853761
+		intValue = -335622229
 	)
 	@Export("crc")
 	int crc;
-	@ObfuscatedName("b")
+	@ObfuscatedName("o")
 	@Export("padding")
 	byte padding;
 
 	NetFileRequest() {
 	}
 
-	@ObfuscatedName("u")
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
-		signature = "(Lhf;I)V",
-		garbageValue = "-568024441"
+		signature = "([I[IB)V",
+		garbageValue = "100"
 	)
-	public static void method4230(AbstractArchive var0) {
-		StructDefinition.StructDefinition_archive = var0;
+	public static void method4217(int[] var0, int[] var1) {
+		if (var0 != null && var1 != null) {
+			ByteArrayPool.ByteArrayPool_alternativeSizes = var0;
+			VerticalAlignment.ByteArrayPool_altSizeArrayCounts = new int[var0.length];
+			ByteArrayPool.ByteArrayPool_arrays = new byte[var0.length][][];
+
+			for (int var2 = 0; var2 < ByteArrayPool.ByteArrayPool_alternativeSizes.length; ++var2) {
+				ByteArrayPool.ByteArrayPool_arrays[var2] = new byte[var1[var2]][];
+			}
+
+		} else {
+			ByteArrayPool.ByteArrayPool_alternativeSizes = null;
+			VerticalAlignment.ByteArrayPool_altSizeArrayCounts = null;
+			ByteArrayPool.ByteArrayPool_arrays = null;
+		}
 	}
 }

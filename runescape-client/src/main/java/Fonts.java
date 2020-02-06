@@ -1,30 +1,37 @@
 import java.util.HashMap;
 import net.runelite.mapping.Export;
 import net.runelite.mapping.Implements;
+import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("kf")
+@ObfuscatedName("kz")
 @Implements("Fonts")
 public class Fonts {
-	@ObfuscatedName("u")
+	@ObfuscatedName("d")
+	@ObfuscatedGetter(
+		intValue = 902886517
+	)
+	@Export("gameCyclesToDo")
+	static int gameCyclesToDo;
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
-		signature = "Lhf;"
+		signature = "Lii;"
 	)
 	@Export("spritesArchive")
 	AbstractArchive spritesArchive;
-	@ObfuscatedName("f")
+	@ObfuscatedName("t")
 	@ObfuscatedSignature(
-		signature = "Lhf;"
+		signature = "Lii;"
 	)
 	@Export("fontsArchive")
 	AbstractArchive fontsArchive;
-	@ObfuscatedName("b")
+	@ObfuscatedName("o")
 	@Export("map")
 	HashMap map;
 
 	@ObfuscatedSignature(
-		signature = "(Lhf;Lhf;)V"
+		signature = "(Lii;Lii;)V"
 	)
 	public Fonts(AbstractArchive var1, AbstractArchive var2) {
 		this.spritesArchive = var1;
@@ -32,10 +39,10 @@ public class Fonts {
 		this.map = new HashMap();
 	}
 
-	@ObfuscatedName("u")
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
-		signature = "([Lka;B)Ljava/util/HashMap;",
-		garbageValue = "35"
+		signature = "([Lkq;I)Ljava/util/HashMap;",
+		garbageValue = "-448655147"
 	)
 	@Export("createMap")
 	public HashMap createMap(FontName[] var1) {
@@ -52,7 +59,7 @@ public class Fonts {
 				String var9 = var5.name;
 				int var10 = var7.getGroupId(var9);
 				int var11 = var7.getFileId(var10, "");
-				Font var6 = class60.method1195(var7, var8, var10, var11);
+				Font var6 = FaceNormal.method3335(var7, var8, var10, var11);
 				if (var6 != null) {
 					this.map.put(var5, var6);
 					var2.put(var5, var6);
@@ -63,41 +70,26 @@ public class Fonts {
 		return var2;
 	}
 
-	@ObfuscatedName("f")
+	@ObfuscatedName("t")
 	@ObfuscatedSignature(
-		signature = "([Ljava/lang/String;[SIII)V",
-		garbageValue = "-1903452094"
+		signature = "(II)Lit;",
+		garbageValue = "291132223"
 	)
-	@Export("sortItemsByName")
-	static void sortItemsByName(String[] var0, short[] var1, int var2, int var3) {
-		if (var2 < var3) {
-			int var4 = (var3 + var2) / 2;
-			int var5 = var2;
-			String var6 = var0[var4];
-			var0[var4] = var0[var3];
-			var0[var3] = var6;
-			short var7 = var1[var4];
-			var1[var4] = var1[var3];
-			var1[var3] = var7;
-
-			for (int var8 = var2; var8 < var3; ++var8) {
-				if (var6 == null || var0[var8] != null && var0[var8].compareTo(var6) < (var8 & 1)) {
-					String var9 = var0[var8];
-					var0[var8] = var0[var5];
-					var0[var5] = var9;
-					short var10 = var1[var8];
-					var1[var8] = var1[var5];
-					var1[var5++] = var10;
-				}
+	@Export("StructDefinition_getStructDefinition")
+	public static StructDefinition StructDefinition_getStructDefinition(int var0) {
+		StructDefinition var1 = (StructDefinition)StructDefinition.StructDefinition_cached.get((long)var0);
+		if (var1 != null) {
+			return var1;
+		} else {
+			byte[] var2 = StructDefinition.StructDefinition_archive.takeFile(34, var0);
+			var1 = new StructDefinition();
+			if (var2 != null) {
+				var1.decode(new Buffer(var2));
 			}
 
-			var0[var3] = var0[var5];
-			var0[var5] = var6;
-			var1[var3] = var1[var5];
-			var1[var5] = var7;
-			sortItemsByName(var0, var1, var2, var5 - 1);
-			sortItemsByName(var0, var1, var5 + 1, var3);
+			var1.postDecode();
+			StructDefinition.StructDefinition_cached.put(var1, (long)var0);
+			return var1;
 		}
-
 	}
 }

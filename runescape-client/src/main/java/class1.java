@@ -1,88 +1,57 @@
 import net.runelite.mapping.Export;
-import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("f")
+@ObfuscatedName("t")
 final class class1 implements class0 {
-	@ObfuscatedName("ix")
-	@ObfuscatedGetter(
-		intValue = -609036975
-	)
-	@Export("selectedItemWidget")
-	static int selectedItemWidget;
-
-	@ObfuscatedName("u")
+	@ObfuscatedName("fe")
 	@ObfuscatedSignature(
-		signature = "(Ljava/lang/Object;Lkg;I)V",
-		garbageValue = "-1331780546"
+		signature = "Lko;"
 	)
-	public void vmethod57(Object var1, Buffer var2) {
+	@Export("fontBold12")
+	static Font fontBold12;
+
+	@ObfuscatedName("c")
+	@ObfuscatedSignature(
+		signature = "(Ljava/lang/Object;Lkp;B)V",
+		garbageValue = "95"
+	)
+	public void vmethod55(Object var1, Buffer var2) {
 		this.method7((Integer)var1, var2);
 	}
 
-	@ObfuscatedName("f")
+	@ObfuscatedName("t")
 	@ObfuscatedSignature(
-		signature = "(Lkg;I)Ljava/lang/Object;",
-		garbageValue = "1713449680"
+		signature = "(Lkp;I)Ljava/lang/Object;",
+		garbageValue = "1665636232"
 	)
-	public Object vmethod65(Buffer var1) {
+	public Object vmethod53(Buffer var1) {
 		return var1.readInt();
 	}
 
-	@ObfuscatedName("y")
+	@ObfuscatedName("l")
 	@ObfuscatedSignature(
-		signature = "(Ljava/lang/Integer;Lkg;I)V",
-		garbageValue = "-1969898467"
+		signature = "(Ljava/lang/Integer;Lkp;I)V",
+		garbageValue = "-890899410"
 	)
 	void method7(Integer var1, Buffer var2) {
 		var2.writeInt(var1);
 	}
 
-	@ObfuscatedName("w")
+	@ObfuscatedName("g")
 	@ObfuscatedSignature(
-		signature = "(I)Lbp;",
-		garbageValue = "1259947083"
+		signature = "(Lbg;Lbg;IZIZI)I",
+		garbageValue = "-926800273"
 	)
-	@Export("getNextWorldListWorld")
-	static World getNextWorldListWorld() {
-		return World.World_listCount < World.World_count ? Skills.World_worlds[++World.World_listCount - 1] : null;
-	}
-
-	@ObfuscatedName("ab")
-	@ObfuscatedSignature(
-		signature = "(Ldt;B)V",
-		garbageValue = "104"
-	)
-	@Export("PcmStream_disable")
-	static final void PcmStream_disable(PcmStream var0) {
-		var0.active = false;
-		if (var0.sound != null) {
-			var0.sound.position = 0;
+	static int method19(World var0, World var1, int var2, boolean var3, int var4, boolean var5) {
+		int var6 = MouseHandler.compareWorlds(var0, var1, var2, var3);
+		if (var6 != 0) {
+			return var3 ? -var6 : var6;
+		} else if (var4 == -1) {
+			return 0;
+		} else {
+			int var7 = MouseHandler.compareWorlds(var0, var1, var4, var5);
+			return var5 ? -var7 : var7;
 		}
-
-		for (PcmStream var1 = var0.firstSubStream(); var1 != null; var1 = var0.nextSubStream()) {
-			PcmStream_disable(var1);
-		}
-
-	}
-
-	@ObfuscatedName("ev")
-	@ObfuscatedSignature(
-		signature = "(I)V",
-		garbageValue = "1824721053"
-	)
-	static final void method15() {
-		Scene.Scene_isLowDetail = false;
-		Client.isLowDetail = false;
-	}
-
-	@ObfuscatedName("gz")
-	@ObfuscatedSignature(
-		signature = "(B)Z",
-		garbageValue = "1"
-	)
-	static boolean method16() {
-		return (Client.drawPlayerNames & 1) != 0;
 	}
 }

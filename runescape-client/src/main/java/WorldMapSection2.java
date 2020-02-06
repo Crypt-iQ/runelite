@@ -4,109 +4,110 @@ import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("l")
+@ObfuscatedName("a")
 @Implements("WorldMapSection2")
 public class WorldMapSection2 implements WorldMapSection {
-	@ObfuscatedName("nk")
-	@ObfuscatedGetter(
-		intValue = 1891389593
+	@ObfuscatedName("sp")
+	@ObfuscatedSignature(
+		signature = "Lbj;"
 	)
-	static int field200;
-	@ObfuscatedName("d")
+	@Export("clientPreferences")
+	static ClientPreferences clientPreferences;
+	@ObfuscatedName("ea")
 	@ObfuscatedGetter(
-		intValue = 1524934865
+		intValue = 1716794499
 	)
-	@Export("clientTickTimeIdx")
-	static int clientTickTimeIdx;
-	@ObfuscatedName("u")
+	@Export("port3")
+	static int port3;
+	@ObfuscatedName("c")
 	@ObfuscatedGetter(
-		intValue = 955020079
+		intValue = 62157229
 	)
 	@Export("minPlane")
 	int minPlane;
-	@ObfuscatedName("f")
+	@ObfuscatedName("t")
 	@ObfuscatedGetter(
-		intValue = -1414372251
+		intValue = 808318479
 	)
 	@Export("planes")
 	int planes;
-	@ObfuscatedName("b")
+	@ObfuscatedName("o")
 	@ObfuscatedGetter(
-		intValue = 779916199
+		intValue = 521626037
 	)
 	@Export("regionStartX")
 	int regionStartX;
-	@ObfuscatedName("g")
+	@ObfuscatedName("e")
 	@ObfuscatedGetter(
-		intValue = 1695825611
+		intValue = 694874349
 	)
 	@Export("regionStartY")
 	int regionStartY;
-	@ObfuscatedName("z")
+	@ObfuscatedName("i")
 	@ObfuscatedGetter(
-		intValue = 1541446225
+		intValue = 316477089
 	)
 	@Export("regionEndX")
 	int regionEndX;
-	@ObfuscatedName("p")
+	@ObfuscatedName("g")
 	@ObfuscatedGetter(
-		intValue = 1892372645
+		intValue = 911714159
 	)
 	@Export("regionEndY")
 	int regionEndY;
-	@ObfuscatedName("h")
+	@ObfuscatedName("d")
 	@ObfuscatedGetter(
-		intValue = 1196441943
+		intValue = 1254748989
 	)
-	int field194;
-	@ObfuscatedName("y")
+	int field214;
+	@ObfuscatedName("l")
 	@ObfuscatedGetter(
-		intValue = -1727293363
+		intValue = 389719751
 	)
-	int field195;
-	@ObfuscatedName("w")
+	int field216;
+	@ObfuscatedName("j")
 	@ObfuscatedGetter(
-		intValue = -1979439593
+		intValue = -363427247
 	)
-	int field196;
-	@ObfuscatedName("i")
+	int field215;
+	@ObfuscatedName("m")
 	@ObfuscatedGetter(
-		intValue = 736473599
+		intValue = 467774707
 	)
-	int field197;
+	int field217;
 
 	WorldMapSection2() {
 	}
 
-	@ObfuscatedName("u")
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
-		signature = "(Laf;I)V",
-		garbageValue = "-567179164"
+		signature = "(Lae;I)V",
+		garbageValue = "-1034100543"
 	)
 	@Export("expandBounds")
 	public void expandBounds(WorldMapArea var1) {
-		if (var1.regionLowX > this.field194) {
-			var1.regionLowX = this.field194;
+		if (var1.regionLowX > this.field214) {
+			var1.regionLowX = this.field214;
 		}
 
-		if (var1.regionHighX < this.field196) {
-			var1.regionHighX = this.field196;
+		if (var1.regionHighX < this.field215) {
+			var1.regionHighX = this.field215;
 		}
 
-		if (var1.regionLowY > this.field195) {
-			var1.regionLowY = this.field195;
+		if (var1.regionLowY > this.field216) {
+			var1.regionLowY = this.field216;
 		}
 
-		if (var1.regionHighY < this.field197) {
-			var1.regionHighY = this.field197;
+		if (var1.regionHighY < this.field217) {
+			var1.regionHighY = this.field217;
 		}
 
 	}
 
-	@ObfuscatedName("f")
+	@ObfuscatedName("t")
 	@ObfuscatedSignature(
 		signature = "(IIIB)Z",
-		garbageValue = "0"
+		garbageValue = "-110"
 	)
 	@Export("containsCoord")
 	public boolean containsCoord(int var1, int var2, int var3) {
@@ -117,51 +118,51 @@ public class WorldMapSection2 implements WorldMapSection {
 		}
 	}
 
-	@ObfuscatedName("b")
+	@ObfuscatedName("o")
 	@ObfuscatedSignature(
-		signature = "(III)Z",
-		garbageValue = "110675609"
+		signature = "(IIB)Z",
+		garbageValue = "37"
 	)
 	@Export("containsPosition")
 	public boolean containsPosition(int var1, int var2) {
-		return var1 >> 6 >= this.field194 && var1 >> 6 <= this.field196 && var2 >> 6 >= this.field195 && var2 >> 6 <= this.field197;
+		return var1 >> 6 >= this.field214 && var1 >> 6 <= this.field215 && var2 >> 6 >= this.field216 && var2 >> 6 <= this.field217;
 	}
 
-	@ObfuscatedName("g")
+	@ObfuscatedName("e")
 	@ObfuscatedSignature(
-		signature = "(IIIB)[I",
-		garbageValue = "69"
+		signature = "(IIII)[I",
+		garbageValue = "-96920779"
 	)
 	@Export("getBorderTileLengths")
 	public int[] getBorderTileLengths(int var1, int var2, int var3) {
 		if (!this.containsCoord(var1, var2, var3)) {
 			return null;
 		} else {
-			int[] var4 = new int[]{this.field194 * 64 - this.regionStartX * 64 + var2, var3 + (this.field195 * 64 - this.regionStartY * 64)};
+			int[] var4 = new int[]{this.field214 * 64 - this.regionStartX * 64 + var2, var3 + (this.field216 * 64 - this.regionStartY * 64)};
 			return var4;
 		}
 	}
 
-	@ObfuscatedName("z")
+	@ObfuscatedName("i")
 	@ObfuscatedSignature(
-		signature = "(III)Lhx;",
-		garbageValue = "1062204141"
+		signature = "(III)Lhj;",
+		garbageValue = "911083222"
 	)
 	@Export("coord")
 	public Coord coord(int var1, int var2) {
 		if (!this.containsPosition(var1, var2)) {
 			return null;
 		} else {
-			int var3 = this.regionStartX * 64 - this.field194 * 64 + var1;
-			int var4 = this.regionStartY * 64 - this.field195 * 64 + var2;
+			int var3 = this.regionStartX * 64 - this.field214 * 64 + var1;
+			int var4 = this.regionStartY * 64 - this.field216 * 64 + var2;
 			return new Coord(this.minPlane, var3, var4);
 		}
 	}
 
-	@ObfuscatedName("p")
+	@ObfuscatedName("g")
 	@ObfuscatedSignature(
-		signature = "(Lkg;I)V",
-		garbageValue = "-179898655"
+		signature = "(Lkp;B)V",
+		garbageValue = "76"
 	)
 	@Export("read")
 	public void read(Buffer var1) {
@@ -171,195 +172,133 @@ public class WorldMapSection2 implements WorldMapSection {
 		this.regionStartY = var1.readUnsignedShort();
 		this.regionEndX = var1.readUnsignedShort();
 		this.regionEndY = var1.readUnsignedShort();
-		this.field194 = var1.readUnsignedShort();
-		this.field195 = var1.readUnsignedShort();
-		this.field196 = var1.readUnsignedShort();
-		this.field197 = var1.readUnsignedShort();
+		this.field214 = var1.readUnsignedShort();
+		this.field216 = var1.readUnsignedShort();
+		this.field215 = var1.readUnsignedShort();
+		this.field217 = var1.readUnsignedShort();
 		this.postRead();
 	}
 
-	@ObfuscatedName("h")
+	@ObfuscatedName("d")
 	@ObfuscatedSignature(
-		signature = "(B)V",
-		garbageValue = "8"
+		signature = "(I)V",
+		garbageValue = "-1425625159"
 	)
 	@Export("postRead")
 	void postRead() {
 	}
 
-	@ObfuscatedName("w")
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
-		signature = "(Ljava/lang/String;I)V",
-		garbageValue = "582291691"
+		signature = "(II)Lio;",
+		garbageValue = "-1814151694"
 	)
-	static final void method347(String var0) {
-		GrandExchangeOfferAgeComparator.addGameMessage(30, "", var0);
+	@Export("KitDefinition_get")
+	public static KitDefinition KitDefinition_get(int var0) {
+		KitDefinition var1 = (KitDefinition)KitDefinition.KitDefinition_cached.get((long)var0);
+		if (var1 != null) {
+			return var1;
+		} else {
+			byte[] var2 = KitDefinition.KitDefinition_archive.takeFile(3, var0);
+			var1 = new KitDefinition();
+			if (var2 != null) {
+				var1.decode(new Buffer(var2));
+			}
+
+			KitDefinition.KitDefinition_cached.put(var1, (long)var0);
+			return var1;
+		}
 	}
 
-	@ObfuscatedName("hk")
+	@ObfuscatedName("o")
 	@ObfuscatedSignature(
-		signature = "(ZLkj;I)V",
-		garbageValue = "-1922958923"
+		signature = "(I)V",
+		garbageValue = "-1693295942"
 	)
-	@Export("updateNpcs")
-	static final void updateNpcs(boolean var0, PacketBuffer var1) {
-		Client.field814 = 0;
-		Client.field687 = 0;
-		WorldMapArea.method424();
-		DynamicObject.method2262(var0, var1);
+	public static void method342() {
+		VarbitDefinition.VarbitDefinition_cached.clear();
+	}
 
-		int var2;
-		int var3;
-		for (var2 = 0; var2 < Client.field687; ++var2) {
-			var3 = Client.field688[var2];
-			NPC var4 = Client.npcs[var3];
-			int var5 = var1.readUnsignedByte();
-			int var6;
-			int var7;
-			int var8;
-			int var9;
-			if ((var5 & 4) != 0) {
-				var6 = var1.method5689();
-				int var10;
-				int var11;
-				int var12;
-				if (var6 > 0) {
-					for (var7 = 0; var7 < var6; ++var7) {
-						var9 = -1;
-						var10 = -1;
-						var11 = -1;
-						var8 = var1.readUShortSmart();
-						if (var8 == 32767) {
-							var8 = var1.readUShortSmart();
-							var10 = var1.readUShortSmart();
-							var9 = var1.readUShortSmart();
-							var11 = var1.readUShortSmart();
-						} else if (var8 != 32766) {
-							var10 = var1.readUShortSmart();
-						} else {
-							var8 = -1;
-						}
-
-						var12 = var1.readUShortSmart();
-						var4.addHitSplat(var8, var10, var9, var11, Client.cycle, var12);
-					}
-				}
-
-				var7 = var1.method5631();
-				if (var7 > 0) {
-					for (var8 = 0; var8 < var7; ++var8) {
-						var9 = var1.readUShortSmart();
-						var10 = var1.readUShortSmart();
-						if (var10 != 32767) {
-							var11 = var1.readUShortSmart();
-							var12 = var1.readUnsignedByte();
-							int var13 = var10 > 0 ? var1.readUnsignedByte() : var12;
-							var4.addHealthBar(var9, Client.cycle, var10, var11, var12, var13);
-						} else {
-							var4.removeHealthBar(var9);
-						}
-					}
-				}
-			}
-
-			if ((var5 & 16) != 0) {
-				var4.targetIndex = var1.readUnsignedShort();
-				if (var4.targetIndex == 65535) {
-					var4.targetIndex = -1;
-				}
-			}
-
-			if ((var5 & 32) != 0) {
-				var4.overheadText = var1.readStringCp1252NullTerminated();
-				var4.overheadTextCyclesRemaining = 100;
-			}
-
-			if ((var5 & 2) != 0) {
-				var6 = var1.readUnsignedShort();
-				if (var6 == 65535) {
-					var6 = -1;
-				}
-
-				var7 = var1.readUnsignedByte();
-				if (var6 == var4.sequence && var6 != -1) {
-					var8 = GrandExchangeOfferAgeComparator.SequenceDefinition_get(var6).field3533;
-					if (var8 == 1) {
-						var4.sequenceFrame = 0;
-						var4.sequenceFrameCycle = 0;
-						var4.sequenceDelay = var7;
-						var4.field971 = 0;
-					}
-
-					if (var8 == 2) {
-						var4.field971 = 0;
-					}
-				} else if (var6 == -1 || var4.sequence == -1 || GrandExchangeOfferAgeComparator.SequenceDefinition_get(var6).field3527 >= GrandExchangeOfferAgeComparator.SequenceDefinition_get(var4.sequence).field3527) {
-					var4.sequence = var6;
-					var4.sequenceFrame = 0;
-					var4.sequenceFrameCycle = 0;
-					var4.sequenceDelay = var7;
-					var4.field971 = 0;
-					var4.field994 = var4.pathLength;
-				}
-			}
-
-			if ((var5 & 1) != 0) {
-				var4.definition = VarcInt.getNpcDefinition(var1.method5640());
-				var4.field938 = var4.definition.size;
-				var4.field988 = var4.definition.rotation;
-				var4.walkSequence = var4.definition.walkSequence;
-				var4.walkBackSequence = var4.definition.walkBackSequence;
-				var4.walkLeftSequence = var4.definition.walkLeftSequence;
-				var4.walkRightSequence = var4.definition.walkRightSequence;
-				var4.readySequence = var4.definition.readySequence;
-				var4.turnLeftSequence = var4.definition.turnLeftSequence;
-				var4.turnRightSequence = var4.definition.turnRightSequence;
-			}
-
-			if ((var5 & 64) != 0) {
-				var4.spotAnimation = var1.method5640();
-				var6 = var1.readInt();
-				var4.field996 = var6 >> 16;
-				var4.field975 = (var6 & 65535) + Client.cycle;
-				var4.spotAnimationFrame = 0;
-				var4.spotAnimationFrameCycle = 0;
-				if (var4.field975 > Client.cycle) {
-					var4.spotAnimationFrame = -1;
-				}
-
-				if (var4.spotAnimation == 65535) {
-					var4.spotAnimation = -1;
-				}
-			}
-
-			if ((var5 & 8) != 0) {
-				var6 = var1.readUnsignedShort();
-				var7 = var1.readUnsignedShort();
-				var8 = var4.x - (var6 - class51.baseX * 64 - class51.baseX * 64) * 64;
-				var9 = var4.y - (var7 - VarcInt.baseY * 64 - VarcInt.baseY * 64) * 64;
-				if (var8 != 0 || var9 != 0) {
-					var4.field965 = (int)(Math.atan2((double)var8, (double)var9) * 325.949D) & 2047;
-				}
-			}
-		}
-
-		for (var2 = 0; var2 < Client.field814; ++var2) {
-			var3 = Client.field764[var2];
-			if (Client.npcs[var3].npcCycle != Client.cycle) {
-				Client.npcs[var3].definition = null;
-				Client.npcs[var3] = null;
-			}
-		}
-
-		if (var1.offset != Client.packetWriter.serverPacketLength) {
-			throw new RuntimeException(var1.offset + "," + Client.packetWriter.serverPacketLength);
+	@ObfuscatedName("o")
+	@ObfuscatedSignature(
+		signature = "(III)I",
+		garbageValue = "-1579745096"
+	)
+	static int method340(int var0, int var1) {
+		ItemContainer var2 = (ItemContainer)ItemContainer.itemContainers.get((long)var0);
+		if (var2 == null) {
+			return 0;
+		} else if (var1 == -1) {
+			return 0;
 		} else {
-			for (var2 = 0; var2 < Client.npcCount; ++var2) {
-				if (Client.npcs[Client.npcIndices[var2]] == null) {
-					throw new RuntimeException(var2 + "," + Client.npcCount);
+			int var3 = 0;
+
+			for (int var4 = 0; var4 < var2.quantities.length; ++var4) {
+				if (var2.ids[var4] == var1) {
+					var3 += var2.quantities[var4];
 				}
 			}
 
+			return var3;
 		}
+	}
+
+	@ObfuscatedName("j")
+	@ObfuscatedSignature(
+		signature = "(I)V",
+		garbageValue = "-1868356098"
+	)
+	static void method344() {
+		Login.Login_username = Login.Login_username.trim();
+		if (Login.Login_username.length() == 0) {
+			Tiles.setLoginResponseString("Please enter your username.", "If you created your account after November", "2010, this will be the creation email address.");
+		} else {
+			long var1 = class30.method567();
+			int var0;
+			if (0L == var1) {
+				var0 = 5;
+			} else {
+				var0 = GraphicsObject.method2060(var1, Login.Login_username);
+			}
+
+			switch(var0) {
+			case 2:
+				Tiles.setLoginResponseString(Strings.field3036, Strings.field3037, Strings.field2933);
+				Login.loginIndex = 6;
+				break;
+			case 3:
+				Tiles.setLoginResponseString("", "Error connecting to server.", "");
+				break;
+			case 4:
+				Tiles.setLoginResponseString("The part of the website you are trying", "to connect to is offline at the moment.", "Please try again later.");
+				break;
+			case 5:
+				Tiles.setLoginResponseString("Sorry, there was an error trying to", "log you in to this part of the website.", "Please try again later.");
+				break;
+			case 6:
+				Tiles.setLoginResponseString("", "Error connecting to server.", "");
+				break;
+			case 7:
+				Tiles.setLoginResponseString("You must enter a valid login to proceed. For accounts", "created after 24th November 2010, please use your", "email address. Otherwise please use your username.");
+			}
+
+		}
+	}
+
+	@ObfuscatedName("x")
+	@ObfuscatedSignature(
+		signature = "(Ljava/lang/CharSequence;B)Ljava/lang/String;",
+		garbageValue = "11"
+	)
+	public static String method321(CharSequence var0) {
+		int var2 = var0.length();
+		char[] var3 = new char[var2];
+
+		for (int var4 = 0; var4 < var2; ++var4) {
+			var3[var4] = '*';
+		}
+
+		String var1 = new String(var3);
+		return var1;
 	}
 }

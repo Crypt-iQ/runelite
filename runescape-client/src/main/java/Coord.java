@@ -4,36 +4,30 @@ import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("hx")
+@ObfuscatedName("hj")
 @Implements("Coord")
 public class Coord {
 	@ObfuscatedName("c")
 	@ObfuscatedGetter(
-		intValue = 556251855
-	)
-	@Export("graphicsTickTimeIdx")
-	static int graphicsTickTimeIdx;
-	@ObfuscatedName("u")
-	@ObfuscatedGetter(
-		intValue = 1348059781
+		intValue = 995034769
 	)
 	@Export("plane")
 	public int plane;
-	@ObfuscatedName("f")
+	@ObfuscatedName("t")
 	@ObfuscatedGetter(
-		intValue = 1294830225
+		intValue = 1797414909
 	)
 	@Export("x")
 	public int x;
-	@ObfuscatedName("b")
+	@ObfuscatedName("o")
 	@ObfuscatedGetter(
-		intValue = 358494981
+		intValue = 1015808091
 	)
 	@Export("y")
 	public int y;
 
 	@ObfuscatedSignature(
-		signature = "(Lhx;)V"
+		signature = "(Lhj;)V"
 	)
 	public Coord(Coord var1) {
 		this.plane = var1.plane;
@@ -58,20 +52,20 @@ public class Coord {
 
 	}
 
-	@ObfuscatedName("u")
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
 		signature = "(I)I",
-		garbageValue = "-633329475"
+		garbageValue = "6116423"
 	)
 	@Export("packed")
 	public int packed() {
 		return this.plane << 28 | this.x << 14 | this.y;
 	}
 
-	@ObfuscatedName("f")
+	@ObfuscatedName("t")
 	@ObfuscatedSignature(
-		signature = "(Lhx;I)Z",
-		garbageValue = "1606698981"
+		signature = "(Lhj;I)Z",
+		garbageValue = "-557558477"
 	)
 	@Export("equalsCoord")
 	boolean equalsCoord(Coord var1) {
@@ -84,22 +78,14 @@ public class Coord {
 		}
 	}
 
-	@ObfuscatedName("b")
+	@ObfuscatedName("o")
 	@ObfuscatedSignature(
 		signature = "(Ljava/lang/String;B)Ljava/lang/String;",
-		garbageValue = "-38"
+		garbageValue = "-120"
 	)
 	@Export("toString")
 	String toString(String var1) {
 		return this.plane + var1 + (this.x >> 6) + var1 + (this.y >> 6) + var1 + (this.x & 63) + var1 + (this.y & 63);
-	}
-
-	public boolean equals(Object var1) {
-		if (this == var1) {
-			return true;
-		} else {
-			return !(var1 instanceof Coord) ? false : this.equalsCoord((Coord)var1);
-		}
 	}
 
 	public int hashCode() {
@@ -108,5 +94,13 @@ public class Coord {
 
 	public String toString() {
 		return this.toString(",");
+	}
+
+	public boolean equals(Object var1) {
+		if (this == var1) {
+			return true;
+		} else {
+			return !(var1 instanceof Coord) ? false : this.equalsCoord((Coord)var1);
+		}
 	}
 }

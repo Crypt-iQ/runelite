@@ -3,30 +3,25 @@ import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("fy")
+@ObfuscatedName("fo")
 public class class173 {
-	@ObfuscatedName("b")
+	@ObfuscatedName("o")
 	@Export("directions")
-	static int[][] directions;
-	@ObfuscatedName("g")
+	public static int[][] directions;
+	@ObfuscatedName("e")
 	@Export("distances")
-	static int[][] distances;
-	@ObfuscatedName("z")
+	public static int[][] distances;
+	@ObfuscatedName("g")
 	@ObfuscatedGetter(
-		intValue = -1442430251
+		intValue = -1572714133
 	)
-	static int field2103;
-	@ObfuscatedName("p")
-	@ObfuscatedGetter(
-		intValue = -101086935
-	)
-	static int field2100;
-	@ObfuscatedName("y")
+	public static int field2093;
+	@ObfuscatedName("l")
 	@Export("bufferX")
-	static int[] bufferX;
-	@ObfuscatedName("w")
+	public static int[] bufferX;
+	@ObfuscatedName("j")
 	@Export("bufferY")
-	static int[] bufferY;
+	public static int[] bufferY;
 
 	static {
 		directions = new int[128][128];
@@ -35,13 +30,22 @@ public class class173 {
 		bufferY = new int[4096];
 	}
 
-	@ObfuscatedName("bi")
+	@ObfuscatedName("o")
 	@ObfuscatedSignature(
-		signature = "(Ljava/lang/String;I)I",
-		garbageValue = "826703684"
+		signature = "(ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;I)V",
+		garbageValue = "-1943215083"
 	)
-	@Export("stringCp1252NullTerminatedByteSize")
-	public static int stringCp1252NullTerminatedByteSize(String var0) {
-		return var0.length() + 1;
+	@Export("addChatMessage")
+	static void addChatMessage(int var0, String var1, String var2, String var3) {
+		ChatChannel var4 = (ChatChannel)Messages.Messages_channels.get(var0);
+		if (var4 == null) {
+			var4 = new ChatChannel();
+			Messages.Messages_channels.put(var0, var4);
+		}
+
+		Message var5 = var4.addMessage(var0, var1, var2, var3);
+		Messages.Messages_hashTable.put(var5, (long)var5.count);
+		Messages.Messages_queue.add(var5);
+		Client.chatCycle = Client.cycleCntr;
 	}
 }

@@ -3,36 +3,30 @@ import java.util.LinkedList;
 import java.util.List;
 import net.runelite.mapping.Export;
 import net.runelite.mapping.Implements;
-import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
+import net.runelite.rs.ScriptOpcodes;
 
-@ObfuscatedName("aq")
+@ObfuscatedName("aw")
 @Implements("WorldMapAreaData")
 public class WorldMapAreaData extends WorldMapArea {
-	@ObfuscatedName("lv")
-	@ObfuscatedGetter(
-		intValue = 147472747
-	)
-	@Export("selectedSpellWidget")
-	static int selectedSpellWidget;
-	@ObfuscatedName("o")
+	@ObfuscatedName("v")
 	@Export("worldMapData0Set")
 	HashSet worldMapData0Set;
-	@ObfuscatedName("e")
+	@ObfuscatedName("n")
 	@Export("worldMapData1Set")
 	HashSet worldMapData1Set;
-	@ObfuscatedName("n")
+	@ObfuscatedName("x")
 	@Export("iconList")
 	List iconList;
 
 	WorldMapAreaData() {
 	}
 
-	@ObfuscatedName("be")
+	@ObfuscatedName("cg")
 	@ObfuscatedSignature(
-		signature = "(Lkg;Lkg;IZI)V",
-		garbageValue = "-2087275167"
+		signature = "(Lkp;Lkp;IZS)V",
+		garbageValue = "-14333"
 	)
 	@Export("init")
 	void init(Buffer var1, Buffer var2, int var3, boolean var4) {
@@ -71,10 +65,10 @@ public class WorldMapAreaData extends WorldMapArea {
 		this.initIconsList(var2, var4);
 	}
 
-	@ObfuscatedName("bt")
+	@ObfuscatedName("cr")
 	@ObfuscatedSignature(
-		signature = "(Lkg;ZI)V",
-		garbageValue = "83812464"
+		signature = "(Lkp;ZI)V",
+		garbageValue = "-1209977249"
 	)
 	@Export("initIconsList")
 	void initIconsList(Buffer var1, boolean var2) {
@@ -82,7 +76,7 @@ public class WorldMapAreaData extends WorldMapArea {
 		int var3 = var1.readUnsignedShort();
 
 		for (int var4 = 0; var4 < var3; ++var4) {
-			int var5 = var1.method5618();
+			int var5 = var1.method5593();
 			Coord var6 = new Coord(var1.readInt());
 			boolean var7 = var1.readUnsignedByte() == 1;
 			if (var2 || !var7) {
@@ -92,100 +86,118 @@ public class WorldMapAreaData extends WorldMapArea {
 
 	}
 
-	@ObfuscatedName("u")
+	@ObfuscatedName("e")
 	@ObfuscatedSignature(
-		signature = "(I)[Lhe;",
-		garbageValue = "-2010559080"
+		signature = "(ILce;ZI)I",
+		garbageValue = "599780957"
 	)
-	public static StudioGame[] method709() {
-		return new StudioGame[]{StudioGame.runescape, StudioGame.game3, StudioGame.oldscape, StudioGame.game4, StudioGame.game5, StudioGame.stellardawn};
-	}
+	static int method706(int var0, Script var1, boolean var2) {
+		int var3;
+		int var4;
+		if (var0 == ScriptOpcodes.CC_CREATE) {
+			class320.Interpreter_intStackSize -= 3;
+			var3 = Interpreter.Interpreter_intStack[class320.Interpreter_intStackSize];
+			var4 = Interpreter.Interpreter_intStack[class320.Interpreter_intStackSize + 1];
+			int var5 = Interpreter.Interpreter_intStack[class320.Interpreter_intStackSize + 2];
+			if (var4 == 0) {
+				throw new RuntimeException();
+			} else {
+				Widget var6 = Varps.getWidget(var3);
+				if (var6.children == null) {
+					var6.children = new Widget[var5 + 1];
+				}
 
-	@ObfuscatedName("u")
-	@ObfuscatedSignature(
-		signature = "(Ljava/lang/String;ZZI)V",
-		garbageValue = "-1808835985"
-	)
-	@Export("openURL")
-	public static void openURL(String var0, boolean var1, boolean var2) {
-		class191.method3721(var0, var1, "openjs", var2);
-	}
+				if (var6.children.length <= var5) {
+					Widget[] var7 = new Widget[var5 + 1];
 
-	@ObfuscatedName("z")
-	@ObfuscatedSignature(
-		signature = "(IB)V",
-		garbageValue = "-67"
-	)
-	@Export("clearItemContainer")
-	static void clearItemContainer(int var0) {
-		ItemContainer var1 = (ItemContainer)ItemContainer.itemContainers.get((long)var0);
-		if (var1 != null) {
-			for (int var2 = 0; var2 < var1.ids.length; ++var2) {
-				var1.ids[var2] = -1;
-				var1.quantities[var2] = 0;
+					for (int var8 = 0; var8 < var6.children.length; ++var8) {
+						var7[var8] = var6.children[var8];
+					}
+
+					var6.children = var7;
+				}
+
+				if (var5 > 0 && var6.children[var5 - 1] == null) {
+					throw new RuntimeException("" + (var5 - 1));
+				} else {
+					Widget var12 = new Widget();
+					var12.type = var4;
+					var12.parentId = var12.id = var6.id;
+					var12.childIndex = var5;
+					var12.isIf3 = true;
+					var6.children[var5] = var12;
+					if (var2) {
+						class186.field2331 = var12;
+					} else {
+						MidiPcmStream.field2444 = var12;
+					}
+
+					NPCDefinition.invalidateWidget(var6);
+					return 1;
+				}
 			}
-
-		}
-	}
-
-	@ObfuscatedName("o")
-	@ObfuscatedSignature(
-		signature = "(II)Ljava/lang/String;",
-		garbageValue = "-316979952"
-	)
-	static final String method711(int var0) {
-		if (var0 < 100000) {
-			return "<col=ffff00>" + var0 + "</col>";
 		} else {
-			return var0 < 10000000 ? "<col=ffffff>" + var0 / 1000 + "K" + "</col>" : "<col=00ff80>" + var0 / 1000000 + "M" + "</col>";
+			Widget var9;
+			if (var0 == ScriptOpcodes.CC_DELETE) {
+				var9 = var2 ? class186.field2331 : MidiPcmStream.field2444;
+				Widget var10 = Varps.getWidget(var9.id);
+				var10.children[var9.childIndex] = null;
+				NPCDefinition.invalidateWidget(var10);
+				return 1;
+			} else if (var0 == ScriptOpcodes.CC_DELETEALL) {
+				var9 = Varps.getWidget(Interpreter.Interpreter_intStack[--class320.Interpreter_intStackSize]);
+				var9.children = null;
+				NPCDefinition.invalidateWidget(var9);
+				return 1;
+			} else if (var0 != ScriptOpcodes.CC_FIND) {
+				if (var0 == ScriptOpcodes.IF_FIND) {
+					var9 = Varps.getWidget(Interpreter.Interpreter_intStack[--class320.Interpreter_intStackSize]);
+					if (var9 != null) {
+						Interpreter.Interpreter_intStack[++class320.Interpreter_intStackSize - 1] = 1;
+						if (var2) {
+							class186.field2331 = var9;
+						} else {
+							MidiPcmStream.field2444 = var9;
+						}
+					} else {
+						Interpreter.Interpreter_intStack[++class320.Interpreter_intStackSize - 1] = 0;
+					}
+
+					return 1;
+				} else {
+					return 2;
+				}
+			} else {
+				class320.Interpreter_intStackSize -= 2;
+				var3 = Interpreter.Interpreter_intStack[class320.Interpreter_intStackSize];
+				var4 = Interpreter.Interpreter_intStack[class320.Interpreter_intStackSize + 1];
+				Widget var11 = SpriteMask.getWidgetChild(var3, var4);
+				if (var11 != null && var4 != -1) {
+					Interpreter.Interpreter_intStack[++class320.Interpreter_intStackSize - 1] = 1;
+					if (var2) {
+						class186.field2331 = var11;
+					} else {
+						MidiPcmStream.field2444 = var11;
+					}
+				} else {
+					Interpreter.Interpreter_intStack[++class320.Interpreter_intStackSize - 1] = 0;
+				}
+
+				return 1;
+			}
 		}
 	}
 
-	@ObfuscatedName("q")
+	@ObfuscatedName("ia")
 	@ObfuscatedSignature(
-		signature = "(I)V",
-		garbageValue = "1095185077"
+		signature = "(III)V",
+		garbageValue = "-1052520169"
 	)
-	public static void method703() {
-		ItemDefinition.ItemDefinition_cached.clear();
-		ItemDefinition.ItemDefinition_cachedModels.clear();
-		ItemDefinition.ItemDefinition_cachedSprites.clear();
-	}
-
-	@ObfuscatedName("fw")
-	@ObfuscatedSignature(
-		signature = "(Lbt;I)V",
-		garbageValue = "-2077720731"
-	)
-	static final void method707(Actor var0) {
-		if (var0.field982 == Client.cycle || var0.sequence == -1 || var0.sequenceDelay != 0 || var0.sequenceFrameCycle + 1 > GrandExchangeOfferAgeComparator.SequenceDefinition_get(var0.sequence).frameLengths[var0.sequenceFrame]) {
-			int var1 = var0.field982 - var0.field934;
-			int var2 = Client.cycle - var0.field934;
-			int var3 = var0.field946 * 128 + var0.field938 * 64;
-			int var4 = var0.field979 * 128 + var0.field938 * 64;
-			int var5 = var0.field978 * 128 + var0.field938 * 64;
-			int var6 = var0.field980 * 128 + var0.field938 * 64;
-			var0.x = (var5 * var2 + var3 * (var1 - var2)) / var1;
-			var0.y = (var6 * var2 + var4 * (var1 - var2)) / var1;
-		}
-
-		var0.field976 = 0;
-		var0.orientation = var0.field983;
-		var0.rotation = var0.orientation;
-	}
-
-	@ObfuscatedName("kk")
-	@ObfuscatedSignature(
-		signature = "(Ljava/lang/String;I)V",
-		garbageValue = "74366885"
-	)
-	@Export("Clan_joinChat")
-	static final void Clan_joinChat(String var0) {
-		if (!var0.equals("")) {
-			PacketBufferNode var1 = ModelData0.getPacketBufferNode(ClientPacket.field2314, Client.packetWriter.isaacCipher);
-			var1.packetBuffer.writeByte(class173.stringCp1252NullTerminatedByteSize(var0));
-			var1.packetBuffer.writeStringCp1252NullTerminated(var0);
-			Client.packetWriter.addNode(var1);
-		}
+	@Export("resumePauseWidget")
+	static void resumePauseWidget(int var0, int var1) {
+		PacketBufferNode var2 = TilePaint.getPacketBufferNode(ClientPacket.field2256, Client.packetWriter.isaacCipher);
+		var2.packetBuffer.writeShortLE(var1);
+		var2.packetBuffer.writeInt(var0);
+		Client.packetWriter.addNode(var2);
 	}
 }

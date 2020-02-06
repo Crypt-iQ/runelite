@@ -237,6 +237,7 @@ class GrandExchangeSearchPanel extends JPanel
 			int index = 0;
 			for (GrandExchangeItems item : itemsList)
 			{
+
 				GrandExchangeItemPanel panel = new GrandExchangeItemPanel(item.getIcon(), item.getName(),
 					item.getItemId(), item.getGePrice(), item.getHaPrice(), item.getGeItemLimit());
 

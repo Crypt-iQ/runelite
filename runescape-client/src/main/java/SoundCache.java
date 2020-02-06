@@ -1,50 +1,38 @@
 import net.runelite.mapping.Export;
 import net.runelite.mapping.Implements;
-import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("dk")
+@ObfuscatedName("dv")
 @Implements("SoundCache")
 public class SoundCache {
-	@ObfuscatedName("sr")
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
-		signature = "Lh;"
-	)
-	@Export("grandExchangeEvents")
-	static GrandExchangeEvents grandExchangeEvents;
-	@ObfuscatedName("fd")
-	@ObfuscatedGetter(
-		intValue = -1460777927
-	)
-	static int field1438;
-	@ObfuscatedName("u")
-	@ObfuscatedSignature(
-		signature = "Lhf;"
+		signature = "Lii;"
 	)
 	@Export("soundEffectIndex")
 	AbstractArchive soundEffectIndex;
-	@ObfuscatedName("f")
+	@ObfuscatedName("t")
 	@ObfuscatedSignature(
-		signature = "Lhf;"
+		signature = "Lii;"
 	)
 	@Export("musicSampleIndex")
 	AbstractArchive musicSampleIndex;
-	@ObfuscatedName("b")
+	@ObfuscatedName("o")
 	@ObfuscatedSignature(
-		signature = "Lle;"
+		signature = "Lln;"
 	)
 	@Export("musicSamples")
 	NodeHashTable musicSamples;
-	@ObfuscatedName("g")
+	@ObfuscatedName("e")
 	@ObfuscatedSignature(
-		signature = "Lle;"
+		signature = "Lln;"
 	)
 	@Export("rawSounds")
 	NodeHashTable rawSounds;
 
 	@ObfuscatedSignature(
-		signature = "(Lhf;Lhf;)V"
+		signature = "(Lii;Lii;)V"
 	)
 	public SoundCache(AbstractArchive var1, AbstractArchive var2) {
 		this.musicSamples = new NodeHashTable(256);
@@ -53,10 +41,10 @@ public class SoundCache {
 		this.musicSampleIndex = var2;
 	}
 
-	@ObfuscatedName("u")
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
-		signature = "(II[II)Lcw;",
-		garbageValue = "1674765898"
+		signature = "(II[II)Lcv;",
+		garbageValue = "-2049722880"
 	)
 	@Export("getSoundEffect0")
 	RawSound getSoundEffect0(int var1, int var2, int[] var3) {
@@ -84,10 +72,10 @@ public class SoundCache {
 		}
 	}
 
-	@ObfuscatedName("f")
+	@ObfuscatedName("t")
 	@ObfuscatedSignature(
-		signature = "(II[IB)Lcw;",
-		garbageValue = "-43"
+		signature = "(II[II)Lcv;",
+		garbageValue = "-207683218"
 	)
 	@Export("getMusicSample0")
 	RawSound getMusicSample0(int var1, int var2, int[] var3) {
@@ -121,10 +109,10 @@ public class SoundCache {
 		}
 	}
 
-	@ObfuscatedName("b")
+	@ObfuscatedName("o")
 	@ObfuscatedSignature(
-		signature = "(I[II)Lcw;",
-		garbageValue = "1055604971"
+		signature = "(I[II)Lcv;",
+		garbageValue = "-1171903623"
 	)
 	@Export("getSoundEffect")
 	public RawSound getSoundEffect(int var1, int[] var2) {
@@ -137,10 +125,10 @@ public class SoundCache {
 		}
 	}
 
-	@ObfuscatedName("g")
+	@ObfuscatedName("e")
 	@ObfuscatedSignature(
-		signature = "(I[IB)Lcw;",
-		garbageValue = "93"
+		signature = "(I[II)Lcv;",
+		garbageValue = "872034645"
 	)
 	@Export("getMusicSample")
 	public RawSound getMusicSample(int var1, int[] var2) {
@@ -151,33 +139,5 @@ public class SoundCache {
 		} else {
 			throw new RuntimeException();
 		}
-	}
-
-	@ObfuscatedName("u")
-	@ObfuscatedSignature(
-		signature = "(II)Z",
-		garbageValue = "851722270"
-	)
-	public static boolean method2544(int var0) {
-		return (var0 & 1) != 0;
-	}
-
-	@ObfuscatedName("b")
-	@ObfuscatedSignature(
-		signature = "(II)J",
-		garbageValue = "-1448942759"
-	)
-	public static long method2531(int var0) {
-		return ViewportMouse.ViewportMouse_entityTags[var0];
-	}
-
-	@ObfuscatedName("g")
-	@ObfuscatedSignature(
-		signature = "(Ljava/lang/CharSequence;I)I",
-		garbageValue = "-1986305068"
-	)
-	@Export("parseInt")
-	public static int parseInt(CharSequence var0) {
-		return UserComparator8.parseIntCustomRadix(var0, 10, true);
 	}
 }

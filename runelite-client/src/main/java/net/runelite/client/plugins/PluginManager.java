@@ -25,6 +25,7 @@
 package net.runelite.client.plugins;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Stopwatch;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.graph.Graph;
@@ -40,7 +41,6 @@ import com.google.inject.Key;
 import com.google.inject.Module;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -72,7 +72,6 @@ import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.events.PluginChanged;
 import net.runelite.client.events.SessionClose;
 import net.runelite.client.events.SessionOpen;
-import net.runelite.client.task.Schedule;
 import net.runelite.client.task.ScheduledMethod;
 import net.runelite.client.task.Scheduler;
 import net.runelite.client.ui.RuneLiteSplashScreen;
@@ -212,19 +211,23 @@ public class PluginManager
 
 	public void loadCorePlugins() throws IOException
 	{
-		plugins.addAll(scanAndInstantiate(getClass().getClassLoader(), PLUGIN_PACKAGE));
+		plugins.addAll(scanAndInstantiate(getClass().getClassLoader(), PLUGIN_PACKAGE, false));
 	}
 
 	public void startCorePlugins()
 	{
 		List<Plugin> scannedPlugins = new ArrayList<>(plugins);
-		int loaded = 0;
+		int loaded = 0, started = 0;
 
+		final Stopwatch timer = Stopwatch.createStarted();
 		for (Plugin plugin : scannedPlugins)
 		{
 			try
 			{
-				startPlugin(plugin);
+				if (startPlugin(plugin))
+				{
+					++started;
+				}
 			}
 			catch (PluginInstantiationException ex)
 			{
@@ -236,10 +239,12 @@ public class PluginManager
 
 			RuneLiteSplashScreen.stage(.80, 1, "Starting plugins", loaded, scannedPlugins.size());
 		}
+
+		log.debug("Started {}/{} plugins in {}", started, loaded, timer);
 	}
 
 	@SuppressWarnings("unchecked")
-	List<Plugin> scanAndInstantiate(ClassLoader classLoader, String packageName) throws IOException
+	List<Plugin> scanAndInstantiate(ClassLoader classLoader, String packageName, boolean external) throws IOException
 	{
 		RuneLiteSplashScreen.stage(.59, "Loading plugins");
 		MutableGraph<Class<? extends Plugin>> graph = GraphBuilder
@@ -269,6 +274,12 @@ public class PluginManager
 			{
 				log.warn("Class {} has plugin descriptor, but is not a plugin",
 					clazz);
+				continue;
+			}
+
+			if (external && pluginDescriptor.type() != PluginType.EXTERNAL)
+			{
+				log.error("Class {} is using the external plugin loader but doesn't have PluginType.EXTERNAL", clazz);
 				continue;
 			}
 
@@ -528,22 +539,10 @@ public class PluginManager
 		return plugins;
 	}
 
-	private void schedule(Plugin plugin)
+	public void schedule(Object plugin)
 	{
-		for (Method method : plugin.getClass().getMethods())
-		{
-			Schedule schedule = method.getAnnotation(Schedule.class);
-
-			if (schedule == null)
-			{
-				continue;
-			}
-
-			ScheduledMethod scheduledMethod = new ScheduledMethod(schedule, method, plugin);
-			log.debug("Scheduled task {}", scheduledMethod);
-
-			scheduler.addScheduledMethod(scheduledMethod);
-		}
+		// note to devs: this method will almost certainly merge conflict in the future, just apply the changes in the scheduler instead
+		scheduler.registerObject(plugin);
 	}
 
 	private void unschedule(Plugin plugin)

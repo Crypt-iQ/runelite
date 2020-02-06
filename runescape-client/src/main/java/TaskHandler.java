@@ -7,31 +7,28 @@ import net.runelite.mapping.Implements;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("fu")
+@ObfuscatedName("ff")
 @Implements("TaskHandler")
 public class TaskHandler implements Runnable {
-	@ObfuscatedName("u")
+	@ObfuscatedName("c")
 	@Export("javaVendor")
 	public static String javaVendor;
-	@ObfuscatedName("f")
-	@Export("javaVersion")
-	public static String javaVersion;
-	@ObfuscatedName("b")
+	@ObfuscatedName("o")
 	@ObfuscatedSignature(
-		signature = "Lfo;"
+		signature = "Lfw;"
 	)
 	@Export("current")
 	Task current;
-	@ObfuscatedName("g")
+	@ObfuscatedName("e")
 	@ObfuscatedSignature(
-		signature = "Lfo;"
+		signature = "Lfw;"
 	)
 	@Export("task")
 	Task task;
-	@ObfuscatedName("z")
+	@ObfuscatedName("i")
 	@Export("thread")
 	Thread thread;
-	@ObfuscatedName("p")
+	@ObfuscatedName("g")
 	@Export("isClosed")
 	boolean isClosed;
 
@@ -40,11 +37,11 @@ public class TaskHandler implements Runnable {
 		this.task = null;
 		this.isClosed = false;
 		javaVendor = "Unknown";
-		javaVersion = "1.6";
+		class216.javaVersion = "1.6";
 
 		try {
 			javaVendor = System.getProperty("java.vendor");
-			javaVersion = System.getProperty("java.version");
+			class216.javaVersion = System.getProperty("java.version");
 		} catch (Exception var2) {
 		}
 
@@ -55,10 +52,10 @@ public class TaskHandler implements Runnable {
 		this.thread.start();
 	}
 
-	@ObfuscatedName("u")
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
-		signature = "(I)V",
-		garbageValue = "1951824555"
+		signature = "(B)V",
+		garbageValue = "-77"
 	)
 	@Export("close")
 	public final void close() {
@@ -74,10 +71,10 @@ public class TaskHandler implements Runnable {
 
 	}
 
-	@ObfuscatedName("f")
+	@ObfuscatedName("t")
 	@ObfuscatedSignature(
-		signature = "(IIILjava/lang/Object;B)Lfo;",
-		garbageValue = "1"
+		signature = "(IIILjava/lang/Object;S)Lfw;",
+		garbageValue = "-10894"
 	)
 	@Export("newTask")
 	final Task newTask(int var1, int var2, int var3, Object var4) {
@@ -98,20 +95,20 @@ public class TaskHandler implements Runnable {
 		}
 	}
 
-	@ObfuscatedName("b")
+	@ObfuscatedName("o")
 	@ObfuscatedSignature(
-		signature = "(Ljava/lang/String;II)Lfo;",
-		garbageValue = "456195098"
+		signature = "(Ljava/lang/String;II)Lfw;",
+		garbageValue = "-260343907"
 	)
 	@Export("newSocketTask")
 	public final Task newSocketTask(String var1, int var2) {
 		return this.newTask(1, var2, 0, var1);
 	}
 
-	@ObfuscatedName("g")
+	@ObfuscatedName("e")
 	@ObfuscatedSignature(
-		signature = "(Ljava/lang/Runnable;II)Lfo;",
-		garbageValue = "1003656831"
+		signature = "(Ljava/lang/Runnable;II)Lfw;",
+		garbageValue = "70274663"
 	)
 	@Export("newThreadTask")
 	public final Task newThreadTask(Runnable var1, int var2) {
@@ -166,19 +163,37 @@ public class TaskHandler implements Runnable {
 		}
 	}
 
-	@ObfuscatedName("u")
+	@ObfuscatedName("c")
 	@ObfuscatedSignature(
-		signature = "(I)J",
-		garbageValue = "-1924215879"
+		signature = "(Lmv;I)I",
+		garbageValue = "1649958240"
 	)
-	@Export("currentTimeMillis")
-	public static final synchronized long currentTimeMillis() {
-		long var0 = System.currentTimeMillis();
-		if (var0 < class296.field3695) {
-			class296.field3696 += class296.field3695 - var0;
+	public static final int method3540(LoginType var0) {
+		if (var0 == null) {
+			return 12;
+		} else {
+			switch(var0.field4037) {
+			case 6:
+				return 20;
+			default:
+				return 12;
+			}
 		}
+	}
 
-		class296.field3695 = var0;
-		return class296.field3696 + var0;
+	@ObfuscatedName("e")
+	@ObfuscatedSignature(
+		signature = "(ILii;IIIZI)V",
+		garbageValue = "869410445"
+	)
+	@Export("playMusicTrack")
+	public static void playMusicTrack(int var0, AbstractArchive var1, int var2, int var3, int var4, boolean var5) {
+		class197.field2414 = 1;
+		UserComparator5.musicTrackArchive = var1;
+		class197.musicTrackGroupId = var2;
+		class83.musicTrackFileId = var3;
+		AttackOption.musicTrackVolume = var4;
+		KeyHandler.musicTrackBoolean = var5;
+		class197.field2412 = var0;
 	}
 }

@@ -78,16 +78,118 @@ public enum Graceful
 		this.ids = ImmutableSet.copyOf(ids);
 	}
 
-	public static boolean hasFullSet(final ItemContainer equipment)
+	public static double calculateRecoveryRate(final ItemContainer equipment)
 	{
+		double rate = 1;
+
 		if (equipment == null)
 		{
-			return false;
+			return rate;
 		}
 
 		final Item[] items = equipment.getItems();
 
-		if (equipment == null || items.length <= EquipmentInventorySlot.BOOTS.getSlotIdx())
+		if (hasFullSet(items))
+		{
+			return 1.3;
+		}
+
+		if (hasHood(items))
+		{
+			rate += 0.03;
+		}
+
+		if (hasTop(items))
+		{
+			rate += 0.04;
+		}
+
+		if (hasLegs(items))
+		{
+			rate += 0.04;
+		}
+
+		if (hasGloves(items))
+		{
+			rate += 0.03;
+		}
+
+		if (hasBoots(items))
+		{
+			rate += 0.03;
+		}
+
+		if (hasCape(items))
+		{
+			rate += 0.03;
+		}
+
+		return rate;
+	}
+
+	public static boolean hasHood(final Item[] items)
+	{
+		if (items.length <= EquipmentInventorySlot.HEAD.getSlotIdx())
+		{
+			return false;
+		}
+
+		return HOOD.ids.contains(items[EquipmentInventorySlot.HEAD.getSlotIdx()].getId());
+	}
+
+	public static boolean hasTop(final Item[] items)
+	{
+		if (items.length <= EquipmentInventorySlot.BODY.getSlotIdx())
+		{
+			return false;
+		}
+
+		return TOP.ids.contains(items[EquipmentInventorySlot.BODY.getSlotIdx()].getId());
+	}
+
+	public static boolean hasLegs(final Item[] items)
+	{
+		if (items.length <= EquipmentInventorySlot.LEGS.getSlotIdx())
+		{
+			return false;
+		}
+
+		return LEGS.ids.contains(items[EquipmentInventorySlot.LEGS.getSlotIdx()].getId());
+	}
+
+	public static boolean hasGloves(final Item[] items)
+	{
+		if (items.length <= EquipmentInventorySlot.GLOVES.getSlotIdx())
+		{
+			return false;
+		}
+
+		return GLOVES.ids.contains(items[EquipmentInventorySlot.GLOVES.getSlotIdx()].getId());
+	}
+
+	public static boolean hasBoots(final Item[] items)
+	{
+		if (items.length <= EquipmentInventorySlot.BOOTS.getSlotIdx())
+		{
+			return false;
+		}
+
+		return BOOTS.ids.contains(items[EquipmentInventorySlot.BOOTS.getSlotIdx()].getId());
+	}
+
+	public static boolean hasCape(final Item[] items)
+	{
+		if (items.length <= EquipmentInventorySlot.CAPE.getSlotIdx())
+		{
+			return false;
+		}
+
+		return CAPE.ids.contains(items[EquipmentInventorySlot.CAPE.getSlotIdx()].getId());
+	}
+
+	public static boolean hasFullSet(final Item[] items)
+	{
+		if (items.length <= EquipmentInventorySlot.BOOTS.getSlotIdx())
 		{
 			return false;
 		}
